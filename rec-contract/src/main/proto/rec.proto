@@ -11,7 +11,26 @@ message CtrlPingRequest {
 message CtrlPingResponse {
 	string output = 1;
 }
+
+message ReadRequest {
+  string name = 1;
+}
   
+message ReadResponse {
+  int32 value = 1;
+}
+
+message WriteRequest {
+  string name = 1;
+}
+  
+message WriteResponse {
+  int32 value = 1;
+}
+
 service RecordService {
   rpc ctrl_ping(CtrlPingRequest) returns (CtrlPingResponse);
+  rpc read(ReadRequest) returns (ReadResponse);
+  rpc write(WriteRequest) returns (WriteResponse);
+
 }
