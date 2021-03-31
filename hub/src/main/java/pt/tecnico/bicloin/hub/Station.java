@@ -82,6 +82,7 @@ public class Station {
 
     public Double calculateDistance(Double latitude, Double longitude){
         Integer earthRadius = 6371;
+        
         Double dLat = Math.toRadians((latitude - _latitude));
         Double dLong = Math.toRadians((longitude - _longitude));
 
