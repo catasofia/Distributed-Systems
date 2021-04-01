@@ -10,6 +10,7 @@ import pt.tecnico.bicloin.hub.exceptions.BadEntrySpecificationException;
 public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     HubServerImplOperations operations = new HubServerImplOperations();
+    
 
     @Override
     public void balance(Hub.BalanceRequest request, StreamObserver<Hub.BalanceResponse> responseObserver){
@@ -55,6 +56,8 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void sysStatus(Hub.SysStatusRequest request, StreamObserver<Hub.SysStatusResponse> responseObserver){
-        //TODO
+        /*try{
+
+        }catch(){}*/
     }
 }

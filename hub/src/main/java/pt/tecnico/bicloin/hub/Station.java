@@ -10,9 +10,6 @@ public class Station {
     private Integer _prize;
     private Integer _docksNr;
     private Integer _bikesNr;
-    private List<Boolean> _availabilityDocks; // false == free
-    private Integer _deliveries;
-    private Integer _solicits;
 
     public Station (String name, String abbr, Double latitude, Double longitude, Integer prize, 
     Integer docksNr, Integer bikesNr){
@@ -23,9 +20,6 @@ public class Station {
         _prize = prize;
         _docksNr = docksNr;
         _bikesNr = bikesNr;
-        _availabilityDocks = new ArrayList<>(docksNr);
-        _deliveries = 0;
-        _solicits = 0;
     }
 
     public String getName(){
@@ -54,30 +48,6 @@ public class Station {
 
     public Integer getBikesNr(){
         return _bikesNr;
-    }
-
-    public List<Boolean> getAvailabilityDocks(){
-        return _availabilityDocks;
-    }
-
-    public Integer getDeliveries() {
-        return _deliveries;
-    }
-
-    public Integer getSolicits() {
-        return _solicits;
-    }
-
-    public void increaseDeliveries(){
-        _deliveries++;
-    }
-
-    public void increaseSolicits(){
-        _solicits++;
-    }
-
-    public void setAvailability(){
-        //TODO
     }
 
     public Double calculateDistance(Double latitude, Double longitude){
