@@ -23,6 +23,9 @@
 
 		<hub.host>localhost</hub.host>
 		<hub.port>8081</hub.port>
+
+		<zoo.host>localhost</zoo.host>
+		<zoo.port>2181</zoo.port>
 	</properties>
 
 	<!-- Dependencies are code archives - JARs - on which your current module needs in order to compile, build, test, and/or to run. 
@@ -40,6 +43,11 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${version.junit}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>pt.ulisboa.tecnico.sdis</groupId>
+			<artifactId>zk-naming</artifactId>
+			<version>1.0.4</version>
 		</dependency>
 	</dependencies>
 
@@ -101,6 +109,9 @@
 					<arguments>
 						<argument>${hub.host}</argument>
 						<argument>${hub.port}</argument>
+						<argument>${zoo.host}</argument>
+						<argument>${zoo.port}</argument>
+						<argument>${server.path}</argument>
 					</arguments>
 				</configuration>
 			</plugin>

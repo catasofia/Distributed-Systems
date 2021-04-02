@@ -39,7 +39,6 @@ public class HubMain {
 			//publish
 			zkNaming.rebind(path, host, port);
 			Server server = ServerBuilder.forPort(Integer.parseInt(port)).addService(impl).build();
-			ops.addServer(server);
 			server.start();
 			server.awaitTermination();
 		}catch(ZKNamingException e){
