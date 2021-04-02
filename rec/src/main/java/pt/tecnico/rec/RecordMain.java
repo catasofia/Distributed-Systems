@@ -12,8 +12,8 @@ public class RecordMain {
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException {
 		System.out.println(RecordMain.class.getSimpleName());
 		
-		if(args.length != 6){
-			System.err.printf("Expected 6 arguments\n");
+		if(args.length != 5){
+			System.err.printf("Expected 5 arguments\n");
 		}
 		// receive and print arguments
 		System.out.printf("Received %d arguments%n", args.length);
@@ -23,10 +23,10 @@ public class RecordMain {
 
 		zkNaming = null;
 
-		String zooHost = args[1];
-		String zooPort = args[2];
-		String host = args[3];
-		String port = args[4];
+		String zooHost = args[0];
+		String zooPort = args[1];
+		String host = args[2];
+		String port = args[3];
 		String path = "/grpc/bicloin/rec/1";
 
 		RecServerImpl impl = new RecServerImpl();

@@ -14,8 +14,8 @@ public class HubMain {
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException {
 		System.out.println(HubMain.class.getSimpleName());
 		
-		if(args.length != 8 || args.length != 9){
-			System.out.printf("Expected 8 or 9 arguments\n");
+		if(args.length != 7 || args.length != 8){
+			System.out.printf("Expected 7 or 8 arguments\n");
 		}
 		// receive and print arguments
 		System.out.printf("Received %d arguments%n", args.length);
@@ -25,12 +25,12 @@ public class HubMain {
 
 		zkNaming = null;
 
-		String zooHost = args[1];
-		String zooPort = args[2];
-		String host = args[3];
-		String port = args[4];
+		String zooHost = args[0];
+		String zooPort = args[1];
+		String host = args[2];
+		String port = args[3];
 		String path = "/grpc/bicloin/hub/";
-		path += args[5];
+		path += args[4];
 
 		HubServerImpl impl = new HubServerImpl();
 
