@@ -4,6 +4,7 @@ import pt.ulisboa.tecnico.sdis.zk.ZKRecord;
 import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 import io.grpc.*;
+import pt.tecnico.rec.grpc.*;
 import pt.tecnico.rec.grpc.RecordServiceGrpc;
 import java.io.IOException;
 
@@ -22,5 +23,17 @@ public class RecFrontend{
         stub = RecordServiceGrpc.newBlockingStub(channel);
 
         return channel;
+    }
+
+    public String ctrlPing(String ping){
+        try{
+            Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
+            Rec.CtrlPingResponse pingResponse = stub.ctrlPing(pingRequest);
+            
+            return pingResponse.getOutput();
+        }catch (StatusRuntimeException e) {
+            System.out.println(e.getStatus().getDescription());
+        }
+        return "";
     }
 }
