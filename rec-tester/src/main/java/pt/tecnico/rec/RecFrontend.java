@@ -5,7 +5,6 @@ import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 import io.grpc.*;
 import pt.tecnico.rec.grpc.*;
-import pt.tecnico.rec.grpc.RecordServiceGrpc;
 import java.io.IOException;
 
 public class RecFrontend{
