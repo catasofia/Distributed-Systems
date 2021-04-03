@@ -16,6 +16,8 @@
 	<!-- Properties are variables used to customize the behavior of Maven and its plug-ins. -->
 	<properties>
 		<mainclass>pt.tecnico.bicloin.app.AppMain</mainclass>
+		<zoo.host>localhost</zoo.host>
+		<zoo.port>2181</zoo.port>
 	</properties>
 
 	<!-- Dependencies are code archives - JARs - on which your current module needs in order to compile, build, test, and/or to run. 
@@ -29,7 +31,7 @@
 		</dependency>
 		<!-- tester brings front-end -->
 		<dependency>
-			<groupId>pt.tecnico.bicloin.T01</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>hub-tester</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
@@ -64,7 +66,7 @@
 					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>
-			<!-- The Failsafe plug-in runs integration tests. -->
+			<!-- The Failsafe plug-in runs integration tests.
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>${version.maven-failsafe-plugin}</version>
@@ -76,7 +78,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 			<!-- The Exec plug-in allows us to execute system and Java programs. -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -92,6 +94,8 @@
 				<configuration>
 					<mainClass>${mainclass}</mainClass>
 					<arguments>
+						<argument>${zoo.host}</argument>
+						<argument>${zoo.port}</argument>
 					</arguments>
 				</configuration>
 			</plugin>

@@ -32,6 +32,8 @@ public class HubMain {
 		String path = "/grpc/bicloin/hub/";
 		path += args[4];
 
+		System.out.println(path);
+
 		HubServerImpl impl = new HubServerImpl();
 
 		try{
@@ -40,6 +42,7 @@ public class HubMain {
 			zkNaming.rebind(path, host, port);
 			Server server = ServerBuilder.forPort(Integer.parseInt(port)).addService(impl).build();
 			server.start();
+			System.out.println("oiiiiiiiii\n");
 			server.awaitTermination();
 		}catch(ZKNamingException e){
 			e.printStackTrace();

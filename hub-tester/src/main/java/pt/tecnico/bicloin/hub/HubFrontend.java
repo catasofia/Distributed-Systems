@@ -14,8 +14,8 @@ import java.util.Random;
 
 public class HubFrontend{
 
-    private String path = "/grpc/bicloin/hub/";
-    private List<HubServiceGrpc.HubServiceBlockingStub> stubs = new ArrayList<>();
+    private String path = "/grpc/bicloin/hub";
+    private static List<HubServiceGrpc.HubServiceBlockingStub> stubs = new ArrayList<>();
     private RecFrontend rec;
 
     public HubFrontend(){
@@ -29,16 +29,18 @@ public class HubFrontend{
 
         for(ZKRecord zkRecord: records) {
             String target = zkRecord.getURI(); //host:port
-            final ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
+            System.out.println(target);
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
             channels.add(channel);
             stubs.add(HubServiceGrpc.newBlockingStub(channel));
         }
-
         return channels;
     }
 
-    public String ctrlPing(String ping){
+    public static String ctrlPing(String ping){
         try{
+
+            if(stubs.isEmpty()) System.out.println("burrooooo\n");
             Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(ping).build();
             Random r = new Random();
             int low = 0;
@@ -54,7 +56,7 @@ public class HubFrontend{
         return "";
     }
 
-    public String sys_status(String status, String host, String port) throws ZKNamingException{
+    /*public String sys_status(String status, String host, String port) throws ZKNamingException{
         String result = "";
 
         for (HubServiceGrpc.HubServiceBlockingStub stub: stubs){
@@ -79,5 +81,5 @@ public class HubFrontend{
             result = result + "/grpc/bicloin/rec/1 down\n";
         }
         return result;
-    }
+    }*/
 }

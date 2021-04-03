@@ -30,6 +30,8 @@
 
 		<server.host>localhost</server.host>
 		<server.port>809${instance}</server.port>
+		<url>https://github.com/tecnico-distsys/Bicloin/blob/main/users.csv</url>
+		<url1>https://github.com/tecnico-distsys/Bicloin/blob/main/stations.csv</url1>
 		<server.path>/grpc/bicloin/hub/${instance}</server.path>
 	</properties>
 
@@ -94,12 +96,15 @@
 					<killAfter>-1</killAfter>
 					<mainClass>${mainclass}</mainClass>
 					<arguments>
-						<argument>${hub.port}</argument>
 						<argument>${zoo.host}</argument>
 						<argument>${zoo.port}</argument>
+						<!--<argument>${hub.port}</argument>-->
 						<argument>${server.host}</argument>
 						<argument>${server.port}</argument>
-						<argument>${server.path}</argument>
+						<!--<argument>${server.path}</argument> -->
+						<argument>${instance}</argument>
+						<argument>${url}</argument>
+						<argument>${url1}</argument>
 					</arguments>
 				</configuration>
 			</plugin>

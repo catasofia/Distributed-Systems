@@ -39,7 +39,7 @@
 		sorts the projects into the correct build order;
 		builds the selected projects in order. -->
 	<modules>
-		<!-- Add later, when needed... -->
+		<!-- Add later, when needed...-->
 		<module>zknaming</module>
 		<module>rec-contract</module>
 		<module>rec</module>
@@ -60,6 +60,18 @@
 		They do this by executing an "action" in the context of a project's description. -->
 		<plugins>
 			<!--  Plug-in to check available updates on dependencies. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>

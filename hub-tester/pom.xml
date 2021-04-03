@@ -17,7 +17,7 @@
 	<properties>
 		<!-- see parent POM for more properties -->
 
-		<mainclass>pt.tecnico.bicloin.hub.HubTester</mainclass>
+		<mainclass>pt.tecnico.bicloin.hub.HubFrontend</mainclass>
 
 		<hub.host>localhost</hub.host>
 		<hub.port>8081</hub.port>
@@ -115,7 +115,6 @@
 						<argument>${hub.port}</argument>
 						<argument>${zoo.host}</argument>
 						<argument>${zoo.port}</argument>
-						<argument>${server.path}</argument>
 					</arguments>
 				</configuration>
 			</plugin>
