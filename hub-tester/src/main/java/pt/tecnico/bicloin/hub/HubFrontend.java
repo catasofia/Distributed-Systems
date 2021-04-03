@@ -1,6 +1,9 @@
 package pt.tecnico.bicloin.hub;
 
+import pt.tecnico.rec.grpc.Rec;
+import pt.tecnico.rec.grpc.RecordServiceGrpc;
 import pt.ulisboa.tecnico.sdis.zk.*;
+import pt.tecnico.rec.RecFrontend;
 import io.grpc.*;
 import pt.tecnico.bicloin.hub.grpc.*;
 import java.io.IOException;
@@ -13,8 +16,11 @@ public class HubFrontend{
 
     private String path = "/grpc/bicloin/hub/";
     private List<HubServiceGrpc.HubServiceBlockingStub> stubs = new ArrayList<>();
+    private RecFrontend rec;
 
-    public HubFrontend(){}
+    public HubFrontend(){
+        rec = new RecFrontend();
+    }
 
     public List<ManagedChannel> createChannels(String host, String port) throws ZKNamingException, IOException, InterruptedException {
         ZKNaming zkNaming = new ZKNaming(host, port);
@@ -46,5 +52,32 @@ public class HubFrontend{
             System.out.println(e.getStatus().getDescription());
         }
         return "";
+    }
+
+    public String sys_status(String status, String host, String port) throws ZKNamingException{
+        String result = "";
+
+        for (HubServiceGrpc.HubServiceBlockingStub stub: stubs){
+            int x = 1;
+            try{
+            Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(status).build();
+            stub.ctrlPing(pingRequest);
+            result = result + "/grpc/bicloin/hub/" + x + " up\n";
+            } catch (StatusRuntimeException e) {
+                result = result + "/grpc/bicloin/hub/" + x + " down\n";
+            }
+        }
+        ZKNaming zkNaming = new ZKNaming(host, port);
+        ZKRecord recRecord = zkNaming.lookup("/grpc/bicloin/rec/1");
+        RecordServiceGrpc.RecordServiceBlockingStub recStub = rec.getStub();
+
+        try{
+            Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(status).build();
+            recStub.ctrlPing(pingRequest);
+            result = result + "/grpc/bicloin/rec/1 up\n";
+        } catch(StatusRuntimeException e) {
+            result = result + "/grpc/bicloin/rec/1 down\n";
+        }
+        return result;
     }
 }

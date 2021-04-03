@@ -24,6 +24,10 @@ public class RecFrontend{
         return channel;
     }
 
+    public RecordServiceGrpc.RecordServiceBlockingStub getStub(){
+        return stub;
+    }
+
     public String ctrlPing(String ping){
         try{
             Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();

@@ -3,7 +3,7 @@
 
 ## Authors
 
-Group CXX
+Group T01
 
 
 ## About

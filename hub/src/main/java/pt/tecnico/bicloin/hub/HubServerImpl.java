@@ -56,8 +56,13 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void sysStatus(Hub.SysStatusRequest request, StreamObserver<Hub.SysStatusResponse> responseObserver){
-        /*try{
-
-        }catch(){}*/
+        try{
+            String responseStatus = operations.sys_status(request.getInput());
+            Hub.SysStatusResponse response = Hub.SysStatusResponse.newBuilder().build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }catch(BadEntrySpecificationException e){
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 }

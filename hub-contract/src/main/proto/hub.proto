@@ -17,8 +17,6 @@ message SysStatusRequest {
 }
 
 message SysStatusResponse {
-	string name = 1;
-  string status = 2;
 }
 
 message BalanceRequest {

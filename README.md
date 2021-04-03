@@ -1,11 +1,11 @@
-# CXX-Bicloin
+# T01-Bicloin
 
 Distributed Systems 2020-2021, 2nd semester project
 
 
 ## Authors
 
-**Group CXX**
+**Group T01**
 
 *(fill-in line above with group identifier e.g. A07 or T22; and then delete this line)*
 
