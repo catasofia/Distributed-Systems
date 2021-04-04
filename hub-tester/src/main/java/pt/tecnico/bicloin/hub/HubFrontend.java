@@ -22,6 +22,9 @@ public class HubFrontend{
         rec = new RecFrontend();
     }
 
+
+
+
     public List<ManagedChannel> createChannels(String host, String port) throws ZKNamingException, IOException, InterruptedException {
         ZKNaming zkNaming = new ZKNaming(host, port);
         Collection<ZKRecord> records = zkNaming.listRecords(path);
@@ -47,9 +50,9 @@ public class HubFrontend{
             int high = stubs.size();
             int result = r.nextInt(high - low) + low;
             Hub.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
-            
+
             return pingResponse.getOutput();
-            
+
         }catch (StatusRuntimeException e) {
             System.out.println(e.getStatus().getDescription());
         }
@@ -58,7 +61,6 @@ public class HubFrontend{
 
     /*public String sys_status(String status, String host, String port) throws ZKNamingException{
         String result = "";
-
         for (HubServiceGrpc.HubServiceBlockingStub stub: stubs){
             int x = 1;
             try{
@@ -72,7 +74,6 @@ public class HubFrontend{
         ZKNaming zkNaming = new ZKNaming(host, port);
         ZKRecord recRecord = zkNaming.lookup("/grpc/bicloin/rec/1");
         RecordServiceGrpc.RecordServiceBlockingStub recStub = rec.getStub();
-
         try{
             Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(status).build();
             recStub.ctrlPing(pingRequest);

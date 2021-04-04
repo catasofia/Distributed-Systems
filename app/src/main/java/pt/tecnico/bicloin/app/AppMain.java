@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AppMain {
-
 	private static HubFrontend hubFrontend;
 	private static List<ManagedChannel> channels;
 
