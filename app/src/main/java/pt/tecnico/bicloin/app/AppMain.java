@@ -26,10 +26,10 @@ public class AppMain {
 		System.out.println(args[0] + args[1]);
 		channels = hubFrontend.createChannels(args[0], args[1]);
 
-		//String response = hubFrontend.ctrlPing("friend");
-		//System.out.println(response);
+		String response = hubFrontend.ctrlPing("");
+		System.out.println(response);
 
-		for(ManagedChannel channel: channels){
+		for(ManagedChannel channel: channels) {
 			channel.shutdownNow();
 		}
 	}

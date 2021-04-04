@@ -40,10 +40,8 @@ public class HubFrontend{
         return channels;
     }
 
-    public static String ctrlPing(String ping){
+    public static String ctrlPing(String ping) throws StatusRuntimeException{
         try{
-
-            if(stubs.isEmpty()) System.out.println("burrooooo\n");
             Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(ping).build();
             Random r = new Random();
             int low = 0;
@@ -54,7 +52,8 @@ public class HubFrontend{
             return pingResponse.getOutput();
 
         }catch (StatusRuntimeException e) {
-            System.out.println(e.getStatus().getDescription());
+            System.out.println("Caught exception with description: " +
+                    e.getStatus().getDescription());
         }
         return "";
     }
