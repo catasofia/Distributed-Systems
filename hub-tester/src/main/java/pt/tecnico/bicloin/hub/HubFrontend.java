@@ -58,7 +58,7 @@ public class HubFrontend{
         return "";
     }
 
-    /*public String sys_status(String status, String host, String port) throws ZKNamingException{
+    public String sys_status(String status, String host, String port) throws ZKNamingException{
         String result = "";
         for (HubServiceGrpc.HubServiceBlockingStub stub: stubs){
             int x = 1;
@@ -81,5 +81,5 @@ public class HubFrontend{
             result = result + "/grpc/bicloin/rec/1 down\n";
         }
         return result;
-    }*/
+    }
 }

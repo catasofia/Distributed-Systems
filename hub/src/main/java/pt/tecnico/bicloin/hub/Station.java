@@ -11,8 +11,8 @@ public class Station {
     private Integer _docksNr;
     private Integer _bikesNr;
 
-    public Station (String name, String abbr, Double latitude, Double longitude, Integer prize, 
-    Integer docksNr, Integer bikesNr){
+    public Station (String name, String abbr, Double latitude, Double longitude, Integer docksNr,
+    Integer bikesNr, Integer prize){
         _name = name;
         _abbr = abbr;
         _latitude = latitude;
@@ -26,7 +26,7 @@ public class Station {
         return _name;
     }
 
-    public String getabbr(){
+    public String getAbbr(){
         return _abbr;
     }
     

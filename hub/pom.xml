@@ -30,8 +30,7 @@
 
 		<server.host>localhost</server.host>
 		<server.port>809${instance}</server.port>
-		<url>https://github.com/tecnico-distsys/Bicloin/blob/main/users.csv</url>
-		<url1>https://github.com/tecnico-distsys/Bicloin/blob/main/stations.csv</url1>
+
 		<server.path>/grpc/bicloin/hub/${instance}</server.path>
 	</properties>
 
@@ -48,6 +47,12 @@
 			<groupId>pt.ulisboa.tecnico.sdis</groupId>
 			<artifactId>zk-naming</artifactId>
 			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>pt.tecnico.bicloin.T01</groupId>
+			<artifactId>rec</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
@@ -103,8 +108,8 @@
 						<argument>${server.port}</argument>
 						<!--<argument>${server.path}</argument> -->
 						<argument>${instance}</argument>
-						<argument>${url}</argument>
-						<argument>${url1}</argument>
+						<argument>users.csv</argument>
+						<argument>stations.csv</argument>
 					</arguments>
 				</configuration>
 			</plugin>

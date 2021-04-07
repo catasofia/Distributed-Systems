@@ -3,7 +3,19 @@ package pt.tecnico.bicloin.hub;
 import pt.ulisboa.tecnico.sdis.zk.*;
 import io.grpc.*;
 import pt.tecnico.bicloin.hub.HubServerImpl;
+import pt.tecnico.bicloin.hub.*;
+import pt.tecnico.bicloin.hub.Station;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HubMain {
@@ -32,9 +44,11 @@ public class HubMain {
 		String path = "/grpc/bicloin/hub/";
 		path += args[4];
 
-		System.out.println(path);
-
 		HubServerImpl impl = new HubServerImpl();
+
+		List<User> users = readUsersFromCSV(args[5]);
+		List<Station> stations = readStationsFromCSV(args[6]);
+
 
 		try{
 			zkNaming = new ZKNaming(zooHost, zooPort);
@@ -51,5 +65,40 @@ public class HubMain {
 			}
 		}
 	}
-	
+
+	public static List<User> readUsersFromCSV(String fileName){
+		List<User> users = new ArrayList<>();
+
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
+			String line = br.readLine();
+			while (line != null) {
+				String[] attributes = line.split(" \t");
+				User user = new User(attributes[0], attributes[1], attributes[2]);
+				users.add(user);
+				line = br.readLine();
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		return users;
+	}
+
+	public static List<Station> readStationsFromCSV(String fileName){
+		List<Station> stations = new ArrayList<>();
+
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
+			String line = br.readLine();
+			while (line != null) {
+				String[] attributes = line.split(" \t");
+				Station station = new Station(attributes[0], attributes[1], Double.parseDouble(attributes[2]),
+						Double.parseDouble(attributes[3]), Integer.parseInt(attributes[4]),
+						Integer.parseInt(attributes[5]), Integer.parseInt(attributes[6]));
+				stations.add(station);
+				line = br.readLine();
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		return stations;
+	}
 }

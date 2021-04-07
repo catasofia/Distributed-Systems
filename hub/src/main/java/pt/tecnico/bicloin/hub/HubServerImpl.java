@@ -5,6 +5,7 @@ import pt.tecnico.bicloin.hub.grpc.*;
 import static io.grpc.Status.INVALID_ARGUMENT;
 import pt.tecnico.bicloin.hub.exceptions.BadEntrySpecificationException;
 
+import java.util.List;
 
 
 public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
@@ -24,7 +25,17 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void infoStation(Hub.InfoStationRequest request, StreamObserver<Hub.InfoStationResponse> responseObserver){
-        //TODO
+        try {
+            List<String> result = operations.info_station(request.getAbbr());
+            Hub.InfoStationResponse response = Hub.InfoStationResponse.newBuilder().setName(result.get(0))
+                    .setLatitude(Double.parseDouble(result.get(1))).setLongitude(Double.parseDouble(result.get(2)))
+                    .setDocksNr(Integer.parseInt(result.get(3))).setPrize(Integer.parseInt(result.get(4)))
+                    .setBikesNr(Integer.parseInt(result.get(5))).setStatistics(Integer.parseInt(result.get(6))).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (BadEntrySpecificationException e) {
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 
     @Override

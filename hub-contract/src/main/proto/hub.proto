@@ -43,11 +43,12 @@ message InfoStationRequest {
 
 message InfoStationResponse {
   string name = 1;
-  int32 docksNr = 2;
-  int32 bikesNr = 3;
-  int32 prize = 4;
-  double latitude = 5;
-  double longitude = 6;
+  double latitude = 2;
+  double longitude = 3;
+  int32 docksNr = 4;
+  int32 prize = 5;
+  int32 bikesNr = 6;
+  int32 statistics = 7;
 }
 
 message LocateStationRequest {
