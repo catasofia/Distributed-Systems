@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class RecServerImplOperations {
 
     private Map <String, MutableUser> mutableUsers = new HashMap<>();
+    private Map <String, MutableStation> mutableStations = new HashMap<>();
     
     public RecServerImplOperations() {}
 
@@ -19,21 +20,40 @@ public class RecServerImplOperations {
     }
 
     public synchronized String read(String input) throws BadEntrySpecificationException{
-        if (input.equals("") || !mutableUsers.containsKey(input)){
-            throw new BadEntrySpecificationException("Error read: null or empty");
-        }
+        //TODO -> ESTE IF NAO PODE SER ASSIM, SE NAO EXISTIR INICIALIZA, DIZ NO ENUNCIADO
+        //if (input.equals("") || !mutableUsers.containsKey(input)){
+        //    throw new BadEntrySpecificationException("Error read: null or empty");
+        //}
 
         String[] attributes = input.split("/");
 
         switch (attributes[1]){
             case "balance":
-                MutableUser mutableUser = mutableUsers.get(attributes[0]);
-                return String.valueOf(mutableUser.getBalance());
-
+                if (mutableUsers.get(attributes[0]) == null){
+                    mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
+                    return "0 BIC";
+                }
+                else{
+                    MutableUser mutableUser = mutableUsers.get(attributes[0]);
+                    return mutableUser.getBalance() + " BIC";
+                }
+            case "info":
+                if(mutableStations.get(attributes[0]) == null){
+                    mutableStations.put(attributes[0], new MutableStation(attributes[0]));
+                    //TODO ver o que retorna quando nao existe
+                    return "";
+                }
+                else{
+                    MutableStation mutableStation = mutableStations.get(attributes[0]);
+                    String result = "";
+                    result += mutableStation.getAvailableBikesNr();
+                    result = result + " " + mutableStation.getRequisitions();
+                    result = result + " " + mutableStation.getDeliveries();
+                    return result;
+                }
             default:
                 return "";
 
         }
-
     }
 }

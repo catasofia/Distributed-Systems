@@ -17,7 +17,7 @@ message ReadRequest {
 }
   
 message ReadResponse {
-  int32 value = 1;
+  string value = 1;
 }
 
 message WriteRequest {

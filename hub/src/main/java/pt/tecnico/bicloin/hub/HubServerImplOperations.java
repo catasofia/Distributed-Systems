@@ -15,7 +15,6 @@ import io.grpc.*;
 
 public class HubServerImplOperations {
     private Map <String, Station> stations = new HashMap<>();
-    private Map <String, MutableStation> mutableStations = new HashMap<>();
     private HubFrontend hub = new HubFrontend();
 
     public HubServerImplOperations() {}
@@ -40,20 +39,17 @@ public class HubServerImplOperations {
         }
 
         Station station = stations.get(abbr);
-        MutableStation mStation = mutableStations.get(abbr);
         List<String> result = new ArrayList<>();
         result.add(station.getName());
         result.add(String.valueOf(station.getLatitude()));
         result.add(String.valueOf(station.getLongitude()));
         result.add(String.valueOf(station.getDocksNr()));
         result.add(String.valueOf(station.getPrize()));
-        result.add(String.valueOf(mStation.getAvailableBikesNr()));
-        result.add(String.valueOf(mStation.getDeliveries() + mStation.getRequisitions()));
 
         return result;
     }
 
-    public synchronized Integer balance(String name){
+    public synchronized String balance(String name){
         return hub.balance(name);
     }
 }

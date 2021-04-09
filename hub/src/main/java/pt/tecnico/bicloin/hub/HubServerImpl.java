@@ -15,8 +15,8 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void balance(Hub.BalanceRequest request, StreamObserver<Hub.BalanceResponse> responseObserver){
-       Integer balance = operations.balance(request.getName());
-       Hub.BalanceResponse response = Hub.BalanceResponse.newBuilder().setBalance(balance).build();
+       String balance = operations.balance(request.getName());
+       Hub.BalanceResponse response = Hub.BalanceResponse.newBuilder().setBalance(Integer.parseInt(balance)).build();
        responseObserver.onNext(response);
        responseObserver.onCompleted();
     }
@@ -32,8 +32,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             List<String> result = operations.info_station(request.getAbbr());
             Hub.InfoStationResponse response = Hub.InfoStationResponse.newBuilder().setName(result.get(0))
                     .setLatitude(Double.parseDouble(result.get(1))).setLongitude(Double.parseDouble(result.get(2)))
-                    .setDocksNr(Integer.parseInt(result.get(3))).setPrize(Integer.parseInt(result.get(4)))
-                    .setBikesNr(Integer.parseInt(result.get(5))).setStatistics(Integer.parseInt(result.get(6))).build();
+                    .setDocksNr(Integer.parseInt(result.get(3))).setPrize(Integer.parseInt(result.get(4))).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
@@ -72,7 +71,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
     public void sysStatus(Hub.SysStatusRequest request, StreamObserver<Hub.SysStatusResponse> responseObserver){
         try{
             String responseStatus = operations.sys_status(request.getInput());
-            Hub.SysStatusResponse response = Hub.SysStatusResponse.newBuilder().build();
+            Hub.SysStatusResponse response = Hub.SysStatusResponse.newBuilder().setOutput(responseStatus).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){

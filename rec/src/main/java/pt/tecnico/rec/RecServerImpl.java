@@ -13,7 +13,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){
         try{
             String responseInput = operations.read(request.getName());
-            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(Integer.parseInt(responseInput)).build();
+            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {

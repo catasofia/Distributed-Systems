@@ -20,7 +20,6 @@ public class RecFrontend{
         String target = zkRecord.getURI(); //host:port
         final ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
         stub = RecordServiceGrpc.newBlockingStub(channel);
-
         return channel;
     }
 
@@ -38,5 +37,15 @@ public class RecFrontend{
             System.out.println(e.getStatus().getDescription());
         }
         return "";
+    }
+
+    public String info_station(String abbr){
+        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(abbr+"/info").build();
+        return stub.read(readRequest).getValue();
+    }
+
+    public String balance(String input){
+        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input+"/balance").build();
+        return stub.read(readRequest).getValue();
     }
 }

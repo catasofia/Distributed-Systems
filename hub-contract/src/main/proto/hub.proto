@@ -17,6 +17,7 @@ message SysStatusRequest {
 }
 
 message SysStatusResponse {
+    string output = 1;
 }
 
 message BalanceRequest {

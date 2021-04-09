@@ -73,6 +73,10 @@ public class HubMain {
 			String line = br.readLine();
 			while (line != null) {
 				String[] attributes = line.split(" \t");
+				/*if (attributes[0].length() < 3 || attributes[0].length() > 10)
+					//TODO error
+				if (attributes[1].length() > 30)
+					//TODO error*/
 				User user = new User(attributes[0], attributes[1], attributes[2]);
 				users.add(user);
 				line = br.readLine();
@@ -90,6 +94,8 @@ public class HubMain {
 			String line = br.readLine();
 			while (line != null) {
 				String[] attributes = line.split(" \t");
+				//if (attributes[1].length() != 4)
+					//TODO error
 				Station station = new Station(attributes[0], attributes[1], Double.parseDouble(attributes[2]),
 						Double.parseDouble(attributes[3]), Integer.parseInt(attributes[4]),
 						Integer.parseInt(attributes[5]), Integer.parseInt(attributes[6]));
