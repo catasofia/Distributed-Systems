@@ -11,7 +11,7 @@ public class MutableStation{
     private Integer _requisitions;
 
     public MutableStation(String abbr){
-        _docksAvailability.setLeft(abbr);
+        _docksAvailability.setLeft(abbr + "/docksAvailability");
         _docksAvailability.setRight(new ArrayList<Boolean>());
         _deliveries = 0;
         _requisitions = 0;

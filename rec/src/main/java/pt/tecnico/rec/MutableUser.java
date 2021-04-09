@@ -8,7 +8,7 @@ public class MutableUser{
     private static MutablePair<String, Integer> _balance = new MutablePair<String, Integer>();
 
     public MutableUser(String id){
-        _balance.setLeft(id);
+        _balance.setLeft(id + "/balance");
         _balance.setRight(0);
     }
 

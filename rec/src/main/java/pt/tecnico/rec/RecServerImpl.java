@@ -11,7 +11,14 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
     @Override
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){
-        //TODO
+        try{
+            String responseInput = operations.read(request.getName());
+            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(Integer.parseInt(responseInput)).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (BadEntrySpecificationException e) {
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 
     @Override
