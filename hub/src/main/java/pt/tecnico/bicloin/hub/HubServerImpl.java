@@ -15,7 +15,10 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void balance(Hub.BalanceRequest request, StreamObserver<Hub.BalanceResponse> responseObserver){
-        //TODO
+       Integer balance = operations.balance(request.getName());
+       Hub.BalanceResponse response = Hub.BalanceResponse.newBuilder().setBalance(balance).build();
+       responseObserver.onNext(response);
+       responseObserver.onCompleted();
     }
 
     @Override

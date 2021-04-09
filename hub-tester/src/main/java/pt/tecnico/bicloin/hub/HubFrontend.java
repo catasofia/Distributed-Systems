@@ -24,7 +24,6 @@ public class HubFrontend{
 
 
 
-
     public List<ManagedChannel> createChannels(String host, String port) throws ZKNamingException, IOException, InterruptedException {
         ZKNaming zkNaming = new ZKNaming(host, port);
         Collection<ZKRecord> records = zkNaming.listRecords(path);
@@ -81,5 +80,12 @@ public class HubFrontend{
             result = result + "/grpc/bicloin/rec/1 down\n";
         }
         return result;
+    }
+
+    public Integer balance(String name){
+        RecordServiceGrpc.RecordServiceBlockingStub stub = rec.getStub();
+        Rec.ReadRequest balanceRequest = Rec.ReadRequest.newBuilder().setName(name+"/balance").build();
+        Rec.ReadResponse response = stub.read(balanceRequest);
+        return response.getValue();
     }
 }

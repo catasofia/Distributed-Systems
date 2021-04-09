@@ -5,6 +5,7 @@ import pt.tecnico.bicloin.hub.exceptions.BadEntrySpecificationException;
 import org.apache.commons.lang3.tuple.MutablePair;
 import pt.tecnico.rec.MutableStation;
 import pt.tecnico.bicloin.hub.Station;
+import pt.tecnico.bicloin.hub.HubFrontend;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -13,8 +14,9 @@ import io.grpc.*;
 
 
 public class HubServerImplOperations {
-    Map <String, Station> stations = new HashMap<>();
-    Map <String, MutableStation> mutableStations = new HashMap<>();
+    private Map <String, Station> stations = new HashMap<>();
+    private Map <String, MutableStation> mutableStations = new HashMap<>();
+    private HubFrontend hub = new HubFrontend();
 
     public HubServerImplOperations() {}
 
@@ -49,5 +51,9 @@ public class HubServerImplOperations {
         result.add(String.valueOf(mStation.getDeliveries() + mStation.getRequisitions()));
 
         return result;
+    }
+
+    public synchronized Integer balance(String name){
+        return hub.balance(name);
     }
 }
