@@ -107,6 +107,17 @@ public class HubFrontend{
         return finalResult;
     }
 
+    public String locate_station(Double lat, Double longt, Integer k){
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+        Hub.LocateStationRequest locateRequest = Hub.LocateStationRequest.newBuilder().setLatitude(lat)
+                .setLongitude(longt).setK(k).build();
+        Hub.LocateStationResponse locateResponse = stubs.get(result).locateStation(locateRequest);
+        return locateResponse.getAbbrs();
+    }
+
     public String balance(String name){
         return rec.balance(name);
     }

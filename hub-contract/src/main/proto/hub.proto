@@ -59,7 +59,7 @@ message LocateStationRequest {
 }
 
 message LocateStationResponse {
-  repeated string abbrs = 1;
+  string abbrs = 1;
 }
 
 message BikeUpRequest {

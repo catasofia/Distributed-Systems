@@ -6,10 +6,9 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import pt.tecnico.rec.MutableStation;
 import pt.tecnico.bicloin.hub.Station;
 import pt.tecnico.bicloin.hub.HubFrontend;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+
+import java.util.*;
+
 import io.grpc.*;
 
 
@@ -17,7 +16,9 @@ public class HubServerImplOperations {
     private Map <String, Station> stations = new HashMap<>();
     private HubFrontend hub = new HubFrontend();
 
-    public HubServerImplOperations() {}
+    public HubServerImplOperations() {
+        stations = HubMain.getStations();
+    }
 
     public synchronized String ping(String ping) throws BadEntrySpecificationException{
         if (ping == null || ping.isBlank()){
@@ -41,12 +42,34 @@ public class HubServerImplOperations {
         Station station = stations.get(abbr);
         List<String> result = new ArrayList<>();
         result.add(station.getName());
-        result.add(String.valueOf(station.getLatitude()));
-        result.add(String.valueOf(station.getLongitude()));
+        result.add("lat " + String.valueOf(station.getLatitude()));
+        result.add(String.valueOf(station.getLongitude()) + " long");
         result.add(String.valueOf(station.getDocksNr()));
         result.add(String.valueOf(station.getPrize()));
 
         return result;
+    }
+
+    public synchronized String locate_station(Double lat, Double longt, Integer k){
+        Map <String, Double> stationsDistance = new HashMap<>();
+        Map <String, Double> sortedMap = new HashMap<>();
+        for (Station station : stations.values()){
+            stationsDistance.put(station.getAbbr(), station.calculateDistance(lat, longt));
+        }
+        stationsDistance.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
+        StringBuilder result = new StringBuilder();
+        Set<String> abbrs = sortedMap.keySet();
+        String[] ordered = new String[abbrs.size()];
+        abbrs.toArray(ordered);
+
+        for(int i = 0; i < k; i++){
+            result.append(ordered[i]);
+            result.append("\n");
+        }
+        return result.toString().replaceFirst("[\n\r]+$", ""); //removes last \n
     }
 
     public synchronized String balance(String name){

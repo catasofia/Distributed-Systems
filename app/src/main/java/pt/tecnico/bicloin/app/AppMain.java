@@ -29,14 +29,19 @@ public class AppMain {
 		}
 
 		String user = args[2];
+
 		hubFrontend = new HubFrontend();
 		channels = hubFrontend.createChannels(args[0], args[1]);
 
 		Double latitude = Double.parseDouble(args[4]);
 		Double longitude = Double.parseDouble(args[5]);
 
+		System.out.println("Trying ping:");
 		String response = hubFrontend.ctrlPing("friend");
 		System.out.println(response);
+
+		System.out.println("Trying locate station:");
+		System.out.println(hubFrontend.locate_station(latitude, longitude, 9));
 
 		try(Scanner scanner = new Scanner(System.in)){
 			System.out.println(user + ", welcome to the app!!");

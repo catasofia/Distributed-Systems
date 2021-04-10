@@ -42,7 +42,10 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void locateStation(Hub.LocateStationRequest request, StreamObserver<Hub.LocateStationResponse> responseObserver){
-        //TODO
+        String result = operations.locate_station(request.getLatitude(), request.getLongitude(),request.getK());
+        Hub.LocateStationResponse response = Hub.LocateStationResponse.newBuilder().setAbbrs(result).build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override
