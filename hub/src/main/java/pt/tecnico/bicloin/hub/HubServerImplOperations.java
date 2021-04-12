@@ -14,10 +14,12 @@ import io.grpc.*;
 
 public class HubServerImplOperations {
     private Map <String, Station> stations;
+    private Map <String, User> users;
     private HubFrontend hub = new HubFrontend();
 
     public HubServerImplOperations() {
         stations = HubMain.getStations();
+        users = HubMain.getUsers();
     }
 
     public synchronized String ping(String ping) throws BadEntrySpecificationException{
@@ -74,5 +76,12 @@ public class HubServerImplOperations {
 
     public synchronized String balance(String name){
         return hub.balance(name);
+    }
+
+    public synchronized String topUp(String name, Integer amount, String phone) throws BadEntrySpecificationException{
+        if (!users.get(name).getPhone().equals(phone)){
+            throw new BadEntrySpecificationException("The phone doesn't correspond to this user");
+        }
+        return hub.topUp(name, amount);
     }
 }

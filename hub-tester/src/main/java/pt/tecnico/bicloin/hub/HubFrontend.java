@@ -122,4 +122,8 @@ public class HubFrontend{
     public String balance(String name){
         return rec.balance(name);
     }
+
+    public String topUp(String name, Integer amount){
+        return rec.topUp(name, amount);
+    }
 }

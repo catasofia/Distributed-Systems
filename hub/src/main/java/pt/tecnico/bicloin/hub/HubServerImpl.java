@@ -22,7 +22,14 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void topUp(Hub.TopUpRequest request, StreamObserver<Hub.TopUpResponse> responseObserver){
-        //TODO
+        try {
+            String balance = operations.topUp(request.getName(), request.getAmount(), request.getPhone());
+            Hub.TopUpResponse response = Hub.TopUpResponse.newBuilder().setBalance(Integer.parseInt(balance)).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }catch(BadEntrySpecificationException e) {
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 
     @Override

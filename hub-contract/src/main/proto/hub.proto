@@ -30,7 +30,7 @@ message BalanceResponse {
 
 message TopUpRequest {
   string name = 1;
-  int32 balance = 2;
+  int32 amount = 2;
   string phone = 3;
 }
 

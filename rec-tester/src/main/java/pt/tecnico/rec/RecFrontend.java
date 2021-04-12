@@ -48,4 +48,9 @@ public class RecFrontend{
         Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input+"/balance").build();
         return stub.read(readRequest).getValue();
     }
+
+    public String topUp(String name, Integer amount){
+        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name+"/top_up "+amount).build();
+        return stub.write(writeRequest).getValue();
+    }
 }
