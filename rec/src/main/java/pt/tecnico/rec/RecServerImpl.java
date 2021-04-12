@@ -23,7 +23,14 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
     @Override
     public void write(Rec.WriteRequest request, StreamObserver<Rec.WriteResponse> responseObserver){
-        //TODO
+        try{
+            String responseInput = operations.write(request.getName());
+            Rec.WriteResponse response = Rec.WriteResponse.newBuilder().setValue(responseInput).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (BadEntrySpecificationException e) {
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 
     @Override
