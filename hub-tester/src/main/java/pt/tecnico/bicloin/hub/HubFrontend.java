@@ -103,7 +103,6 @@ public class HubFrontend{
 
         finalResult = finalResult + " " + rec.info_station(abbr) + "https://www.google.com/maps/place/"
                 + infoResponse.getLatitude() + "," + infoResponse.getLongitude();
-            ;
 
         return finalResult;
     }

@@ -7,7 +7,12 @@ import pt.tecnico.rec.exceptions.BadEntrySpecificationException;
 
 public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
-    RecServerImplOperations operations = new RecServerImplOperations();
+    private static RecServerImplOperations operations = new RecServerImplOperations();
+
+
+    public static RecServerImplOperations getRecOperations(){
+        return operations;
+    }
 
     @Override
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){

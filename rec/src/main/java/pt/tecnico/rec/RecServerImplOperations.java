@@ -9,10 +9,10 @@ public class RecServerImplOperations {
 
     private static Map <String, MutableUser> mutableUsers = new HashMap<>();
     private static Map <String, MutableStation> mutableStations = new HashMap<>();
-    
+
     public RecServerImplOperations() {}
 
-    public static synchronized void initializeStations(String abbr, Integer docksNr, Integer bikesNr){
+    public synchronized static void initializeStations(String abbr, Integer docksNr, Integer bikesNr){
         MutableStation station = new MutableStation(abbr, docksNr, bikesNr);
         mutableStations.put(abbr, station);
     }
@@ -42,8 +42,9 @@ public class RecServerImplOperations {
                     return mutableUser.getBalance() + " BIC";
                 }
             case "info":
+                System.out.println("station: " + attributes[0]);
                 if(mutableStations.get(attributes[0]) == null){
-                    System.out.println("mal");
+                    System.out.println("mal " + mutableStations.size());
                     mutableStations.put(attributes[0], new MutableStation(attributes[0]));
                     //TODO ver o que retorna quando nao existe
                     return "";

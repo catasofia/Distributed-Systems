@@ -74,7 +74,7 @@ public class HubMain {
 	}
 
 	public static void initializeRec(String abbr, Integer docksNr, Integer bikesNr){
-		RecServerImplOperations.initializeStations(abbr, docksNr, bikesNr);
+		RecServerImpl.getRecOperations().initializeStations(abbr, docksNr, bikesNr);
 	}
 
 	public static void readUsersFromCSV(String fileName){
