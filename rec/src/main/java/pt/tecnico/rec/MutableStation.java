@@ -5,32 +5,50 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 public class MutableStation{
 
-    private static MutablePair<String, ArrayList<Boolean>> _docksAvailability = new MutablePair<String, ArrayList<Boolean>>();
-    //false = no bike in the dock
+    private static MutablePair<String, Boolean[]> _docksAvailability = new MutablePair<>();
+    //null == there is an available bike
     private Integer _deliveries;
     private Integer _requisitions;
 
     public MutableStation(String abbr){
         _docksAvailability.setLeft(abbr + "/docksAvailability");
-        _docksAvailability.setRight(new ArrayList<Boolean>());
+        /*Boolean[] docks = new Boolean[];
+        _docksAvailability.setRight(docks);*/
         _deliveries = 0;
         _requisitions = 0;
     }
 
-    public ArrayList<Boolean> getDocksAvailability(){
+    public MutableStation(String abbr, Integer docksNr, Integer bikesNr){
+        _docksAvailability.setLeft(abbr + "/docksAvailability");
+        _requisitions = docksNr - bikesNr;
+        _deliveries = 0;
+        Boolean[] docks = new Boolean[docksNr];
+        for(int i = 0; i < (docksNr - bikesNr); i++){
+            docks[i] = true;
+        }
+        _docksAvailability.setRight(docks);
+    }
+
+    /*public ArrayList<Boolean> getDocksAvailability(){
+        return _docksAvailability.getRight();
+    }*/
+
+    public Boolean[] getDocksAvailability(){
         return _docksAvailability.getRight();
     }
 
     public void setDockAvailability(Integer dockNr){
-        Boolean availability = _docksAvailability.getRight().get(dockNr);
-        _docksAvailability.getRight().set(dockNr, !availability);
+        //Boolean availability = _docksAvailability.getRight().get(dockNr);
+        Boolean availability = _docksAvailability.getRight()[dockNr];
+        _docksAvailability.getRight()[dockNr] = !availability;
     }
 
     public Integer getAvailableBikesNr(){
         Integer count = 0;
-        List<Boolean> availability = _docksAvailability.getRight();
+        //List<Boolean> availability = _docksAvailability.getRight();
+        Boolean[] availability = _docksAvailability.getRight();
         for (Boolean bool: availability) {
-            if (bool) count++;
+            if (bool == null) count++;
         }
         return count;
     }

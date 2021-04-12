@@ -121,6 +121,7 @@
 						<argument>${instance}</argument>
 						<argument>users.csv</argument>
 						<argument>stations.csv</argument>
+						<argument>initRec</argument>
 					</arguments>
 				</configuration>
 			</plugin>

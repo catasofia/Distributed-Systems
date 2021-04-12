@@ -13,7 +13,7 @@ import io.grpc.*;
 
 
 public class HubServerImplOperations {
-    private Map <String, Station> stations = new HashMap<>();
+    private Map <String, Station> stations;
     private HubFrontend hub = new HubFrontend();
 
     public HubServerImplOperations() {
@@ -42,8 +42,8 @@ public class HubServerImplOperations {
         Station station = stations.get(abbr);
         List<String> result = new ArrayList<>();
         result.add(station.getName());
-        result.add("lat " + String.valueOf(station.getLatitude()));
-        result.add(String.valueOf(station.getLongitude()) + " long");
+        result.add(String.valueOf(station.getLatitude()));
+        result.add(String.valueOf(station.getLongitude()));
         result.add(String.valueOf(station.getDocksNr()));
         result.add(String.valueOf(station.getPrize()));
 

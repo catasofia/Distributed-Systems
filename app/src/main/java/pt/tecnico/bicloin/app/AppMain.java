@@ -40,11 +40,8 @@ public class AppMain {
 		String response = hubFrontend.ctrlPing("friend");
 		System.out.println(response);
 
-		System.out.println("Trying locate station:");
-		System.out.println(hubFrontend.locate_station(latitude, longitude, 9));
-
 		try(Scanner scanner = new Scanner(System.in)){
-			System.out.println(user + ", welcome to the app!!");
+			System.out.println("\n" + user + ", welcome to the app!!\n");
 			do{
 				String command = scanner.nextLine();
 				if (command.equals("balance")) {
@@ -52,8 +49,7 @@ public class AppMain {
 				}
 				else if (command.startsWith("info")){
 					String[] attributes = command.split(" ");
-					System.out.println(hubFrontend.info_station(attributes[0]) + "https://www.google.com/maps/place/" +
-							+ latitude + "," + longitude);
+					System.out.println(hubFrontend.info_station(attributes[1]));
 				}
 				else {
 					System.out.println("The command you entered is not valid. Please, try again!");

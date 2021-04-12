@@ -2,6 +2,8 @@ package pt.tecnico.bicloin.hub;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import pt.tecnico.rec.RecServerImpl;
+import pt.tecnico.rec.RecServerImplOperations;
 import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 
@@ -24,7 +26,7 @@ public class HubMain {
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException {
 		System.out.println(HubMain.class.getSimpleName());
 		
-		if(args.length != 7 || args.length != 8){
+		if(args.length != 7 && args.length != 8){
 			System.out.printf("Expected 7 or 8 arguments\n");
 		}
 		// receive and print arguments
@@ -42,10 +44,10 @@ public class HubMain {
 		String path = "/grpc/bicloin/hub/";
 		path += args[4];
 
-		HubServerImpl impl = new HubServerImpl();
-
 		readUsersFromCSV(args[5]);
-		readStationsFromCSV(args[6]);
+		readStationsFromCSV(args[6], args.length == 8);
+
+		HubServerImpl impl = new HubServerImpl();
 
 		try{
 			zkNaming = new ZKNaming(zooHost, zooPort);
@@ -69,6 +71,10 @@ public class HubMain {
 
 	public static Map<String, Station> getStations(){
 		return stations;
+	}
+
+	public static void initializeRec(String abbr, Integer docksNr, Integer bikesNr){
+		RecServerImplOperations.initializeStations(abbr, docksNr, bikesNr);
 	}
 
 	public static void readUsersFromCSV(String fileName){
@@ -103,7 +109,7 @@ public class HubMain {
 		}
 	}
 
-	public static void readStationsFromCSV(String fileName){
+	public static void readStationsFromCSV(String fileName, boolean bool){
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
 			String line = br.readLine();
 			while (line != null) {
@@ -120,9 +126,13 @@ public class HubMain {
 					continue;
 				}
 				Station station = new Station(attributes[0], attributes[1], Double.parseDouble(attributes[2]),
-					Double.parseDouble(attributes[3]), Integer.parseInt(attributes[4]),
-					Integer.parseInt(attributes[5]), Integer.parseInt(attributes[6]));
+					Double.parseDouble(attributes[3]), Integer.parseInt(attributes[4]), Integer.parseInt(attributes[6]));
 				stations.put(attributes[1], station);
+
+				if(bool){
+					initializeRec(attributes[1], Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]));
+				}
+
 				line = br.readLine();
 			}
 		} catch(IOException e){

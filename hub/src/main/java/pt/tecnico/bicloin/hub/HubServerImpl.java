@@ -11,7 +11,6 @@ import java.util.List;
 public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     HubServerImplOperations operations = new HubServerImplOperations();
-    
 
     @Override
     public void balance(Hub.BalanceRequest request, StreamObserver<Hub.BalanceResponse> responseObserver){

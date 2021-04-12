@@ -96,13 +96,14 @@ public class HubFrontend{
         String finalResult = "";
 
         finalResult += infoResponse.getName();
-        finalResult = finalResult + " " + infoResponse.getLatitude();
-        finalResult = finalResult + " " + infoResponse.getLongitude();
-        finalResult = finalResult + " " + infoResponse.getDocksNr();
-        finalResult = finalResult + " " + infoResponse.getPrize();
+        finalResult = finalResult + ", lat " + infoResponse.getLatitude();
+        finalResult = finalResult + ", " + infoResponse.getLongitude() + " long, ";
+        finalResult = finalResult + infoResponse.getDocksNr() + " docas, ";
+        finalResult = finalResult + infoResponse.getPrize() + " BIC prémio, ";
 
-        finalResult = finalResult + " " + rec.info_station(abbr);
-
+        finalResult = finalResult + " " + rec.info_station(abbr) + "https://www.google.com/maps/place/"
+                + infoResponse.getLatitude() + "," + infoResponse.getLongitude();
+            ;
 
         return finalResult;
     }

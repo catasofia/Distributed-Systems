@@ -18,9 +18,6 @@ public class HubIT {
 
 	private static HubFrontend hubFrontend;
 	private static List<ManagedChannel> channels;
-	// static members
-	// TODO
-	
 	
 	// one-time initialization and clean-up
 	@BeforeAll
@@ -67,4 +64,16 @@ public class HubIT {
 				.getStatus()
 				.getCode());
 	}
+
+	/*@Test
+	public void balanceOK(){
+		String response = HubFrontend.balance("alice");
+		assertEquals("0 BIC", response);
+	}
+
+	@Test
+	public void locate_station(){
+		String response = HubFrontend.locate_station(38.7380, -9.3000, 2);
+		assertEquals("cate\nocea", response);
+	}*/
 }
