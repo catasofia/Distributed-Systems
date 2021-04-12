@@ -18,6 +18,6 @@ public class MutableUser{
 
     public void increaseBalance(Integer balance){
         Integer previousBalance = _balance.getValue();
-        _balance.setValue(previousBalance + balance);
+        _balance.setValue(previousBalance + (balance*10));
     }
 }

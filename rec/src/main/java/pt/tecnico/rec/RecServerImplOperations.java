@@ -66,25 +66,27 @@ public class RecServerImplOperations {
     public synchronized String write(String input) throws BadEntrySpecificationException{
         String[] attributes = input.split("/");
 
-        switch (attributes[1]) {
-            case "top_up":
-                if (mutableUsers.get(attributes[0]) == null) {
-                    mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
-                    String[] amount = attributes[1].split(" ");
-                    mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1]));
-                    Integer balance = mutableUsers.get(attributes[0]).getBalance();
-                    return String.valueOf(balance);
-                }
-                else {
-                    MutableUser mutableUser = mutableUsers.get(attributes[0]);
-                    String[] amount = attributes[1].split(" ");
-                    mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1]));
-                    Integer balance = mutableUsers.get(attributes[0]).getBalance();
-                    return String.valueOf(balance);
-                }
-
-            default:
-                return "";
+        /* switch (attributes[1]) {
+            case "top_up": */
+        if(attributes[1].startsWith("top_up")){
+            if (mutableUsers.get(attributes[0]) == null) {
+                mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
+                String[] amount = attributes[1].split(" ");
+                mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1]));
+                Integer balance = mutableUsers.get(attributes[0]).getBalance();
+                return String.valueOf(balance);
+            }
+            else {
+                MutableUser mutableUser = mutableUsers.get(attributes[0]);
+                String[] amount = attributes[1].split(" ");
+                mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1]));
+                Integer balance = mutableUsers.get(attributes[0]).getBalance();
+                return String.valueOf(balance);
+            }
         }
+
+    return ""; //default case
+        /* default:
+            return ""; */
     }
 }

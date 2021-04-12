@@ -51,6 +51,10 @@ public class AppMain {
 					String[] attributes = command.split(" ");
 					System.out.println(hubFrontend.info_station(attributes[1]));
 				}
+				else if (command.startsWith("top-up")){
+					String[] attributes = command.split(" ");
+					System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1])) + " BIC");
+				}
 				else {
 					System.out.println("The command you entered is not valid. Please, try again!");
 				}
