@@ -77,14 +77,40 @@ public class RecServerImplOperations {
             else {
                 MutableUser mutableUser = mutableUsers.get(attributes[0]);
                 String[] amount = attributes[1].split(" ");
-                mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1]));
-                Integer balance = mutableUsers.get(attributes[0]).getBalance();
+                mutableUser.increaseBalance(Integer.parseInt(amount[1]));
+                Integer balance = mutableUser.getBalance();
                 return String.valueOf(balance);
+            }
+        }
+        else if(attributes[1].startsWith("bike_up")){
+            if (mutableStations.get(attributes[0]) == null) {
+                mutableStations.put(attributes[0], new MutableStation(attributes[0]));
+                mutableStations.get(attributes[0]).bikeUp();
+                Integer requisitions = mutableStations.get(attributes[0]).getRequisitions();
+                return String.valueOf(requisitions);
+            }
+            else {
+                MutableStation mutableStation = mutableStations.get(attributes[0]);
+                mutableStation.bikeUp();
+                Integer requisitions = mutableStation.getRequisitions();
+                return String.valueOf(requisitions);
+            }
+        }
+        else if(attributes[1].startsWith("bike_down")){
+            if (mutableStations.get(attributes[0]) == null) {
+                mutableStations.put(attributes[0], new MutableStation(attributes[0]));
+                mutableStations.get(attributes[0]).bikeDown();
+                Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
+                return String.valueOf(deliveries);
+            }
+            else {
+                MutableStation mutableStation = mutableStations.get(attributes[0]);
+                mutableStations.get(attributes[0]).bikeDown();
+                Integer deliveries = mutableStation.getDeliveries();
+                return String.valueOf(deliveries);
             }
         }
 
         return ""; //default case
-        /* default:
-            return ""; */
     }
 }
