@@ -49,4 +49,16 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
             responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
         }
     }
+
+    @Override
+    public void initialize(Rec.initializeRequest request, StreamObserver<Rec.initializeResponse> responseStreamObserver){
+
+            String abbr = request.getAbbr();
+            int docks = request.getDocks();
+            int bikes = request.getBikes();
+            operations.initializeStations(abbr, docks, bikes);
+            responseStreamObserver.onNext(Rec.initializeResponse.newBuilder().build());
+            responseStreamObserver.onCompleted();
+
+    }
 }

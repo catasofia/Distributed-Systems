@@ -87,4 +87,5 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
         }
     }
+
 }

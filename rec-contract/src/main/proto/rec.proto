@@ -28,9 +28,17 @@ message WriteResponse {
    string value = 1;
 }
 
+message initializeRequest{
+    string abbr = 1;
+    int32 docks = 2;
+    int32 bikes = 3;
+}
+
+message initializeResponse{}
+
 service RecordService {
   rpc ctrl_ping(CtrlPingRequest) returns (CtrlPingResponse);
   rpc read(ReadRequest) returns (ReadResponse);
   rpc write(WriteRequest) returns (WriteResponse);
-
+  rpc initialize(initializeRequest) returns (initializeResponse);
 }

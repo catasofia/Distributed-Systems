@@ -42,20 +42,17 @@ public class RecServerImplOperations {
                     return mutableUser.getBalance() + " BIC";
                 }
             case "info":
-                System.out.println("station: " + attributes[0]);
                 if(mutableStations.get(attributes[0]) == null){
-                    System.out.println("mal " + mutableStations.size());
                     mutableStations.put(attributes[0], new MutableStation(attributes[0]));
                     //TODO ver o que retorna quando nao existe
                     return "";
                 }
                 else{
-                    System.out.println("bem");
                     MutableStation mutableStation = mutableStations.get(attributes[0]);
                     String result = "";
-                    result += mutableStation.getAvailableBikesNr();
-                    result = result + " " + mutableStation.getRequisitions();
-                    result = result + " " + mutableStation.getDeliveries();
+                    result += mutableStation.getAvailableBikesNr() + " bicicletas,";
+                    result = result + " " + mutableStation.getRequisitions() + " levantamentos,";
+                    result = result + " " + mutableStation.getDeliveries() + " devoluções, ";
                     return result;
                 }
             default:
@@ -86,7 +83,7 @@ public class RecServerImplOperations {
             }
         }
 
-    return ""; //default case
+        return ""; //default case
         /* default:
             return ""; */
     }

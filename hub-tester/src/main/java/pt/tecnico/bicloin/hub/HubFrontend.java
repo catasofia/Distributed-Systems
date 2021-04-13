@@ -21,7 +21,7 @@ public class HubFrontend{
 
     private String path = "/grpc/bicloin/hub";
     private static List<HubServiceGrpc.HubServiceBlockingStub> stubs = new ArrayList<>();
-    private RecFrontend rec = new RecFrontend();
+    private static RecFrontend rec = new RecFrontend();
 
     public HubFrontend(){}
 
@@ -73,8 +73,6 @@ public class HubFrontend{
                 x++;
             }
         }
-
-        RecordServiceGrpc.RecordServiceBlockingStub recStub = rec.getStub();
 
         try{
             rec.ctrlPing(status);

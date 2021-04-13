@@ -44,13 +44,14 @@ public class MutableStation{
     }
 
     public Integer getAvailableBikesNr(){
-        Integer count = 0;
+        /*Integer count = 0;
         //List<Boolean> availability = _docksAvailability.getRight();
         Boolean[] availability = _docksAvailability.getRight();
         for (Boolean bool: availability) {
             if (bool == null) count++;
         }
-        return count;
+        return count;*/
+        return (_docksAvailability.getRight().length - _requisitions + _deliveries);
     }
 
     public void addDeliveries(){

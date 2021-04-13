@@ -1,17 +1,24 @@
 package pt.tecnico.bicloin.hub;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import pt.tecnico.rec.RecServerImpl;
 import pt.tecnico.rec.RecServerImplOperations;
+import pt.tecnico.rec.grpc.Rec;
+import pt.tecnico.rec.grpc.RecordServiceGrpc;
 import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
+import pt.ulisboa.tecnico.sdis.zk.ZKRecord;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 /*import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -22,6 +29,9 @@ public class HubMain {
 	private static ZKNaming zkNaming;
 	private static Map<String, User> users =  new HashMap<>();
 	private static Map<String, Station> stations = new HashMap<>();
+
+	private static ManagedChannel rec_channel;
+	private static RecordServiceGrpc.RecordServiceBlockingStub rec_stub;
 	
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException {
 		System.out.println(HubMain.class.getSimpleName());
@@ -44,8 +54,6 @@ public class HubMain {
 		String path = "/grpc/bicloin/hub/";
 		path += args[4];
 
-		readUsersFromCSV(args[5]);
-		readStationsFromCSV(args[6], args.length == 8);
 
 		HubServerImpl impl = new HubServerImpl();
 
@@ -55,6 +63,8 @@ public class HubMain {
 			zkNaming.rebind(path, host, port);
 			Server server = ServerBuilder.forPort(Integer.parseInt(port)).addService(impl).build();
 			server.start();
+			readUsersFromCSV(args[5]);
+			readStationsFromCSV(args[6], args.length == 8);
 			server.awaitTermination();
 		}catch(ZKNamingException e){
 			e.printStackTrace();
@@ -63,6 +73,7 @@ public class HubMain {
 				zkNaming.unbind(path, host, port);
 			}
 		}
+
 	}
 
 	public static Map<String, User> getUsers(){
@@ -73,8 +84,16 @@ public class HubMain {
 		return stations;
 	}
 
-	public static void initializeRec(String abbr, Integer docksNr, Integer bikesNr){
-		RecServerImpl.getRecOperations().initializeStations(abbr, docksNr, bikesNr);
+	public static void initializeRec(String abbr, Integer docksNr, Integer bikesNr)throws ZKNamingException, IOException, InterruptedException{
+		ZKRecord zkRecord = zkNaming.lookup("/grpc/bicloin/rec/1");
+		String uri = zkRecord.getURI();
+		rec_channel = ManagedChannelBuilder.forTarget(uri).usePlaintext().build();
+		rec_stub = RecordServiceGrpc.newBlockingStub(rec_channel);
+
+		Rec.initializeRequest request = Rec.initializeRequest.newBuilder().setAbbr(abbr)
+				.setDocks(docksNr).setBikes(bikesNr).build();
+		rec_stub.initialize(request);
+		//RecServerImp.getRecOperations().initializeStations(abbr, docksNr, bikesNr);
 	}
 
 	public static void readUsersFromCSV(String fileName){
@@ -128,11 +147,18 @@ public class HubMain {
 				Station station = new Station(attributes[0], attributes[1], Double.parseDouble(attributes[2]),
 					Double.parseDouble(attributes[3]), Integer.parseInt(attributes[4]), Integer.parseInt(attributes[6]));
 				stations.put(attributes[1], station);
-
 				if(bool){
-					initializeRec(attributes[1], Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]));
-				}
+					try {
+						initializeRec(attributes[1], Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]));
 
+					} catch (ZKNamingException e){
+						System.out.println("ZK Naming exception.");
+					} catch (IOException e){
+					System.out.println("IO Exception");
+					} catch (InterruptedException e){
+						System.out.println("Interrupted exception.");
+					}
+				}
 				line = br.readLine();
 			}
 		} catch(IOException e){

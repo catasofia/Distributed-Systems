@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class AppMain {
 	private static HubFrontend hubFrontend;
@@ -27,7 +28,7 @@ public class AppMain {
 			Double.parseDouble(args[4]);
 			Double.parseDouble(args[5]);
 		} catch (NumberFormatException e){
-			System.out.println("Latitude and longitude should be both doubles.");
+			System.out.println("Latitude e longitude têm de ser valores Double.");
 		}
 
 		Map<String, String> tags = new HashMap<>();
@@ -40,12 +41,8 @@ public class AppMain {
 		Double latitude = Double.parseDouble(args[4]);
 		Double longitude = Double.parseDouble(args[5]);
 
-		System.out.println("Trying ping:");
-		String response = hubFrontend.ctrlPing("friend");
-		System.out.println(response);
-
 		try(Scanner scanner = new Scanner(System.in)){
-			System.out.println("\n" + user + ", welcome to the app!!\n");
+			System.out.println("\n" + user + ", bem-vindo à APP!!\n");
 			do{
 				String command = scanner.nextLine();
 				if (command.equals("balance")) {
@@ -75,7 +72,7 @@ public class AppMain {
 				else if(command.startsWith("move")){
 					String[] attributes = command.split(" ");
 					if(tags.get(attributes[1]) == null){
-						System.out.println("There is no tag named " + attributes[1]);
+						System.out.println("Não existe nenhuma tag com o nome: " + attributes[1]);
 					}
 					else{
 						String position = tags.get(attributes[1]);
@@ -88,8 +85,35 @@ public class AppMain {
 				else if(command.startsWith("at")){
 					System.out.println(user + " em https://www.google.com/maps/place/" + latitude + "," + longitude);
 				}
+				else if(command.startsWith("scan")){
+					//TODO
+				}
+				else if(command.startsWith("bike-up")){
+					//TODO
+				}
+				else if(command.startsWith("bike-down")){
+					//TODO
+				}
+				else if(command.startsWith("ping")){
+					System.out.println(hubFrontend.ctrlPing("ping"));
+				}
+				else if(command.startsWith("sys_status")){
+					System.out.println(hubFrontend.sys_status("status"));
+				}
+				else if(command.startsWith("zzz")){
+					String[] attributes = command.split(" ");
+					TimeUnit.MILLISECONDS.sleep(Integer.parseInt(attributes[1]));
+					System.out.println("Dormi durante " + attributes[1] + " milissegundos!\n");
+				}
+				else if(command.startsWith("#")){
+					continue;
+				}
+				else if(command.startsWith("help")){
+					System.out.println("\nComandos adicionais:");
+					System.out.println("exit para sair da app");
+				}
 				else {
-					System.out.println("The command you entered is not valid. Please, try again!");
+					System.out.println("O comando inserido não é válido. Por favor, tente de novo!");
 				}
 			} while(scanner.hasNextLine());
 		}
