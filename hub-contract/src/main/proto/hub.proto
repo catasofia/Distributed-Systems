@@ -25,7 +25,7 @@ message BalanceRequest {
 }
 
 message BalanceResponse {
-  int32 balance = 1;
+  string balance = 1;
 }
 
 message TopUpRequest {
@@ -35,7 +35,7 @@ message TopUpRequest {
 }
 
 message TopUpResponse {
-  int32 balance = 1;
+  string balance = 1;
 }
 
 message InfoStationRequest {
@@ -70,7 +70,7 @@ message BikeUpRequest {
 }
 
 message BikeUpResponse {
-  //no arguments
+  string response = 1;
 }
 
 message BikeDownRequest {
@@ -81,7 +81,7 @@ message BikeDownRequest {
 }
 
 message BikeDownResponse {
-  //no arguments
+  string response = 1;
 }
   
 service HubService {

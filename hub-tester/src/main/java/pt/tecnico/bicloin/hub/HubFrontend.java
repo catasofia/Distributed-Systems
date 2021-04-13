@@ -7,6 +7,7 @@ import pt.tecnico.bicloin.hub.grpc.Hub;
 import pt.tecnico.bicloin.hub.grpc.HubServiceGrpc;
 import pt.tecnico.rec.MutableStation;
 import pt.tecnico.rec.RecFrontend;
+import pt.tecnico.rec.exceptions.BadEntrySpecificationException;
 import pt.tecnico.rec.grpc.Rec;
 import pt.tecnico.rec.grpc.RecordServiceGrpc;
 import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
@@ -117,10 +118,30 @@ public class HubFrontend{
     }
 
     public String balance(String name){
-        return rec.balance(name);
+        Hub.BalanceRequest request = Hub.BalanceRequest.newBuilder().setName(name).build();
+        String value = stubs.get(0).balance(request).getBalance();
+        return rec.balance(value);
     }
 
     public String topUp(String name, Integer amount){
-        return rec.topUp(name, amount);
+        Hub.TopUpRequest request = Hub.TopUpRequest.newBuilder().setName(name)
+                .setAmount(amount).build();
+        String value = stubs.get(0).topUp(request).getBalance();
+        return rec.topUp(value);
+    }
+
+    public void bikeUp(String name, Double latitude, Double longitude, String abbr){
+        Random r = new Random();
+        int low = 0;
+        System.out.println(stubs.size());
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+        Hub.BikeUpRequest bikeUpRequest = Hub.BikeUpRequest.newBuilder().setName(name).setLatitude(latitude)
+                .setLongitude(longitude).setAbbr(abbr).build();
+        stubs.get(result).bikeUp(bikeUpRequest);
+        rec.bikeUp(abbr);
+
+        System.out.println("olaaaa");
+        
     }
 }

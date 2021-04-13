@@ -75,13 +75,34 @@ public class HubServerImplOperations {
     }
 
     public synchronized String balance(String name){
-        return hub.balance(name);
+        return name + "/balance";
     }
 
     public synchronized String topUp(String name, Integer amount, String phone) throws BadEntrySpecificationException{
-        if (!users.get(name).getPhone().equals(phone)){
-            throw new BadEntrySpecificationException("The phone doesn't correspond to this user");
+        /*if (!users.get(name).getPhone().equals(phone)){
+            throw new BadEntrySpecificationException("O número de telemóvel não corresponde ao utilizador");
+        }*/
+        if(amount < 1 || amount > 20){
+            throw new BadEntrySpecificationException("Só se pode carregar com valores entre 1 EUR e 20 EUR, inclusive.");
         }
-        return hub.topUp(name, amount);
+        return name+"/top_up "+amount;
+    }
+
+    public synchronized String bikeUp(String name, Double latitude, Double longitude, String abbr) throws BadEntrySpecificationException{
+        Station station = stations.get(abbr);
+        if (station.calculateDistance(latitude, longitude) < 200){
+            return abbr+"/bike_up";
+        }else{
+            throw new BadEntrySpecificationException("Fora de alcance");
+        }
+    }
+
+    public synchronized String bikeDown(String name, Double latitude, Double longitude, String abbr) throws BadEntrySpecificationException{
+        Station station = stations.get(abbr);
+        if (station.calculateDistance(latitude, longitude) < 200){
+            return abbr+"/bike_down";
+        }else{
+            throw new BadEntrySpecificationException("Fora de alcance");
+        }
     }
 }

@@ -15,7 +15,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
     @Override
     public void balance(Hub.BalanceRequest request, StreamObserver<Hub.BalanceResponse> responseObserver){
        String balance = operations.balance(request.getName());
-       Hub.BalanceResponse response = Hub.BalanceResponse.newBuilder().setBalance(Integer.parseInt(balance)).build();
+       Hub.BalanceResponse response = Hub.BalanceResponse.newBuilder().setBalance(balance).build();
        responseObserver.onNext(response);
        responseObserver.onCompleted();
     }
@@ -24,11 +24,12 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
     public void topUp(Hub.TopUpRequest request, StreamObserver<Hub.TopUpResponse> responseObserver){
         try {
             String balance = operations.topUp(request.getName(), request.getAmount(), request.getPhone());
-            Hub.TopUpResponse response = Hub.TopUpResponse.newBuilder().setBalance(Integer.parseInt(balance)).build();
+            Hub.TopUpResponse response = Hub.TopUpResponse.newBuilder().setBalance(balance).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            //System.out.println("Erro: " + e.toString());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
         }
     }
 
@@ -56,12 +57,28 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
 
     @Override
     public void bikeUp(Hub.BikeUpRequest request, StreamObserver<Hub.BikeUpResponse> responseObserver){
-        //TODO
+        try {
+            String result = operations.bikeUp(request.getName(), request.getLatitude(), request.getLongitude(), request.getAbbr());
+            Hub.BikeUpResponse response = Hub.BikeUpResponse.newBuilder().setResponse(result).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }catch(BadEntrySpecificationException e){
+            System.out.println("ERRO");
+            //responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 
     @Override
     public void bikeDown(Hub.BikeDownRequest request, StreamObserver<Hub.BikeDownResponse> responseObserver){
-        //TODO
+        try {
+            String result = operations.bikeDown(request.getName(), request.getLatitude(), request.getLongitude(), request.getAbbr());
+            Hub.BikeDownResponse response = Hub.BikeDownResponse.newBuilder().setResponse(result).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }catch(BadEntrySpecificationException e){
+            System.out.println("ERRO");
+            //responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+        }
     }
 
     @Override

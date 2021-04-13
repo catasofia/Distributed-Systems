@@ -45,12 +45,22 @@ public class RecFrontend{
     }
 
     public String balance(String input){
-        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input+"/balance").build();
+        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
         return stub.read(readRequest).getValue();
     }
 
-    public String topUp(String name, Integer amount){
-        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name+"/top_up "+amount).build();
+    public String topUp(String name){
+        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+        return stub.write(writeRequest).getValue();
+    }
+
+    public String bikeUp(String name){
+        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+        return stub.write(writeRequest).getValue();
+    }
+
+    public String bikeDown(String name){
+        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
         return stub.write(writeRequest).getValue();
     }
 }

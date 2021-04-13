@@ -1,6 +1,7 @@
 package pt.tecnico.bicloin.app;
 
 import io.grpc.ManagedChannel;
+import io.grpc.StatusRuntimeException;
 import pt.tecnico.bicloin.hub.HubFrontend;
 import pt.tecnico.bicloin.hub.grpc.Hub;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
@@ -35,13 +36,14 @@ public class AppMain {
 		String user = args[2];
 
 
-		hubFrontend = new HubFrontend();
-		channels = hubFrontend.createChannels(args[0], args[1]);
 
 		Double latitude = Double.parseDouble(args[4]);
 		Double longitude = Double.parseDouble(args[5]);
+		//System.out.println(hubFrontend.locate_station(latitude, longitude, 2));
 
 		try(Scanner scanner = new Scanner(System.in)){
+			hubFrontend = new HubFrontend();
+			channels = hubFrontend.createChannels(args[0], args[1]);
 			System.out.println("\n" + user + ", bem-vindo à APP!!\n");
 			do{
 				String command = scanner.nextLine();
@@ -53,8 +55,12 @@ public class AppMain {
 					System.out.println(hubFrontend.info_station(attributes[1]));
 				}
 				else if (command.startsWith("top-up")){
-					String[] attributes = command.split(" ");
-					System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1])) + " BIC");
+					try {
+						String[] attributes = command.split(" ");
+						System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1])) + " BIC");
+					} catch (StatusRuntimeException e){
+						System.out.println("ERRO: Impossível carregar. Tente outra vez!");
+					}
 				}
 				else if(command.startsWith("tag")){
 					String[] attributes = command.split(" ");
@@ -72,7 +78,7 @@ public class AppMain {
 				else if(command.startsWith("move")){
 					String[] attributes = command.split(" ");
 					if(tags.get(attributes[1]) == null){
-						System.out.println("Não existe nenhuma tag com o nome: " + attributes[1]);
+						System.out.println("ERRO: Não existe nenhuma tag com o nome: " + attributes[1]);
 					}
 					else{
 						String position = tags.get(attributes[1]);
@@ -89,7 +95,12 @@ public class AppMain {
 					//TODO
 				}
 				else if(command.startsWith("bike-up")){
-					//TODO
+					String[] attributes = command.split(" ");
+					try{
+						hubFrontend.bikeUp(user, latitude, longitude, attributes[1]);
+					} catch(StatusRuntimeException e){
+						System.out.println("ERRO: impossível requisitar uma bicicleta. Tente outra vez!");
+					}
 				}
 				else if(command.startsWith("bike-down")){
 					//TODO
