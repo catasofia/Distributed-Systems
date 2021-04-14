@@ -91,7 +91,7 @@ public class HubServerImplOperations {
     public synchronized String bikeUp(String name, Double latitude, Double longitude, String abbr) throws BadEntrySpecificationException{
         Station station = stations.get(abbr);
         if (station.calculateDistance(latitude, longitude) < 200){
-            return abbr+"/bike_up";
+            return abbr+"/bike_up " + name;
         }else{
             throw new BadEntrySpecificationException("Fora de alcance");
         }
@@ -100,7 +100,7 @@ public class HubServerImplOperations {
     public synchronized String bikeDown(String name, Double latitude, Double longitude, String abbr) throws BadEntrySpecificationException{
         Station station = stations.get(abbr);
         if (station.calculateDistance(latitude, longitude) < 200){
-            return abbr+"/bike_down";
+            return abbr+"/bike_down " + name;
         }else{
             throw new BadEntrySpecificationException("Fora de alcance");
         }

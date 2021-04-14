@@ -30,6 +30,10 @@ public class MutableStation{
         return _bikes;
     }
 
+    public Integer getDocksNumber() {
+        return _docks;
+    }
+
     public void bikeDown(){
         _bikes++;
         _deliveries++;

@@ -19,7 +19,7 @@ public class RecServerImplOperations {
 
     public synchronized String ping(String ping) throws BadEntrySpecificationException{
         if (ping == null || ping.isBlank()){
-            throw new BadEntrySpecificationException("Error ping: null or empty");
+            throw new BadEntrySpecificationException("Erro ping: nulo ou vazio");
         }
         return ping;
     }
@@ -64,8 +64,6 @@ public class RecServerImplOperations {
     public synchronized String write(String input) throws BadEntrySpecificationException{
         String[] attributes = input.split("/");
 
-        /* switch (attributes[1]) {
-            case "top_up": */
         if(attributes[1].startsWith("top_up")){
             if (mutableUsers.get(attributes[0]) == null) {
                 mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
@@ -83,29 +81,48 @@ public class RecServerImplOperations {
             }
         }
         else if(attributes[1].startsWith("bike_up")){
+            String[] userId = attributes[1].split(" ");
+
+            if(mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
+                throw new BadEntrySpecificationException("Erro write: Não há bicicletas disponiveis para requisitar.");
+            }
+            if(!mutableUsers.get(userId[1]).getBikeState()) {
+                throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar mais bicicletas.");
+            }
+
             if (mutableStations.get(attributes[0]) == null) {
                 mutableStations.put(attributes[0], new MutableStation(attributes[0]));
                 mutableStations.get(attributes[0]).bikeUp();
+                mutableUsers.get(userId[1]).setBikeState();
                 Integer requisitions = mutableStations.get(attributes[0]).getRequisitions();
                 return String.valueOf(requisitions);
             }
             else {
                 MutableStation mutableStation = mutableStations.get(attributes[0]);
                 mutableStation.bikeUp();
+                mutableUsers.get(userId[1]).setBikeState();
                 Integer requisitions = mutableStation.getRequisitions();
                 return String.valueOf(requisitions);
             }
         }
         else if(attributes[1].startsWith("bike_down")){
+            String[] userId = attributes[1].split(" ");
+
+            if(mutableStations.get(attributes[0]).getDocksNumber() -  mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
+                throw new BadEntrySpecificationException("Erro write: Não pode devolver a bicicleta nesta doca. Doca cheia.");
+            }
+
             if (mutableStations.get(attributes[0]) == null) {
                 mutableStations.put(attributes[0], new MutableStation(attributes[0]));
                 mutableStations.get(attributes[0]).bikeDown();
+                mutableUsers.get(userId[1]).setBikeState();
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
                 return String.valueOf(deliveries);
             }
             else {
                 MutableStation mutableStation = mutableStations.get(attributes[0]);
                 mutableStations.get(attributes[0]).bikeDown();
+                mutableUsers.get(userId[1]).setBikeState();
                 Integer deliveries = mutableStation.getDeliveries();
                 return String.valueOf(deliveries);
             }
