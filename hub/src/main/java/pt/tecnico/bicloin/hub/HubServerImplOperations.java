@@ -57,7 +57,6 @@ public class HubServerImplOperations {
         LinkedHashMap <String, Double> sortedMap = new LinkedHashMap<>();
         for (Station station : stations.values()){
             stationsDistance.put(station.getAbbr(), station.calculateDistance(lat, longt));
-            System.out.println(station.getAbbr() + station.calculateDistance(lat, longt));
         }
         stationsDistance.entrySet()
                 .stream()
@@ -67,7 +66,7 @@ public class HubServerImplOperations {
         Set<String> abbrs = sortedMap.keySet();
         String[] ordered = new String[abbrs.size()];
         abbrs.toArray(ordered);
-
+        if(k > ordered.length) k = ordered.length;
         for(int i = 0; i < k; i++){
             result.append(ordered[i]);
             result.append("\n");

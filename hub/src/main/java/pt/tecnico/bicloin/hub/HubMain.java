@@ -20,9 +20,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/*import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;*/
 
 public class HubMain {
 
@@ -93,7 +90,6 @@ public class HubMain {
 		Rec.initializeRequest request = Rec.initializeRequest.newBuilder().setAbbr(abbr)
 				.setDocks(docksNr).setBikes(bikesNr).build();
 		rec_stub.initialize(request);
-		//RecServerImp.getRecOperations().initializeStations(abbr, docksNr, bikesNr);
 	}
 
 	public static void readUsersFromCSV(String fileName){
@@ -102,23 +98,21 @@ public class HubMain {
 			while (line != null) {
 				String[] attributes = line.split(" \t");
 				if (attributes[0].length() < 3 || attributes[0].length() > 10) {
-					System.out.println("The user should be between 3 and 10 characters. " + attributes[0] + " doesn't have the right length.");
+					System.out.println("O utilizador tem de ter entre 3 a 10 caracteres. "
+							+ attributes[0] + " não tem o tamanho desejado.");
 					continue;
 				}
 				if (attributes[1].length() > 30) {
-					System.out.println("The name can't have more than 30 characters. " + attributes[1] + " doesn't have the right length.");
+					System.out.println("O nome não pode ter mais de 30 caracteres. "
+							+ attributes[1] + " não tem o tamanho desejado.");
 					continue;
 				}
-				/*PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-				try{
-					PhoneNumber phoneNumber = phoneUtil.parse(attributes[2], PhoneNumber.CountryCodeSource.UNSPECIFIED.name());
-					if (!phoneUtil.isValidNumber(phoneNumber)){
-						System.out.println("Invalid mobile number.");
-						continue;
-					}
-				} catch (NumberParseException e){
-					System.out.println("Exception: Impossible to parse number.");
-				}*/
+
+				if(!attributes[2].startsWith("+") || attributes[2].length() > 15){
+					System.out.println("O número de telémovel " + attributes[2] + "não é um número válido.");
+					continue;
+				}
+
 				User user = new User(attributes[0], attributes[1], attributes[2]);
 				users.put(attributes[0], user);
 				line = br.readLine();

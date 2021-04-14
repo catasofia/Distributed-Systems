@@ -21,20 +21,22 @@ public class HubIT {
 	
 	// one-time initialization and clean-up
 	@BeforeAll
-	public static void oneTimeSetUp() throws ZKNamingException, IOException, InterruptedException{
+	public static void oneTimeSetUp() throws ZKNamingException, IOException, InterruptedException {
 		hubFrontend = new HubFrontend();
 		channels = hubFrontend.createChannels("localhost", "2181");
 	}
 	
 	@AfterAll
 	public static void oneTimeTearDown() {
+		for(ManagedChannel channel: channels) {
+			channel.shutdownNow();
+		}
 	}
 	
 	// initialization and clean-up for each test
 	
 	@BeforeEach
 	public void setUp() {
-		
 	}
 	
 	@AfterEach
@@ -46,8 +48,19 @@ public class HubIT {
 	
 	@Test
 	public void test() {
+	}
 		
+	@Test
+	public void topUpOK(){
+		String response = HubFrontend.topUp("alice", 12, "+35191102030");
+		assertEquals("120", response);
+	}
 		
+
+	@Test
+	public void balanceOK(){
+		String response = HubFrontend.balance("alice");
+		assertEquals("120 BIC", response);
 	}
 
 	@Test
@@ -59,27 +72,15 @@ public class HubIT {
 
 	@Test
 	public void emptyPingTest(){
-		Hub.CtrlPingRequest request = Hub.CtrlPingRequest.newBuilder().setInput("").build();
 		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.ctrlPing(""))
 				.getStatus()
 				.getCode());
 	}
 
-	@Test
-	public void balanceOK(){
-		String response = HubFrontend.balance("alice");
-		assertEquals("0 BIC", response);
-	}
 
-	@Test
-	public void topUpOK(){
-		String response = HubFrontend.topUp("alice", 12, "+35191102030");
-		assertEquals("alice 120 BIC", response);
-	}
 
 	@Test
 	public void topUpErrorPhone(){
-		String response = HubFrontend.topUp("alice", 12, "+35196502030");
 		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.
 				topUp("alice", 12, "+35196502030"))
 				.getStatus()
@@ -88,7 +89,6 @@ public class HubIT {
 
 	@Test
 	public void topUpErrorMoney(){
-		String response = HubFrontend.topUp("alice", 23, "+35191102030");
 		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.
 				topUp("alice", 23, "+35191102030"))
 				.getStatus()
@@ -117,7 +117,6 @@ public class HubIT {
 
 	@Test
 	public void bikeUpErrorDistance(){
-		HubFrontend.bikeUp("alice", 38.7376, -9.3031, "jero");
 		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.
 				bikeUp("alice", 38.7376, -9.3031, "jero"))
 				.getStatus()
@@ -126,9 +125,6 @@ public class HubIT {
 
 	@Test
 	public void bikeDownErrorDistance(){
-		HubFrontend.bikeUp("alice", 38.7376, -9.3031, "istt");
-
-		HubFrontend.bikeDown("alice", 38.7376, -9.3031, "jero");
 		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.
 				bikeDown("alice", 38.7376, -9.3031, "jero"))
 				.getStatus()

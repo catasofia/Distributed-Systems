@@ -41,22 +41,16 @@ public class HubFrontend{
         return channels;
     }
 
-    public static String ctrlPing(String ping) throws StatusRuntimeException{
-        try{
-            Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(ping).build();
-            Random r = new Random();
-            int low = 0;
-            int high = stubs.size();
-            int result = r.nextInt(high - low) + low;
-            Hub.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
+    public static String ctrlPing(String ping){
+        Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(ping).build();
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+        Hub.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
 
-            return pingResponse.getOutput();
+        return pingResponse.getOutput();
 
-        }catch (StatusRuntimeException e) {
-            System.out.println("Caught exception with description: " +
-                    e.getStatus().getDescription());
-        }
-        return "";
     }
 
     public String sys_status(String status){
