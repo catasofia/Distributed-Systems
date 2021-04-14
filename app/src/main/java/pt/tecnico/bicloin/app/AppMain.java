@@ -57,7 +57,7 @@ public class AppMain {
 				else if (command.startsWith("top-up")){
 					try {
 						String[] attributes = command.split(" ");
-						System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1])) + " BIC");
+						System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1]), args[3]) + " BIC");
 					} catch (StatusRuntimeException e){
 						System.out.println("ERRO: Impossível carregar. Tente outra vez!");
 					}
@@ -105,12 +105,12 @@ public class AppMain {
 				}
 				else if(command.startsWith("bike-down")){
 					String[] attributes = command.split(" ");
-					/*try{
+					try{
 						hubFrontend.bikeDown(user, latitude, longitude, attributes[1]);
 						System.out.println("OK");
 					} catch(StatusRuntimeException e){
 						System.out.println("ERRO: Impossível devolver uma bicicleta. Tente outra vez!");
-					}*/
+					}
 				}
 				else if(command.startsWith("ping")){
 					System.out.println(hubFrontend.ctrlPing("ping"));

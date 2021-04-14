@@ -123,9 +123,9 @@ public class HubFrontend{
         return rec.balance(value);
     }
 
-    public String topUp(String name, Integer amount){
+    public String topUp(String name, Integer amount, String phone){
         Hub.TopUpRequest request = Hub.TopUpRequest.newBuilder().setName(name)
-                .setAmount(amount).build();
+                .setAmount(amount).setPhone(phone).build();
         String value = stubs.get(0).topUp(request).getBalance();
         return rec.topUp(value);
     }
@@ -140,5 +140,17 @@ public class HubFrontend{
         String value = stubs.get(result).bikeUp(bikeUpRequest).getResponse();
 
         rec.bikeUp(value);
+    }
+
+    public void bikeDown(String name, Double latitude, Double longitude, String abbr){
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+        Hub.BikeDownRequest bikeDownRequest = Hub.BikeDownRequest.newBuilder().setName(name).setLatitude(latitude)
+                .setLongitude(longitude).setAbbr(abbr).build();
+        String value = stubs.get(result).bikeDown(bikeDownRequest).getResponse();
+
+        rec.bikeDown(value);
     }
 }
