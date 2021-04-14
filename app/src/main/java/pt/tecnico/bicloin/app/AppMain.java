@@ -68,7 +68,7 @@ public class AppMain {
 						Double.parseDouble(attributes[1]);
 						Double.parseDouble(attributes[2]);
 					} catch (NumberFormatException e){
-						System.out.println("ERRO: impossivel criar uma tag com os valores:" +
+						System.out.println("ERRO: Impossivel criar uma tag com os valores:" +
 								attributes[1] + " e " + attributes[2]);
 						continue;
 					}
@@ -98,12 +98,19 @@ public class AppMain {
 					String[] attributes = command.split(" ");
 					try{
 						hubFrontend.bikeUp(user, latitude, longitude, attributes[1]);
+						System.out.println("OK");
 					} catch(StatusRuntimeException e){
-						System.out.println("ERRO: impossível requisitar uma bicicleta. Tente outra vez!");
+						System.out.println("ERRO: Impossível requisitar uma bicicleta. Tente outra vez!");
 					}
 				}
 				else if(command.startsWith("bike-down")){
-					//TODO
+					String[] attributes = command.split(" ");
+					/*try{
+						hubFrontend.bikeDown(user, latitude, longitude, attributes[1]);
+						System.out.println("OK");
+					} catch(StatusRuntimeException e){
+						System.out.println("ERRO: Impossível devolver uma bicicleta. Tente outra vez!");
+					}*/
 				}
 				else if(command.startsWith("ping")){
 					System.out.println(hubFrontend.ctrlPing("ping"));
@@ -118,6 +125,12 @@ public class AppMain {
 				}
 				else if(command.startsWith("#")){
 					continue;
+				}
+				else if(command.startsWith("exit")){
+					for(ManagedChannel channel: channels) {
+						channel.shutdownNow();
+					}
+					System.exit(0);
 				}
 				else if(command.startsWith("help")){
 					System.out.println("\nComandos adicionais:");

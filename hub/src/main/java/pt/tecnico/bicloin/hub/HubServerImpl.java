@@ -63,8 +63,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            System.out.println("ERRO");
-            //responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
         }
     }
 
@@ -76,8 +75,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            System.out.println("ERRO");
-            //responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
         }
     }
 

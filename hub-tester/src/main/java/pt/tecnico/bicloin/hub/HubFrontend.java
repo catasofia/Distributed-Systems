@@ -133,15 +133,12 @@ public class HubFrontend{
     public void bikeUp(String name, Double latitude, Double longitude, String abbr){
         Random r = new Random();
         int low = 0;
-        System.out.println(stubs.size());
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
         Hub.BikeUpRequest bikeUpRequest = Hub.BikeUpRequest.newBuilder().setName(name).setLatitude(latitude)
                 .setLongitude(longitude).setAbbr(abbr).build();
-        stubs.get(result).bikeUp(bikeUpRequest);
-        rec.bikeUp(abbr);
+        String value = stubs.get(result).bikeUp(bikeUpRequest).getResponse();
 
-        System.out.println("olaaaa");
-        
+        rec.bikeUp(value);
     }
 }

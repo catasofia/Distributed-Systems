@@ -86,7 +86,12 @@ public class RecServerImplOperations {
             if(mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
                 throw new BadEntrySpecificationException("Erro write: Não há bicicletas disponiveis para requisitar.");
             }
-            if(!mutableUsers.get(userId[1]).getBikeState()) {
+
+            if (mutableUsers.get(userId[1]) == null) {
+                mutableUsers.put(userId[1], new MutableUser(userId[1]));
+            }
+
+            if(mutableUsers.get(userId[1]).getBikeState()) {
                 throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar mais bicicletas.");
             }
 
