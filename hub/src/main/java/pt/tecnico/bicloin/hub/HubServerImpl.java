@@ -42,7 +42,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
@@ -62,7 +62,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
@@ -74,7 +74,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
@@ -86,7 +86,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
@@ -98,7 +98,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 

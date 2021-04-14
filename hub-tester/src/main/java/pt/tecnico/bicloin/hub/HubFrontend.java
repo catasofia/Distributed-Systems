@@ -84,7 +84,9 @@ public class HubFrontend{
         return result;
     }
 
-    public String info_station(String abbr){
+    public static String info_station(String abbr){
+
+        //TODO erro e teste correspondente
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
@@ -138,7 +140,7 @@ public class HubFrontend{
         return Math.pow(Math.sin(val / 2), 2);
     }
 
-    public String locate_station(Double lat, Double longt, Integer k){
+    public static String locate_station(Double lat, Double longt, Integer k){
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
@@ -149,20 +151,20 @@ public class HubFrontend{
         return locateResponse.getAbbrs();
     }
 
-    public String balance(String name){
+    public static String balance(String name){
         Hub.BalanceRequest request = Hub.BalanceRequest.newBuilder().setName(name).build();
         String value = stubs.get(0).balance(request).getBalance();
         return rec.balance(value);
     }
 
-    public String topUp(String name, Integer amount, String phone){
+    public static String topUp(String name, Integer amount, String phone){
         Hub.TopUpRequest request = Hub.TopUpRequest.newBuilder().setName(name)
                 .setAmount(amount).setPhone(phone).build();
         String value = stubs.get(0).topUp(request).getBalance();
         return rec.topUp(value);
     }
 
-    public void bikeUp(String name, Double latitude, Double longitude, String abbr){
+    public static void bikeUp(String name, Double latitude, Double longitude, String abbr){
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
@@ -174,7 +176,7 @@ public class HubFrontend{
         rec.bikeUp(value);
     }
 
-    public void bikeDown(String name, Double latitude, Double longitude, String abbr){
+    public static void bikeDown(String name, Double latitude, Double longitude, String abbr){
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
