@@ -39,7 +39,6 @@ public class AppMain {
 
 		Double latitude = Double.parseDouble(args[4]);
 		Double longitude = Double.parseDouble(args[5]);
-		//System.out.println(hubFrontend.locate_station(latitude, longitude, 2));
 
 		try(Scanner scanner = new Scanner(System.in)){
 			hubFrontend = new HubFrontend();
@@ -59,7 +58,7 @@ public class AppMain {
 						String[] attributes = command.split(" ");
 						System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1]), args[3]) + " BIC");
 					} catch (StatusRuntimeException e){
-						System.out.println("ERRO: Impossível carregar. Tente outra vez!");
+						System.out.println("ERRO: " + e.getMessage());
 					}
 				}
 				else if(command.startsWith("tag")){
@@ -92,7 +91,12 @@ public class AppMain {
 					System.out.println(user + " em https://www.google.com/maps/place/" + latitude + "," + longitude);
 				}
 				else if(command.startsWith("scan")){
-					//TODO
+					String[] attributes = command.split(" ");
+					String stations = hubFrontend.locate_station(latitude, longitude, Integer.parseInt(attributes[1]));
+					String[] dividedStations = stations.split("\n");
+					for (String dividedStation : dividedStations) {
+						System.out.println(dividedStation + " " + hubFrontend.scan(dividedStation, latitude, longitude));
+					}
 				}
 				else if(command.startsWith("bike-up")){
 					String[] attributes = command.split(" ");
@@ -100,7 +104,7 @@ public class AppMain {
 						hubFrontend.bikeUp(user, latitude, longitude, attributes[1]);
 						System.out.println("OK");
 					} catch(StatusRuntimeException e){
-						System.out.println("ERRO: Impossível requisitar uma bicicleta. Tente outra vez!");
+						System.out.println("ERRO: " + e.getMessage());
 					}
 				}
 				else if(command.startsWith("bike-down")){
@@ -109,7 +113,7 @@ public class AppMain {
 						hubFrontend.bikeDown(user, latitude, longitude, attributes[1]);
 						System.out.println("OK");
 					} catch(StatusRuntimeException e){
-						System.out.println("ERRO: Impossível devolver uma bicicleta. Tente outra vez!");
+						System.out.println("ERRO: " + e.getMessage());
 					}
 				}
 				else if(command.startsWith("ping")){
@@ -133,6 +137,7 @@ public class AppMain {
 					System.exit(0);
 				}
 				else if(command.startsWith("help")){
+					//TODO
 					System.out.println("\nComandos adicionais:");
 					System.out.println("exit para sair da app");
 				}

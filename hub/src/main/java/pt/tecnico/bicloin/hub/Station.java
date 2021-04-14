@@ -9,17 +9,15 @@ public class Station {
     private Double _longitude;
     private Integer _prize;
     private Integer _docksNr;
-    //private Integer _bikesNr;
 
     public Station (String name, String abbr, Double latitude, Double longitude, Integer docksNr,
-    /*Integer bikesNr,*/ Integer prize){
+                    Integer prize){
         _name = name;
         _abbr = abbr;
         _latitude = latitude;
         _longitude = longitude;
         _prize = prize;
         _docksNr = docksNr;
-        //_bikesNr = bikesNr;
     }
 
     public String getName(){
@@ -46,12 +44,8 @@ public class Station {
         return _docksNr;
     }
 
-    /*public Integer getBikesNr(){
-        return _bikesNr;
-    }*/
-
     public Double calculateDistance(Double latitude, Double longitude){
-        Integer earthRadius = 6371;
+        Integer earthRadius = 6371000;
         
         Double dLat = Math.toRadians((latitude - _latitude));
         Double dLong = Math.toRadians((longitude - _longitude));

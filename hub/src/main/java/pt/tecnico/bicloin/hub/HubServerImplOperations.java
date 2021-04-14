@@ -54,9 +54,10 @@ public class HubServerImplOperations {
 
     public synchronized String locate_station(Double lat, Double longt, Integer k){
         Map <String, Double> stationsDistance = new HashMap<>();
-        Map <String, Double> sortedMap = new HashMap<>();
+        LinkedHashMap <String, Double> sortedMap = new LinkedHashMap<>();
         for (Station station : stations.values()){
             stationsDistance.put(station.getAbbr(), station.calculateDistance(lat, longt));
+            System.out.println(station.getAbbr() + station.calculateDistance(lat, longt));
         }
         stationsDistance.entrySet()
                 .stream()

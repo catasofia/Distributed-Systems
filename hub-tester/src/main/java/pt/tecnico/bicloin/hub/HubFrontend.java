@@ -98,12 +98,44 @@ public class HubFrontend{
         finalResult = finalResult + ", lat " + infoResponse.getLatitude();
         finalResult = finalResult + ", " + infoResponse.getLongitude() + " long, ";
         finalResult = finalResult + infoResponse.getDocksNr() + " docas, ";
-        finalResult = finalResult + infoResponse.getPrize() + " BIC prémio, ";
+        finalResult = finalResult + infoResponse.getPrize() + " BIC prémio,";
 
         finalResult = finalResult + " " + rec.info_station(abbr) + "https://www.google.com/maps/place/"
                 + infoResponse.getLatitude() + "," + infoResponse.getLongitude();
 
         return finalResult;
+    }
+
+    public String scan(String abbr, Double latitude, Double longitude){
+        String info = info_station(abbr);
+        String[] attributes = info.split(",");
+
+        attributes[1] = attributes[1].substring(5);
+        attributes[2] = attributes[2].substring(1, attributes[2].length() - 5);
+
+        String[] splitedResult= info.split("lat");
+        String[] result = splitedResult[1].split("bicicletas");
+        Double distance = calculateDistance(latitude, longitude, Double.parseDouble(attributes[1]),
+                Double.parseDouble(attributes[2]));
+        return "lat" + result[0] + "bicicletas, a " + (int)Math.round(distance) + " metros";
+    }
+
+    public Double calculateDistance(Double lat1, Double long1, Double lat2, Double long2){
+        Integer earthRadius = 6371000;
+
+        Double dLat = Math.toRadians((lat1 - lat2));
+        Double dLong = Math.toRadians((long1 - long2));
+
+        Double startLat = Math.toRadians(lat1);
+        Double endLat = Math.toRadians(lat2);
+
+        Double a = haversin(dLat) + Math.cos(startLat) * Math.cos(endLat) * haversin(dLong);
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadius * c;
+    }
+
+    public Double haversin(Double val) {
+        return Math.pow(Math.sin(val / 2), 2);
     }
 
     public String locate_station(Double lat, Double longt, Integer k){
