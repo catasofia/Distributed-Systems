@@ -25,12 +25,8 @@ public class RecServerImplOperations {
     }
 
     public synchronized String read(String input) throws BadEntrySpecificationException{
-        //TODO -> ESTE IF NAO PODE SER ASSIM, SE NAO EXISTIR INICIALIZA, DIZ NO ENUNCIADO
-        //if (input.equals("") || !mutableUsers.containsKey(input)){
-        //    throw new BadEntrySpecificationException("Error read: null or empty");
-        //}
-
         String[] attributes = input.split("/");
+
         switch (attributes[1]){
             case "balance":
                 if (mutableUsers.get(attributes[0]) == null){
@@ -44,8 +40,12 @@ public class RecServerImplOperations {
             case "info":
                 if(mutableStations.get(attributes[0]) == null){
                     mutableStations.put(attributes[0], new MutableStation(attributes[0]));
-                    //TODO ver o que retorna quando nao existe
-                    return "";
+                    MutableStation mutableStation = mutableStations.get(attributes[0]);
+                    String result = "";
+                    result += mutableStation.getAvailableBikesNr() + " bicicletas,";
+                    result = result + " " + mutableStation.getRequisitions() + " levantamentos,";
+                    result = result + " " + mutableStation.getDeliveries() + " devoluções, ";
+                    return result;
                 }
                 else{
                     MutableStation mutableStation = mutableStations.get(attributes[0]);
@@ -68,14 +68,14 @@ public class RecServerImplOperations {
             if (mutableUsers.get(attributes[0]) == null) {
                 mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
                 String[] amount = attributes[1].split(" ");
-                mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1]));
+                mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1])*10);
                 Integer balance = mutableUsers.get(attributes[0]).getBalance();
                 return String.valueOf(balance);
             }
             else {
                 MutableUser mutableUser = mutableUsers.get(attributes[0]);
                 String[] amount = attributes[1].split(" ");
-                mutableUser.increaseBalance(Integer.parseInt(amount[1]));
+                mutableUser.increaseBalance(Integer.parseInt(amount[1])*10);
                 Integer balance = mutableUser.getBalance();
                 return String.valueOf(balance);
             }
@@ -95,10 +95,16 @@ public class RecServerImplOperations {
                 throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar mais bicicletas.");
             }
 
+            if(mutableUsers.get(userId[1]).getBalance() < 10) {
+                throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar bicicletas. " +
+                        "Conta com dinheiro insuficiente");
+            }
+
             if (mutableStations.get(attributes[0]) == null) {
                 mutableStations.put(attributes[0], new MutableStation(attributes[0]));
                 mutableStations.get(attributes[0]).bikeUp();
                 mutableUsers.get(userId[1]).setBikeState();
+                mutableUsers.get(userId[1]).increaseBalance(-10);
                 Integer requisitions = mutableStations.get(attributes[0]).getRequisitions();
                 return String.valueOf(requisitions);
             }
@@ -106,6 +112,7 @@ public class RecServerImplOperations {
                 MutableStation mutableStation = mutableStations.get(attributes[0]);
                 mutableStation.bikeUp();
                 mutableUsers.get(userId[1]).setBikeState();
+                mutableUsers.get(userId[1]).increaseBalance(-10);
                 Integer requisitions = mutableStation.getRequisitions();
                 return String.valueOf(requisitions);
             }
@@ -121,6 +128,7 @@ public class RecServerImplOperations {
                 mutableStations.put(attributes[0], new MutableStation(attributes[0]));
                 mutableStations.get(attributes[0]).bikeDown();
                 mutableUsers.get(userId[1]).setBikeState();
+                mutableUsers.get(userId[1]).increaseBalance(Integer.parseInt(userId[2]));
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
                 return String.valueOf(deliveries);
             }
@@ -128,6 +136,7 @@ public class RecServerImplOperations {
                 MutableStation mutableStation = mutableStations.get(attributes[0]);
                 mutableStations.get(attributes[0]).bikeDown();
                 mutableUsers.get(userId[1]).setBikeState();
+                mutableUsers.get(userId[1]).increaseBalance(Integer.parseInt(userId[2]));
                 Integer deliveries = mutableStation.getDeliveries();
                 return String.valueOf(deliveries);
             }
