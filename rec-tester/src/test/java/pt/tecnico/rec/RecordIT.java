@@ -140,6 +140,6 @@ public class RecordIT {
 	@Test
 	public void balanceOK(){
 		String response = recFrontend.balance("alice/balance");
-		assertEquals("141 BIC", response);
+		assertEquals("140 BIC", response);
 	}
 }

@@ -110,9 +110,9 @@ public class HubIT {
 
 	@Test
 	public void bikeUpAndBikeDownOK(){
-		HubFrontend.topUp("alice", 12, "+35191102030");
-		HubFrontend.bikeUp("alice", 38.7376, -9.3031, "istt");
-		HubFrontend.bikeDown("alice", 38.7376, -9.3031, "istt");
+		HubFrontend.topUp("carlos", 12, "+34203040");
+		HubFrontend.bikeUp("carlos", 38.7372, -9.3023, "istt");
+		HubFrontend.bikeDown("carlos", 38.7372, -9.3023, "istt");
 	}
 
 

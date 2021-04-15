@@ -3,7 +3,6 @@ package pt.tecnico.bicloin.app;
 import io.grpc.ManagedChannel;
 import io.grpc.StatusRuntimeException;
 import pt.tecnico.bicloin.hub.HubFrontend;
-import pt.tecnico.bicloin.hub.grpc.Hub;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 
 import java.io.IOException;
@@ -34,6 +33,7 @@ public class AppMain {
 
 		Map<String, String> tags = new HashMap<>();
 		String user = args[2];
+
 
 		Double latitude = Double.parseDouble(args[4]);
 		Double longitude = Double.parseDouble(args[5]);
@@ -101,7 +101,7 @@ public class AppMain {
 						System.out.println("ERRO: prima \"help\" para saber como utilizar o comando \"move\".");
 					}
 				}
-				else if(command.startsWith("at")){
+				else if(command.equals("at")){
 					System.out.println(user + " em https://www.google.com/maps/place/" + latitude + "," + longitude);
 				}
 				else if(command.startsWith("scan")){
@@ -131,9 +131,22 @@ public class AppMain {
 					}
 				}
 				else if(command.startsWith("ping")){
-					System.out.println(hubFrontend.ctrlPing("ping"));
+					if(command.equals("ping")){
+						try{
+							System.out.println(hubFrontend.ctrlPing(""));
+						} catch(StatusRuntimeException e){
+							System.out.println("ERRO: " + e.getMessage());
+						}
+					} else{
+						String[] attributes = command.split(" ");
+						try{
+							System.out.println(hubFrontend.ctrlPing(attributes[1]));
+						} catch(StatusRuntimeException e){
+							System.out.println("ERRO: " + e.getMessage());
+						}
+					}
 				}
-				else if(command.startsWith("sys_status")){
+				else if(command.equals("sys_status")){
 					System.out.println(hubFrontend.sys_status("status"));
 				}
 				else if(command.startsWith("zzz")){
@@ -144,28 +157,28 @@ public class AppMain {
 				else if(command.startsWith("#")){
 					continue;
 				}
-				else if(command.startsWith("exit")){
+				else if(command.equals("exit")){
 					for(ManagedChannel channel: channels) {
 						channel.shutdownNow();
 					}
 					System.exit(0);
 				}
-				else if(command.startsWith("help")){
-					System.out.println("\n- Comando \"at\": devolve a posição atual do utilizador.\nNão recebe argumentos. " +
+				else if(command.equals("help")){
+					System.out.println("\n- Comando \"at\": devolve a posição atual do utilizador.\nNão recebe argumentos.\n" +
 							"Modo de utilização: at\n Exemplo de retorno: alice em " +
 							"https://www.google.com/maps/place/38.7376,-9.3031\n");
-					System.out.println("- Comando \"balance\": devolve o saldo da conta do utilizador.\nNão recebe argumentos " +
+					System.out.println("- Comando \"balance\": devolve o saldo da conta do utilizador.\nNão recebe argumentos.\n" +
 							"Modo de utilização: balance\nRetorna o identificador do utilizador seguido do valor de" +
 							" Bicloins. Exemplo: alice 100 BIC\n");
 					System.out.println("- Comando \"bike-down\": Comando para devolver uma bicicleta.\nRecebe um argumento:" +
 							" abreviatura da estação na qual se pertende devolver a bicicleta.\n" +
 							"Exemplo de utilização: bike-down istt\nRetorna OK em caso de sucesso e ERRO em caso de" +
 							"insucesso\n");
-					System.out.println("- Comando \"bike-up\": Comando para alugar uma bicicleta.\nRecebe um argumentos:" +
+					System.out.println("- Comando \"bike-up\": Comando para alugar uma bicicleta.\nRecebe um argumento:" +
 							" abreviatura da estação de onde se pertende alugar a bicicleta.\n" +
 							"Exemplo de utilização: bike-up istt\nRetorna OK em caso de sucesso e ERRO em caso de" +
 							"insucesso\n");
-					System.out.println("- Comando \"exit\": Comando para desligar a aplicação.\nNão recebe argumentos " +
+					System.out.println("- Comando \"exit\": Comando para desligar a aplicação.\nNão recebe argumentos.\n" +
 							"Modo de utilização: exit\n");
 					System.out.println("- Comando \"info\": Comando que devolve a informação de uma estaçao.\nRecebe um " +
 							"argumento: abreviatura da estação pretendida.\nExemplo de utilização: info istt\n" +
@@ -174,10 +187,11 @@ public class AppMain {
 							" retorno: IST Taguspark, lat 38.7372, -9.3023 long, 20 docas, 4 BIC prémio, 12 bicicletas, " +
 							"22 levantamentos, 7 devoluções, https://www.google.com/maps/place/38.7372,-9.3023\n");
 					System.out.println("- Comando \"move\": Comando para mover o utilizador.\nRecebe 2 argumentos:" +
-							"Latitude Longitude || recebe 1 argumento: nome da tag\n Exemplo de utilização: " +
+							" Latitude Longitude || recebe 1 argumento: nome da tag\n Exemplo de utilização: " +
 							"move 38.6867 -9.3117 || move loc1 (loc1 é uma tag).\nRetorna OK em caso de sucesso e " +
 							"ERRO em caso de insucesso.\n");
-					System.out.println("- Comando \"ping\": Comando que devolve o estado do servidor.\n");
+					System.out.println("- Comando \"ping\": Comando que devolve o estado do servidor. Recebe um argumento: " +
+							"input. Exemplo: ping input.\n");
 					System.out.println("- Comando \"scan\": Comando que devolve informação das estações mais próximas.\nRecebe " +
 							"um argumento: número de estações que deseja receber.\nExemplo de utilização: " +
 							"scan 2\nRetorna uma linha por estação com formato: abreviatura da estação, Latitude, " +
@@ -186,12 +200,12 @@ public class AppMain {
 							"12 bicicletas, a 82 metros\nstao, lat 38.6867, -9.3124 long, 30 docas, 3 BIC prémio, " +
 							"20 bicicletas, a 5717 metros\n");
 					System.out.println("- Comando \"sys_status\": Comando que devolve o estado dos servidores atuais indicando " +
-							"o seu path e se está a responder(up) ou não(down)\n");
+							"o seu path e se está a responder(up) ou não(down). Não recebe argumentos.\n");
 					System.out.println("- Comando \"tag\": Comando que permite criar uma tag de localização.Recebe 3 argumentos: " +
-							"Latitude Longitude e nome da tag. Exemplo de utilização: tag 38.7376 -9.3031 loc1\n" +
+							"Latitude Longitude e nome da tag.\nExemplo de utilização: tag 38.7376 -9.3031 loc1\n" +
 							"Retorna OK em caso de sucesso e ERRO em caso de insucesso.\n");
 					System.out.println("Comando \"top-up\": Comando que permite carregar o saldo. Recebe um argumento: " +
-							"valor a carregar. Exemplo: top-up 15\nRetorna OK em caso de sucesso e ERRO em caso de" +
+							"valor inteiro a carregar.\nExemplo: top-up 15\nRetorna OK em caso de sucesso e ERRO em caso de" +
 							"insucesso.\n");
 					System.out.println("- Comando \"zzz\": Comando para adormecer a aplicação. Recebe um argumento: " +
 							"nr de milissegundos para adormecer.\nExemplo de utilização: zzz 1000\n");

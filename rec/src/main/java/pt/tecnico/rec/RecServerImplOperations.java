@@ -7,12 +7,12 @@ import java.util.HashMap;
 
 public class RecServerImplOperations {
 
-    private static Map <String, MutableUser> mutableUsers = new HashMap<>();
-    private static Map <String, MutableStation> mutableStations = new HashMap<>();
+    private Map <String, MutableUser> mutableUsers = new HashMap<>();
+    private Map <String, MutableStation> mutableStations = new HashMap<>();
 
     public RecServerImplOperations() {}
 
-    public synchronized static void initializeStations(String abbr, Integer docksNr, Integer bikesNr){
+    public synchronized void initializeStations(String abbr, Integer docksNr, Integer bikesNr){
         MutableStation station = new MutableStation(abbr, docksNr, bikesNr);
         mutableStations.put(abbr, station);
     }

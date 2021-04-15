@@ -5,13 +5,17 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 public class MutableUser{
 
-    private static MutablePair<String, Integer> _balance = new MutablePair<String, Integer>();
+    private MutablePair<String, Integer> _balance = new MutablePair<String, Integer>();
     private boolean _bike;
 
     public MutableUser(String id){
         _balance.setLeft(id + "/balance");
         _balance.setRight(0);
         _bike = false;
+    }
+
+    public String getId(){
+        return _balance.getLeft();
     }
 
     public Integer getBalance(){

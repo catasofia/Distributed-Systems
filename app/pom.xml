@@ -36,7 +36,7 @@
 			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<!-- Resources are files like properties, images, etc; used by the module.  -->
@@ -94,12 +94,12 @@
 				<configuration>
 					<mainClass>${mainclass}</mainClass>
 					<arguments>
-						<argument>${zoo.host}</argument>
+						<!--<argument>${zoo.host}</argument>
 						<argument>${zoo.port}</argument>
 						<argument>alice</argument>
 						<argument>+35191102030</argument>
 						<argument>38.7380</argument>
-						<argument>-9.3000</argument>
+						<argument>-9.3000</argument>-->
 					</arguments>
 				</configuration>
 			</plugin>
