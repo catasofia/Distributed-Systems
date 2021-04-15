@@ -10,9 +10,9 @@ Distributed Systems 2020-2021, 2nd semester project
 ### Elements
 | IST Number          | E-mail 	| Photos
 | :-----------------| :-------------------: | :-----------------|
-| 93691	| [Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)| ![ScreenShot](https://git.rnl.tecnico.ulisboa.pt/SD-20-21-2/T01-Bicloin/src/branch/main/Photos/93691.jpg)|
-| 93695	| [Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)|             |
-| 93735	| [Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)|             |
+| <p align="center">93691</p>	| <p align="center">[Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)</p>| <img src = https://git.rnl.tecnico.ulisboa.pt/SD-20-21-2/T01-Bicloin/src/branch/main/Photos/93691.jpg) width="100">|
+| <p align="center">93695</p>	| <p align="center">[Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)</p>| <img src = https://git.rnl.tecnico.ulisboa.pt/SD-20-21-2/T01-Bicloin/src/branch/main/Photos/93695.jpg) width="100">            |
+| <p align="center">93735</p>	| <p align="center">[Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)</p>|   <img src = https://git.rnl.tecnico.ulisboa.pt/SD-20-21-2/T01-Bicloin/src/branch/main/Photos/93735.png) width="100">          |
 
 
 
