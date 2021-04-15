@@ -10,7 +10,7 @@ import java.io.IOException;
 public class RecFrontend{
 
     private String path = "/grpc/bicloin/rec/1";
-    private RecordServiceGrpc.RecordServiceBlockingStub stub;
+    private static RecordServiceGrpc.RecordServiceBlockingStub stub;
 
     public RecFrontend(){}
 
@@ -27,39 +27,34 @@ public class RecFrontend{
         return stub;
     }
 
-    public String ctrlPing(String ping){
-        try{
-            Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
-            Rec.CtrlPingResponse pingResponse = stub.ctrlPing(pingRequest);
-            
-            return pingResponse.getOutput();
-        }catch (StatusRuntimeException e) {
-            System.out.println(e.getStatus().getDescription());
-        }
-        return "";
+    public static String ctrlPing(String ping){
+        Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
+        Rec.CtrlPingResponse pingResponse = stub.ctrlPing(pingRequest);
+
+        return pingResponse.getOutput();
     }
 
-    public String info_station(String abbr){
+    public static String info_station(String abbr){
         Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(abbr+"/info").build();
         return stub.read(readRequest).getValue();
     }
 
-    public String balance(String input){
+    public static String balance(String input){
         Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
         return stub.read(readRequest).getValue();
     }
 
-    public String topUp(String name){
+    public static String topUp(String name){
         Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
         return stub.write(writeRequest).getValue();
     }
 
-    public String bikeUp(String name){
+    public static String bikeUp(String name){
         Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
         return stub.write(writeRequest).getValue();
     }
 
-    public String bikeDown(String name){
+    public static String bikeDown(String name){
         Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
         return stub.write(writeRequest).getValue();
     }

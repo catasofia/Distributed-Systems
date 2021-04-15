@@ -52,15 +52,15 @@ public class HubIT {
 		
 	@Test
 	public void topUpOK(){
-		String response = HubFrontend.topUp("alice", 12, "+35191102030");
+		String response = HubFrontend.topUp("diana", 12, "+34010203");
 		assertEquals("120", response);
 	}
 		
 
 	@Test
 	public void balanceOK(){
-		String response = HubFrontend.balance("alice");
-		assertEquals("120 BIC", response);
+		String response = HubFrontend.balance("maria");
+		assertEquals("0 BIC", response);
 	}
 
 	@Test
@@ -110,6 +110,7 @@ public class HubIT {
 
 	@Test
 	public void bikeUpAndBikeDownOK(){
+		HubFrontend.topUp("alice", 12, "+35191102030");
 		HubFrontend.bikeUp("alice", 38.7376, -9.3031, "istt");
 		HubFrontend.bikeDown("alice", 38.7376, -9.3031, "istt");
 	}

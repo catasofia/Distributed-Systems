@@ -63,7 +63,6 @@ public class RecServerImplOperations {
 
     public synchronized String write(String input) throws BadEntrySpecificationException{
         String[] attributes = input.split("/");
-
         if(attributes[1].startsWith("top_up")){
             if (mutableUsers.get(attributes[0]) == null) {
                 mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
@@ -83,12 +82,12 @@ public class RecServerImplOperations {
         else if(attributes[1].startsWith("bike_up")){
             String[] userId = attributes[1].split(" ");
 
-            if(mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
-                throw new BadEntrySpecificationException("Erro write: Não há bicicletas disponiveis para requisitar.");
-            }
-
             if (mutableUsers.get(userId[1]) == null) {
                 mutableUsers.put(userId[1], new MutableUser(userId[1]));
+            }
+
+            if(mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
+                throw new BadEntrySpecificationException("Erro write: Não há bicicletas disponiveis para requisitar.");
             }
 
             if(mutableUsers.get(userId[1]).getBikeState()) {
@@ -120,8 +119,16 @@ public class RecServerImplOperations {
         else if(attributes[1].startsWith("bike_down")){
             String[] userId = attributes[1].split(" ");
 
+            if (mutableUsers.get(userId[1]) == null) {
+                mutableUsers.put(userId[1], new MutableUser(userId[1]));
+            }
+
             if(mutableStations.get(attributes[0]).getDocksNumber() -  mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
                 throw new BadEntrySpecificationException("Erro write: Não pode devolver a bicicleta nesta doca. Doca cheia.");
+            }
+
+            if(!(mutableUsers.get(userId[1]).getBikeState())){
+                throw new BadEntrySpecificationException("Erro write: Este utilizador não tem bicicleta para devolver");
             }
 
             if (mutableStations.get(attributes[0]) == null) {
