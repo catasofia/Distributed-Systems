@@ -5,22 +5,12 @@
 
 Group T01
 
-*(fill-in line above with group identifier e.g. A07 or T22; and then delete this line)*
-
 ### Lead developer 
-
-... ... ...
-
-*(fill-in line above with student number, name, and @GitHub identity of module leader; and then delete this line)*
+* 93691 Beatriz Alves [@ist193691](https://git.rnl.tecnico.ulisboa.pt/ist193691)
 
 ### Contributors
-
-... ... ...
-
-... ... ...
-
-*(fill-in lines above with student number, name, and @GitHub identity of module contributors; and then delete this line)*
-
+* 93695 Catarina Sousa [@ist193695](https://git.rnl.tecnico.ulisboa.pt/ist193695)
+* 93735 Maria Ribeiro [@ist193735](https://git.rnl.tecnico.ulisboa.pt/ist193735)
 
 ## About
 

@@ -7,15 +7,13 @@ Distributed Systems 2020-2021, 2nd semester project
 
 **Group T01**
 
-*(fill-in line above with group identifier e.g. A07 or T22; and then delete this line)*
 
-... [...](mailto:...@tecnico.ulisboa.pt)
+93691 [Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)
 
-... [...](mailto:...@tecnico.ulisboa.pt)
+93695 [Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)
 
-... [...](mailto:...@tecnico.ulisboa.pt)
+93735 [Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)
 
-*(fill-in lines above with student number, name, and email; and then delete this line)*
 
 ### Module leaders
 

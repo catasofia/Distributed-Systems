@@ -6,19 +6,11 @@
 Group T01
 
 ### Lead developer 
-
-... ... ...
-
-*(fill-in line above with student number, name, and @GitHub identity of module leader; and then delete this line)*
+* 93735 Maria Ribeiro [@ist193735](https://git.rnl.tecnico.ulisboa.pt/ist193735)
 
 ### Contributors
-
-... ... ...
-
-... ... ...
-
-*(fill-in lines above with student number, name, and @GitHub identity of module contributors; and then delete this line)*
-
+* 93691 Beatriz Alves [@ist193691](https://git.rnl.tecnico.ulisboa.pt/ist193691)
+* 93695 Catarina Sousa [@ist193695](https://git.rnl.tecnico.ulisboa.pt/ist193695)
 
 ## About
 
