@@ -161,6 +161,7 @@ public class AppMain {
 					for(ManagedChannel channel: channels) {
 						channel.shutdownNow();
 					}
+					System.out.println("Até à próxima!!!");
 					System.exit(0);
 				}
 				else if(command.equals("help")){
@@ -215,7 +216,8 @@ public class AppMain {
 
 				}
 				else {
-					System.out.println("O comando inserido não é válido. Por favor, tente de novo!");
+					System.out.println("O comando inserido não é válido. Por favor, tente de novo! Prima \"help\" " +
+							"para saber os comandos disponíveis e como utilizar.");
 				}
 			} while(scanner.hasNextLine());
 		}

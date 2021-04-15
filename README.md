@@ -10,9 +10,9 @@ Distributed Systems 2020-2021, 2nd semester project
 ### Elements
 | IST Number          | E-mail 	| Photos
 | :-----------------| :-------------------: | :-----------------|
-| <p align="center">93691</p>	| <p align="center">[Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)</p>| ![Beatriz](Photos/93691.png)|
-| <p align="center">93695</p>	| <p align="center">[Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)</p>| ![Catarina](Photos/93695.png)  |
-| <p align="center">93735</p>	| <p align="center">[Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)</p>| ![Catarina](Photos/93735.png)  |
+| <p align="center">93691</p>	| <p align="center">[Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)</p>| ![Beatriz](report/93691.png)|
+| <p align="center">93695</p>	| <p align="center">[Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)</p>| ![Catarina](report/93695.png)  |
+| <p align="center">93735</p>	| <p align="center">[Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)</p>| ![Catarina](report/93735.png)  |
 
 
 
