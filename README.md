@@ -7,12 +7,13 @@ Distributed Systems 2020-2021, 2nd semester project
 
 **Group T01**
 
+### Elements
+| IST Number          | E-mail 	| Photos
+| :-----------------| :-------------------: | :-----------------|
+| 93691	| [Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)| ![ScreenShot](https://git.rnl.tecnico.ulisboa.pt/SD-20-21-2/T01-Bicloin/src/branch/main/Photos/93691.jpg)|
+| 93695	| [Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)|             |
+| 93735	| [Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)|             |
 
-93691 [Beatriz Alves](mailto:beatriz.cruz.alves@tecnico.ulisboa.pt)
-
-93695 [Catarina Sousa](mailto:catarinasousa2000@tecnico.ulisboa.pt)
-
-93735 [Maria Ribeiro](mailto:maria.f.ribeiro@tecnico.ulisboa.pt)
 
 
 ### Module leaders
