@@ -74,15 +74,31 @@ public class AppMain {
 				}
 				else if(command.startsWith("move")){
 					String[] attributes = command.split(" ");
-					if(tags.get(attributes[1]) == null){
-						System.out.println("ERRO: Não existe nenhuma tag com o nome: " + attributes[1]);
-					}
-					else{
-						String position = tags.get(attributes[1]);
-						String[] lat_long = position.split(" ");
-						latitude = Double.parseDouble(lat_long[0]);
-						longitude = Double.parseDouble(lat_long[1]);
+					if(attributes.length == 2){
+						if(tags.get(attributes[1]) == null){
+							System.out.println("ERRO: Não existe nenhuma tag com o nome: " + attributes[1]);
+						}
+						else{
+							String position = tags.get(attributes[1]);
+							String[] lat_long = position.split(" ");
+							latitude = Double.parseDouble(lat_long[0]);
+							longitude = Double.parseDouble(lat_long[1]);
+							System.out.println(user + " em https://www.google.com/maps/place/" + latitude + "," + longitude);
+						}
+					} else if(attributes.length == 3){
+						try{
+						Double.parseDouble(attributes[1]);
+						Double.parseDouble(attributes[2]);
+						latitude = Double.parseDouble(attributes[1]);
+						longitude = Double.parseDouble(attributes[2]);
 						System.out.println(user + " em https://www.google.com/maps/place/" + latitude + "," + longitude);
+						} catch (NumberFormatException e){
+							System.out.println("ERRO: Impossivel mover  para coordenadas com valores:" +
+									attributes[1] + " e " + attributes[2]);
+							continue;
+						}
+					} else {
+						System.out.println("ERRO: prima \"help\" para saber como utilizar o comando \"move\".");
 					}
 				}
 				else if(command.startsWith("at")){
