@@ -32,7 +32,7 @@ public class RecordTester {
 			String response = frontend.ctrlPing(request.getInput());
 			System.out.println(response);
 		} catch (StatusRuntimeException e) {
-			System.out.println("Caught exception with description: " +
+			System.out.println("Apanhada exceção com descrição: " +
 					e.getStatus().getDescription());
 		}
 	}

@@ -323,6 +323,9 @@ Até à próxima!!!
 
 ## 3. Considerações Finais
 
+Quando é inserido um utilizador ou uma estação através dos ficheiros csv que não verifica as condições, é ignorado a passa
+a ler o seguinte elemento.
+
 Para correr com os ficheiros com os comandos (*comandosAlice.txt* e *comandosBruno.txt*) é necessário lançar os servidores e
 na pasta app fazer:\
 Para a alice:

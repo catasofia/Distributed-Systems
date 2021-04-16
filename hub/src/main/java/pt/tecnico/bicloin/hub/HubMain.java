@@ -128,14 +128,14 @@ public class HubMain {
 			while (line != null) {
 				String[] attributes = line.split(" \t");
 				if (attributes[1].length() != 4) {
-					System.out.println("The abbreviation must have 4 characters. " + attributes[1] + " has" + attributes[1].length());
+					System.out.println("A abreviatura tem de ter 4 caracteres. " + attributes[1] + " tem" + attributes[1].length());
 					continue;
 				}
 				try{
 					Double.parseDouble(attributes[2]);
 					Double.parseDouble(attributes[3]);
 				} catch (NumberFormatException e){
-					System.out.println("Latitude and longitude should be both doubles.");
+					System.out.println("Latitude e longitude têm de ser numeros decimais.");
 					continue;
 				}
 				Station station = new Station(attributes[0], attributes[1], Double.parseDouble(attributes[2]),
@@ -144,13 +144,12 @@ public class HubMain {
 				if(bool){
 					try {
 						initializeRec(attributes[1], Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]));
-
 					} catch (ZKNamingException e){
-						System.out.println("ZK Naming exception.");
+						System.out.println("ZK Naming exceção.");
 					} catch (IOException e){
-					System.out.println("IO Exception");
+					System.out.println("IO exceção");
 					} catch (InterruptedException e){
-						System.out.println("Interrupted exception.");
+						System.out.println("Interrupted exceção.");
 					}
 				}
 				line = br.readLine();
