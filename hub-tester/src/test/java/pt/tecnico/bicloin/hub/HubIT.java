@@ -109,6 +109,14 @@ public class HubIT {
 	}
 
 	@Test
+	public void info_stationError(){
+		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.
+				info_station("amadora"))
+				.getStatus()
+				.getCode());
+	}
+
+	@Test
 	public void bikeUpAndBikeDownOK(){
 		HubFrontend.topUp("carlos", 12, "+34203040");
 		HubFrontend.bikeUp("carlos", 38.7372, -9.3023, "istt");
