@@ -24,21 +24,21 @@ public class HubServerImplOperations {
 
     public synchronized String ping(String ping) throws BadEntrySpecificationException{
         if (ping == null || ping.isBlank()){
-            throw new BadEntrySpecificationException("Error ping: null or empty");
+            throw new BadEntrySpecificationException("Ping: nulo ou vazio");
         }
         return ping;
     }
 
     public synchronized String sys_status(String sysStatus) throws BadEntrySpecificationException{
         if(sysStatus == null || sysStatus.isBlank()){
-            throw new BadEntrySpecificationException("Error system status: null or empty");
+            throw new BadEntrySpecificationException("System status: nulo ou vazio");
         }
         return sysStatus;
     }
 
     public synchronized List<String> info_station(String abbr) throws BadEntrySpecificationException{
         if(stations.get(abbr) == null){
-            throw new BadEntrySpecificationException("Error: there is no station with abbr:" + abbr);
+            throw new BadEntrySpecificationException("Não existe nenhuma estação com a abreviatura: " + abbr);
         }
 
         Station station = stations.get(abbr);

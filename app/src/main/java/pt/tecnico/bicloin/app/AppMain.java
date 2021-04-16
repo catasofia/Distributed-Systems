@@ -48,8 +48,12 @@ public class AppMain {
 					System.out.println(user + " " + hubFrontend.balance(user));
 				}
 				else if (command.startsWith("info")){
-					String[] attributes = command.split(" ");
-					System.out.println(hubFrontend.info_station(attributes[1]));
+					try {
+						String[] attributes = command.split(" ");
+						System.out.println(hubFrontend.info_station(attributes[1]));
+					} catch (StatusRuntimeException e){
+						System.out.println("ERRO: " + e.getMessage());
+					}
 				}
 				else if (command.startsWith("top-up")){
 					try {
@@ -146,8 +150,21 @@ public class AppMain {
 						}
 					}
 				}
-				else if(command.equals("sys_status")){
-					System.out.println(hubFrontend.sys_status("status"));
+				else if(command.startsWith("sys_status")){
+					if(command.equals("sys_status")){
+						try{
+							System.out.println(hubFrontend.sys_status(""));
+						} catch(StatusRuntimeException e){
+							System.out.println("ERRO: " + e.getMessage());
+						}
+					} else{
+						String[] attributes = command.split(" ");
+						try {
+							System.out.println(hubFrontend.sys_status(attributes[1]));
+						}catch (StatusRuntimeException e){
+							System.out.println("ERRO: " + e.getMessage());
+						}
+					}
 				}
 				else if(command.startsWith("zzz")){
 					String[] attributes = command.split(" ");
@@ -192,7 +209,7 @@ public class AppMain {
 							"move 38.6867 -9.3117 || move loc1 (loc1 é uma tag).\nRetorna OK em caso de sucesso e " +
 							"ERRO em caso de insucesso.\n");
 					System.out.println("- Comando \"ping\": Comando que devolve o estado do servidor. Recebe um argumento: " +
-							"input. Exemplo: ping input.\n");
+							"input. Exemplo: ping input\n");
 					System.out.println("- Comando \"scan\": Comando que devolve informação das estações mais próximas.\nRecebe " +
 							"um argumento: número de estações que deseja receber.\nExemplo de utilização: " +
 							"scan 2\nRetorna uma linha por estação com formato: abreviatura da estação, Latitude, " +
@@ -201,7 +218,8 @@ public class AppMain {
 							"12 bicicletas, a 82 metros\nstao, lat 38.6867, -9.3124 long, 30 docas, 3 BIC prémio, " +
 							"20 bicicletas, a 5717 metros\n");
 					System.out.println("- Comando \"sys_status\": Comando que devolve o estado dos servidores atuais indicando " +
-							"o seu path e se está a responder(up) ou não(down). Não recebe argumentos.\n");
+							"o seu path e se está a responder(up) ou não(down).\nRecebe um argumento: input\nExemplo " +
+							"de utilização: sys_status status\n");
 					System.out.println("- Comando \"tag\": Comando que permite criar uma tag de localização.Recebe 3 argumentos: " +
 							"Latitude Longitude e nome da tag.\nExemplo de utilização: tag 38.7376 -9.3031 loc1\n" +
 							"Retorna OK em caso de sucesso e ERRO em caso de insucesso.\n");

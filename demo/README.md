@@ -145,6 +145,11 @@ Caso de sucesso para ambos:
 IST Taguspark, lat 38.7372, -9.3023 long, 20 docas, 4 BIC prémio, 12 bicicletas, 8 levantamentos, 0 devoluções, https://www.google.com/maps/place/38.7372,-9.3023
 ```
 
+Caso de insucesso para ambos:
+```
+> info amadora
+ERRO: INVALID ARGUMENT: Não existe nenhuma estação com a abreviatura: amadora
+```
 ### 2.4 *locate_station*
 
 Caso de sucesso para alice:
@@ -225,7 +230,7 @@ ERRO: INVALID_ARGUMENT: Error ping: null or empty
 Caso de sucesso para ambos:
 
 ```
-> sys_status
+> sys_status status
 /grpc/bicloin/hub/1 up
 /grpc/bicloin/rec/1 up
 ```
@@ -252,14 +257,14 @@ ERRO: Impossivel criar uma tag com os valores:istt e ista
 
 ### 2.10 *move*
 
-Caso de sucesso para alice: (assumindo que loc1 é uma tag)
+Caso de sucesso para alice (assumindo que loc1 é uma tag):
 
 ```
 > move loc1 
 alice em https://www.google.com/maps/place/38.7376,-9.3031
 ```
 
-Caso de sucesso para bruno: (assumindo que loc1 é uma tag)
+Caso de sucesso para bruno (assumindo que loc1 é uma tag):
 
 ```
 > move loc1 
@@ -280,7 +285,7 @@ Caso de sucesso para bruno:
 bruno em https://www.google.com/maps/place/38.6867,-9.3117
 ```
 
-Caso de insucesso para ambos: (istt não é uma tag)
+Caso de insucesso para ambos (istt não é uma tag):
 
 ```
 > move istt
@@ -305,7 +310,7 @@ bruno em https://www.google.com/maps/place/38.6867,-9.3117
 
 ### 2.12 *exit*
 
-Caso de sucesso para ambos
+Caso de sucesso para ambos:
 
 ```
 > exit
@@ -317,5 +322,16 @@ Até à próxima!!!
 
 
 ## 3. Considerações Finais
+
+Para correr com os ficheiros com os comandos (*comandosAlice.txt* e *comandosBruno.txt*) é necessário lançar os servidores e
+na pasta app fazer:\
+Para a alice:
+```
+mvn exec:java -Dexec.args="localhost 2181 alice +35191102030 38.7380 -9.3000" < comandosAlice.txt
+```
+Para o bruno:
+```
+mvn exec:java -Dexec.args="localhost 2181 bruno +35193334444 38.6867 -9.3124" < comandosBruno.txt
+```
 
 Estes testes não cobrem tudo, pelo que devem ter sempre em conta os testes de integração e o código.
