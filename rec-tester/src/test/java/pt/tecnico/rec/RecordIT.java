@@ -12,22 +12,26 @@ import io.grpc.StatusRuntimeException;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 import static io.grpc.Status.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordIT {
 
 	private static RecFrontend recFrontend;
-	private static ManagedChannel channel;
+	private static List<ManagedChannel> channels = new ArrayList<>();
 	
 	// one-time initialization and clean-up
 	@BeforeAll
 	public static void oneTimeSetUp() throws ZKNamingException, IOException, InterruptedException{
 		recFrontend = new RecFrontend();
-		channel = recFrontend.createChannel("localhost", "2181");
+		channels = recFrontend.createChannels("localhost", "2181");
 	}
 	
 	@AfterAll
 	public static void oneTimeTearDown() {
-		channel.shutdownNow();
+		for(ManagedChannel channel: channels) {
+			channel.shutdownNow();
+		}
 	}
 	
 	// initialization and clean-up for each test

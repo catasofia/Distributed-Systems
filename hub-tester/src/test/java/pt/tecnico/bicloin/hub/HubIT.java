@@ -17,20 +17,18 @@ import java.util.List;
 public class HubIT {
 
 	private static HubFrontend hubFrontend;
-	private static List<ManagedChannel> channels;
+	private static ManagedChannel channel;
 	
 	// one-time initialization and clean-up
 	@BeforeAll
 	public static void oneTimeSetUp() throws ZKNamingException, IOException, InterruptedException {
 		hubFrontend = new HubFrontend();
-		channels = hubFrontend.createChannels("localhost", "2181");
+		channel = hubFrontend.createChannel("localhost", "2181");
 	}
 	
 	@AfterAll
 	public static void oneTimeTearDown() {
-		for(ManagedChannel channel: channels) {
-			channel.shutdownNow();
-		}
+		channel.shutdownNow();
 	}
 	
 	// initialization and clean-up for each test

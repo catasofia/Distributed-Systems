@@ -6,56 +6,100 @@ import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 import io.grpc.*;
 import pt.tecnico.rec.grpc.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 public class RecFrontend{
 
-    private String path = "/grpc/bicloin/rec/1";
-    private static RecordServiceGrpc.RecordServiceBlockingStub stub;
+    private String path = "/grpc/bicloin/rec";
+    private static List<RecordServiceGrpc.RecordServiceBlockingStub> stubs = new ArrayList<>();
 
     public RecFrontend(){}
 
-    public ManagedChannel createChannel(String host, String port) throws ZKNamingException, IOException, InterruptedException {
+    public List<ManagedChannel> createChannels(String host, String port) throws ZKNamingException, IOException, InterruptedException {
         ZKNaming zkNaming = new ZKNaming(host, port);
-        ZKRecord zkRecord = zkNaming.lookup(path);
-        String target = zkRecord.getURI(); //host:port
-        final ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-        stub = RecordServiceGrpc.newBlockingStub(channel);
-        return channel;
+        Collection<ZKRecord> records = zkNaming.listRecords(path);
+        List<ManagedChannel> channels = new ArrayList<>();
+        for(ZKRecord record: records) {
+            String target = record.getURI(); //host:port
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
+            channels.add(channel);
+            stubs.add(RecordServiceGrpc.newBlockingStub(channel));
+        }
+        return channels;
     }
 
-    public RecordServiceGrpc.RecordServiceBlockingStub getStub(){
-        return stub;
+    public List<RecordServiceGrpc.RecordServiceBlockingStub> getStub(){
+        return stubs;
     }
 
     public static String ctrlPing(String ping){
         Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
-        Rec.CtrlPingResponse pingResponse = stub.ctrlPing(pingRequest);
+
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+
+        Rec.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
 
         return pingResponse.getOutput();
     }
 
     public static String info_station(String abbr){
         Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(abbr+"/info").build();
-        return stub.read(readRequest).getValue();
+
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+
+        return stubs.get(result).read(readRequest).getValue();
     }
 
     public static String balance(String input){
         Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
-        return stub.read(readRequest).getValue();
+
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+
+        return stubs.get(result).read(readRequest).getValue();
     }
 
     public static String topUp(String name){
         Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-        return stub.write(writeRequest).getValue();
+
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+
+        return stubs.get(result).write(writeRequest).getValue();
     }
 
     public static String bikeUp(String name){
         Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-        return stub.write(writeRequest).getValue();
+
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+
+        return stubs.get(result).write(writeRequest).getValue();
     }
 
     public static String bikeDown(String name){
         Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-        return stub.write(writeRequest).getValue();
+
+        Random r = new Random();
+        int low = 0;
+        int high = stubs.size();
+        int result = r.nextInt(high - low) + low;
+
+        return stubs.get(result).write(writeRequest).getValue();
     }
 }

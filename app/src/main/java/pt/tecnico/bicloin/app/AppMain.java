@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AppMain {
 	private static HubFrontend hubFrontend;
-	private static List<ManagedChannel> channels;
+	private static ManagedChannel channel;
 
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException {
 		System.out.println(AppMain.class.getSimpleName());
@@ -40,7 +40,7 @@ public class AppMain {
 
 		try(Scanner scanner = new Scanner(System.in)){
 			hubFrontend = new HubFrontend();
-			channels = hubFrontend.createChannels(args[0], args[1]);
+			channel = hubFrontend.createChannel(args[0], args[1]);
 			System.out.println("\n" + user + ", bem-vindo à APP!!\n");
 			do{
 				String command = scanner.nextLine();
@@ -175,9 +175,7 @@ public class AppMain {
 					continue;
 				}
 				else if(command.equals("exit")){
-					for(ManagedChannel channel: channels) {
-						channel.shutdownNow();
-					}
+					channel.shutdownNow();
 					System.out.println("Até à próxima!!!");
 					System.exit(0);
 				}
@@ -239,8 +237,6 @@ public class AppMain {
 				}
 			} while(scanner.hasNextLine());
 		}
-		for(ManagedChannel channel: channels) {
-			channel.shutdownNow();
-		}
+		channel.shutdownNow();
 	}
 }

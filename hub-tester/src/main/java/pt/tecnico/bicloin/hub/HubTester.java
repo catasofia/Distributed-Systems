@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class HubTester {
-	private static List<ManagedChannel> channels;
+	private static ManagedChannel channel;
 
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException{
 		System.out.println(HubTester.class.getSimpleName());
@@ -22,12 +22,12 @@ public class HubTester {
 			System.out.printf("arg[%d] = %s%n", i, args[i]);
 		}
 		HubFrontend hubFrontend = new HubFrontend();
-		channels = hubFrontend.createChannels("localhost", "2181");
+		channel= hubFrontend.createChannel("localhost", "2181");
 		ctrl_ping(hubFrontend);
 
-		for(ManagedChannel channel: channels) {
-			channel.shutdownNow();
-		}
+
+		channel.shutdownNow();
+
 		System.exit(0);
 	}
 

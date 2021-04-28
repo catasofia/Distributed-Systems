@@ -6,10 +6,12 @@ import io.grpc.StatusRuntimeException;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 import pt.tecnico.rec.grpc.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordTester {
 
-	private static ManagedChannel channel;
+	private static List<ManagedChannel> channels = new ArrayList<>();
 	public static void main(String[] args) throws ZKNamingException, IOException, InterruptedException{
 		System.out.println(RecordTester.class.getSimpleName());
 		
@@ -20,9 +22,11 @@ public class RecordTester {
 		}
 
 		RecFrontend recFrontend = new RecFrontend();
-		channel = recFrontend.createChannel("localhost", "2181");
+		channels = recFrontend.createChannels("localhost", "2181");
 		ctrl_ping(recFrontend);
-		channel.shutdownNow();
+		for(ManagedChannel channel: channels) {
+			channel.shutdownNow();
+		}
 		System.exit(0);
 	}
 

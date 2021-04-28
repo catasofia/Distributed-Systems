@@ -20,34 +20,27 @@ import java.util.*;
 
 public class HubFrontend{
 
-    private String path = "/grpc/bicloin/hub";
-    private static List<HubServiceGrpc.HubServiceBlockingStub> stubs = new ArrayList<>();
+    private String path = "/grpc/bicloin/hub/1";
+    private static HubServiceGrpc.HubServiceBlockingStub stub;
     private static RecFrontend rec = new RecFrontend();
 
     public HubFrontend(){}
 
-    public List<ManagedChannel> createChannels(String host, String port) throws ZKNamingException, IOException, InterruptedException {
+    public ManagedChannel createChannel(String host, String port) throws ZKNamingException, IOException, InterruptedException {
         ZKNaming zkNaming = new ZKNaming(host, port);
-        Collection<ZKRecord> records = zkNaming.listRecords(path);
-        List<ManagedChannel> channels = new ArrayList<>();
-        for(ZKRecord zkRecord: records) {
-            String target = zkRecord.getURI(); //host:port
-            System.out.println(target);
-            ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-            channels.add(channel);
-            stubs.add(HubServiceGrpc.newBlockingStub(channel));
-        }
-        rec.createChannel(host, port);
-        return channels;
+        ZKRecord record = zkNaming.lookup(path);
+        String target = record.getURI(); //host:port
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
+        stub = HubServiceGrpc.newBlockingStub(channel);
+
+        rec.createChannels(host, port);
+        return channel;
     }
 
     public static String ctrlPing(String ping){
         Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(ping).build();
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
-        Hub.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
+
+        Hub.CtrlPingResponse pingResponse = stub.ctrlPing(pingRequest);
 
         return pingResponse.getOutput();
 
@@ -56,17 +49,15 @@ public class HubFrontend{
     public String sys_status(String status){
         String result = "";
         int x = 1;
-        for (HubServiceGrpc.HubServiceBlockingStub stub: stubs){
-            try{
-            Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(status).build();
-            stub.ctrlPing(pingRequest);
-            result = result + "/grpc/bicloin/hub/" + x + " up\n";
-            } catch (StatusRuntimeException e) {
-                result = result + "/grpc/bicloin/hub/" + x + " down\n";
-            }
-            finally {
-                x++;
-            }
+        try{
+        Hub.CtrlPingRequest pingRequest = Hub.CtrlPingRequest.newBuilder().setInput(status).build();
+        stub.ctrlPing(pingRequest);
+        result = result + "/grpc/bicloin/hub/" + x + " up\n";
+        } catch (StatusRuntimeException e) {
+            result = result + "/grpc/bicloin/hub/" + x + " down\n";
+        }
+        finally {
+            x++;
         }
 
         try{
@@ -79,14 +70,8 @@ public class HubFrontend{
     }
 
     public static String info_station(String abbr){
-
-        //TODO erro e teste correspondente
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
         Hub.InfoStationRequest infoRequest = Hub.InfoStationRequest.newBuilder().setAbbr(abbr).build();
-        Hub.InfoStationResponse infoResponse = stubs.get(result).infoStation(infoRequest);
+        Hub.InfoStationResponse infoResponse = stub.infoStation(infoRequest);
 
         String finalResult = "";
 
@@ -135,49 +120,37 @@ public class HubFrontend{
     }
 
     public static String locate_station(Double lat, Double longt, Integer k){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
         Hub.LocateStationRequest locateRequest = Hub.LocateStationRequest.newBuilder().setLatitude(lat)
                 .setLongitude(longt).setK(k).build();
-        Hub.LocateStationResponse locateResponse = stubs.get(result).locateStation(locateRequest);
+        Hub.LocateStationResponse locateResponse = stub.locateStation(locateRequest);
         return locateResponse.getAbbrs();
     }
 
     public static String balance(String name){
         Hub.BalanceRequest request = Hub.BalanceRequest.newBuilder().setName(name).build();
-        String value = stubs.get(0).balance(request).getBalance();
+        String value = stub.balance(request).getBalance();
         return rec.balance(value);
     }
 
     public static String topUp(String name, Integer amount, String phone){
         Hub.TopUpRequest request = Hub.TopUpRequest.newBuilder().setName(name)
                 .setAmount(amount).setPhone(phone).build();
-        String value = stubs.get(0).topUp(request).getBalance();
+        String value = stub.topUp(request).getBalance();
         return rec.topUp(value);
     }
 
     public static void bikeUp(String name, Double latitude, Double longitude, String abbr){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
         Hub.BikeUpRequest bikeUpRequest = Hub.BikeUpRequest.newBuilder().setName(name).setLatitude(latitude)
                 .setLongitude(longitude).setAbbr(abbr).build();
-        String value = stubs.get(result).bikeUp(bikeUpRequest).getResponse();
+        String value = stub.bikeUp(bikeUpRequest).getResponse();
 
         rec.bikeUp(value);
     }
 
     public static void bikeDown(String name, Double latitude, Double longitude, String abbr){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
         Hub.BikeDownRequest bikeDownRequest = Hub.BikeDownRequest.newBuilder().setName(name).setLatitude(latitude)
                 .setLongitude(longitude).setAbbr(abbr).build();
-        String value = stubs.get(result).bikeDown(bikeDownRequest).getResponse();
+        String value = stub.bikeDown(bikeDownRequest).getResponse();
 
         rec.bikeDown(value);
     }
