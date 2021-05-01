@@ -7,8 +7,13 @@ import pt.tecnico.rec.exceptions.BadEntrySpecificationException;
 
 public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
-    private static RecServerImplOperations operations = new RecServerImplOperations();
+    private static RecServerImplOperations operations;
+    private ReplicaManager replicaManager;
 
+    public RecServerImpl(String zooHost, String zooPort){
+        operations = new RecServerImplOperations(zooHost, zooPort);
+        replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec");
+    }
 
     public static RecServerImplOperations getRecOperations(){
         return operations;

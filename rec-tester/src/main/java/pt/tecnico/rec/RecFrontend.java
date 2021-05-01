@@ -43,6 +43,8 @@ public class RecFrontend{
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
+        System.out.println("Conectei-me à réplica: " + (result+1) + " no localhost 809" + (result+1));
+
         Rec.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
 
         return pingResponse.getOutput();
@@ -56,50 +58,75 @@ public class RecFrontend{
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
+        System.out.println("Conectei-me à réplica: " + (result+1) + " no localhost 809" + (result+1));
+
+
         return stubs.get(result).read(readRequest).getValue();
     }
 
     public static String balance(String input){
-        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
-
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        return stubs.get(result).read(readRequest).getValue();
+        try {
+
+            Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
+            Rec.ReadResponse readResponse = stubs.get(result).read(readRequest);
+            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            return readResponse.getValue();
+
+        } catch (StatusRuntimeException e) {
+            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+        }
     }
 
     public static String topUp(String name){
-        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        return stubs.get(result).write(writeRequest).getValue();
+        try {
+            Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
+            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            return writeResponse.getValue();
+        } catch (StatusRuntimeException e) {
+            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+        }
     }
 
     public static String bikeUp(String name){
-        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        return stubs.get(result).write(writeRequest).getValue();
+        try {
+            Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
+            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            return writeResponse.getValue();
+        } catch (StatusRuntimeException e) {
+            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+        }
     }
 
     public static String bikeDown(String name){
-        Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-
         Random r = new Random();
         int low = 0;
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        return stubs.get(result).write(writeRequest).getValue();
+        try {
+            Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
+            return writeResponse.getValue();
+        } catch (StatusRuntimeException e) {
+            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+        }
     }
 }

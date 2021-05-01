@@ -27,9 +27,13 @@ public class RecordMain {
 		String zooPort = args[1];
 		String host = args[2];
 		String port = args[3];
-		String path = "/grpc/bicloin/rec/1";
+		String path = "/grpc/bicloin/rec/";
 
-		RecServerImpl impl = new RecServerImpl();
+		path += args[4];
+
+		System.out.println("Path: " + path);
+
+		RecServerImpl impl = new RecServerImpl(zooHost, zooPort);
 
 		try{
 			zkNaming = new ZKNaming(zooHost, zooPort);

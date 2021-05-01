@@ -18,6 +18,8 @@ message ReadRequest {
   
 message ReadResponse {
   string value = 1;
+  int32 version = 2;
+  int32 cid = 3;
 }
 
 message WriteRequest {
