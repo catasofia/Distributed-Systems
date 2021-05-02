@@ -99,7 +99,7 @@ public class RecServerImplOperations {
 
             if(mutableUsers.get(userId[1]).getBalance() < 10) {
                 throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar bicicletas. " +
-                        "Conta com dinheiro insuficiente");
+                        "Conta com dinheiro insuficiente.");
             }
 
             if (mutableStations.get(attributes[0]) == null) {
@@ -131,7 +131,7 @@ public class RecServerImplOperations {
             }
 
             if(!(mutableUsers.get(userId[1]).getBikeState())){
-                throw new BadEntrySpecificationException("Erro write: Este utilizador não tem bicicleta para devolver");
+                throw new BadEntrySpecificationException("Erro write: Este utilizador não tem bicicleta para devolver.");
             }
 
             if (mutableStations.get(attributes[0]) == null) {

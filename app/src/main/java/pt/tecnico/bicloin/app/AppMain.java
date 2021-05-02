@@ -52,7 +52,12 @@ public class AppMain {
 						String[] attributes = command.split(" ");
 						System.out.println(hubFrontend.info_station(attributes[1]));
 					} catch (StatusRuntimeException e){
-						System.out.println("ERRO: " + e.getMessage());
+						if(e.getMessage().equals("UNAVAILABLE: io exception")) {
+							System.out.println("ERRO: Falha na conexão.");
+						}
+						else{
+							System.out.println("ERRO: " + e.getMessage());
+						}
 					}
 				}
 				else if (command.startsWith("top-up")){
@@ -122,7 +127,12 @@ public class AppMain {
 						hubFrontend.bikeUp(user, latitude, longitude, attributes[1]);
 						System.out.println("OK");
 					} catch(StatusRuntimeException e){
-						System.out.println("ERRO: " + e.getMessage());
+						if(e.getMessage().equals("UNAVAILABLE: io exception")) {
+							System.out.println("ERRO: Falha na conexão.");
+						}
+						else{
+							System.out.println("ERRO: " + e.getMessage());
+						}
 					}
 				}
 				else if(command.startsWith("bike-down")){
@@ -131,7 +141,12 @@ public class AppMain {
 						hubFrontend.bikeDown(user, latitude, longitude, attributes[1]);
 						System.out.println("OK");
 					} catch(StatusRuntimeException e){
-						System.out.println("ERRO: " + e.getMessage());
+						if(e.getMessage().equals("UNAVAILABLE: io exception")) {
+							System.out.println("ERRO: Falha na conexão.");
+						}
+						else{
+							System.out.println("ERRO: " + e.getMessage());
+						}
 					}
 				}
 				else if(command.startsWith("ping")){

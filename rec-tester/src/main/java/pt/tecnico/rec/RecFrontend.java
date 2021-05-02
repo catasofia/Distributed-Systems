@@ -1,5 +1,6 @@
 package pt.tecnico.rec;
 
+import pt.tecnico.rec.exceptions.BadEntrySpecificationException;
 import pt.ulisboa.tecnico.sdis.zk.ZKRecord;
 import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
@@ -43,7 +44,7 @@ public class RecFrontend{
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        System.out.println("Conectei-me à réplica: " + (result+1) + " no localhost 809" + (result+1));
+        System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
 
         Rec.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
 
@@ -58,8 +59,7 @@ public class RecFrontend{
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        System.out.println("Conectei-me à réplica: " + (result+1) + " no localhost 809" + (result+1));
-
+        System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
 
         return stubs.get(result).read(readRequest).getValue();
     }
@@ -73,11 +73,12 @@ public class RecFrontend{
 
         try {
             Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
+            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
             Rec.ReadResponse readResponse = stubs.get(result).read(readRequest);
-            System.out.println("Conectei-me à réplica: " + (result+1) + " no localhost 809" + (result+1));
+            System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
             return readResponse.getValue();
         } catch (StatusRuntimeException e) {
-            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+            return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
         }
     }
 
@@ -89,13 +90,14 @@ public class RecFrontend{
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
             Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
-            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
             stubs.get(result).update(updateRequest);
             return writeResponse.getValue();
         } catch (StatusRuntimeException e) {
-            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+            return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
         }
     }
 
@@ -107,14 +109,16 @@ public class RecFrontend{
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
             Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
-            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
             stubs.get(result).update(updateRequest);
             return writeResponse.getValue();
-        } catch (StatusRuntimeException e) {
-            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+        } catch (IllegalThreadStateException e) {
+            System.out.println("Tentei conectar-me à réplica " + (result + 1) + " e falhei! ");
         }
+        return "";
     }
 
     public static String bikeDown(String name){
@@ -125,13 +129,15 @@ public class RecFrontend{
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
             Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
+            System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
             stubs.get(result).update(updateRequest);
             return writeResponse.getValue();
-        } catch (StatusRuntimeException e) {
-            return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
+        } catch (IllegalThreadStateException e) {
+            System.out.println("Tentei conectar-me à réplica " + (result + 1) + " e falhei! ");
         }
+        return "";
     }
 }

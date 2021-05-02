@@ -31,8 +31,6 @@ public class RecordMain {
 
 		path += args[4];
 
-		System.out.println("Path: " + path);
-
 		RecServerImpl impl = new RecServerImpl(zooHost, zooPort, Integer.parseInt(args[4]));
 
 		try{

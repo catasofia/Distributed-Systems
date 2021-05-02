@@ -2,6 +2,7 @@ package pt.tecnico.rec;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import pt.ulisboa.tecnico.sdis.zk.ZKNaming;
 import pt.tecnico.rec.grpc.*;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
@@ -51,8 +52,12 @@ public class ReplicaManager {
             e.printStackTrace();
         }
         for(RecordServiceGrpc.RecordServiceBlockingStub stub: stubs.values()){
-            Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(changed).build();
-            stub.write(writeRequest);
+            try {
+                Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(changed).build();
+                stub.write(writeRequest);
+            }catch (StatusRuntimeException e) {
+                continue;
+            }
         }
     }
 

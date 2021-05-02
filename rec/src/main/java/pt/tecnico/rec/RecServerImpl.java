@@ -42,7 +42,6 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            System.out.println("Apanhei exceção");
             responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
