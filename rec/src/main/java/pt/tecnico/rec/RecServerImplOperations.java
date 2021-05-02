@@ -9,10 +9,10 @@ public class RecServerImplOperations {
 
     private Map <String, MutableUser> mutableUsers = new HashMap<>();
     private Map <String, MutableStation> mutableStations = new HashMap<>();
-    private ReplicaManager replicaManager;
+    //private ReplicaManager replicaManager;
 
     public RecServerImplOperations(String zooHost, String zooPort) {
-        replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec");
+        //replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec");
     }
 
     public synchronized void initializeStations(String abbr, Integer docksNr, Integer bikesNr){
@@ -34,12 +34,10 @@ public class RecServerImplOperations {
             case "balance":
                 if (mutableUsers.get(attributes[0]) == null){
                     mutableUsers.put(attributes[0], new MutableUser(attributes[0]));
-                    replicaManager.update(input);
                     return "0 BIC";
                 }
                 else{
                     MutableUser mutableUser = mutableUsers.get(attributes[0]);
-                    replicaManager.update(input);
                     return mutableUser.getBalance() + " BIC";
                 }
             case "info":
@@ -74,7 +72,6 @@ public class RecServerImplOperations {
                 String[] amount = attributes[1].split(" ");
                 mutableUsers.get(attributes[0]).increaseBalance(Integer.parseInt(amount[1])*10);
                 Integer balance = mutableUsers.get(attributes[0]).getBalance();
-                replicaManager.update(input);
                 return String.valueOf(balance);
             }
             else {
@@ -82,7 +79,6 @@ public class RecServerImplOperations {
                 String[] amount = attributes[1].split(" ");
                 mutableUser.increaseBalance(Integer.parseInt(amount[1])*10);
                 Integer balance = mutableUser.getBalance();
-                replicaManager.update(input);
                 return String.valueOf(balance);
             }
         }

@@ -1,5 +1,6 @@
 package pt.tecnico.bicloin.hub;
 
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import pt.tecnico.bicloin.hub.grpc.*;
 import static io.grpc.Status.INVALID_ARGUMENT;

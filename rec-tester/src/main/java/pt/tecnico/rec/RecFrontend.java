@@ -70,13 +70,12 @@ public class RecFrontend{
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
 
-        try {
 
+        try {
             Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
             Rec.ReadResponse readResponse = stubs.get(result).read(readRequest);
-            System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            System.out.println("Conectei-me à réplica: " + (result+1) + " no localhost 809" + (result+1));
             return readResponse.getValue();
-
         } catch (StatusRuntimeException e) {
             return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
         }
@@ -92,6 +91,8 @@ public class RecFrontend{
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
             Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
             System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
+            stubs.get(result).update(updateRequest);
             return writeResponse.getValue();
         } catch (StatusRuntimeException e) {
             return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
@@ -108,6 +109,8 @@ public class RecFrontend{
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
             Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
             System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
+            Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
+            stubs.get(result).update(updateRequest);
             return writeResponse.getValue();
         } catch (StatusRuntimeException e) {
             return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";
@@ -124,6 +127,8 @@ public class RecFrontend{
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
             System.out.println("Conectei-me à réplica: " + (result + 1) + " no localhost 809" + (result + 1));
             Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
+            Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
+            stubs.get(result).update(updateRequest);
             return writeResponse.getValue();
         } catch (StatusRuntimeException e) {
             return "Tentei conectar-me à réplica: " + (result + 1) + " e falhei! ";

@@ -38,9 +38,27 @@ message initializeRequest{
 
 message initializeResponse{}
 
+message UpdateRequest{
+    string input = 1;
+    int32 id = 2;
+    int32 version = 3;
+}
+
+message UpdateResponse{}
+
+message InitializeReplicasRequest{
+    string abbr = 1;
+    int32 docks = 2;
+    int32 bikes = 3;
+}
+
+message InitializeReplicasResponse{}
+
 service RecordService {
   rpc ctrl_ping(CtrlPingRequest) returns (CtrlPingResponse);
   rpc read(ReadRequest) returns (ReadResponse);
   rpc write(WriteRequest) returns (WriteResponse);
   rpc initialize(initializeRequest) returns (initializeResponse);
+  rpc update(UpdateRequest) returns (UpdateResponse);
+  rpc initializeReplicas(InitializeReplicasRequest) returns (InitializeReplicasResponse);
 }

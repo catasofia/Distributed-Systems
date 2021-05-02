@@ -9,10 +9,12 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
     private static RecServerImplOperations operations;
     private ReplicaManager replicaManager;
+    private Integer tag;
 
-    public RecServerImpl(String zooHost, String zooPort){
+    public RecServerImpl(String zooHost, String zooPort, Integer id){
         operations = new RecServerImplOperations(zooHost, zooPort);
-        replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec");
+        replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec", id);
+        tag = 0;
     }
 
     public static RecServerImplOperations getRecOperations(){
@@ -23,11 +25,11 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){
         try{
             String responseInput = operations.read(request.getName());
-            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput).build();
+            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput).setVersion(tag).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
@@ -36,10 +38,12 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
         try{
             String responseInput = operations.write(request.getName());
             Rec.WriteResponse response = Rec.WriteResponse.newBuilder().setValue(responseInput).build();
+            //tag++;
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            System.out.println("Apanhei exceção");
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
@@ -51,19 +55,35 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.toString()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
         }
     }
 
     @Override
     public void initialize(Rec.initializeRequest request, StreamObserver<Rec.initializeResponse> responseStreamObserver){
-
             String abbr = request.getAbbr();
             int docks = request.getDocks();
             int bikes = request.getBikes();
             operations.initializeStations(abbr, docks, bikes);
             responseStreamObserver.onNext(Rec.initializeResponse.newBuilder().build());
             responseStreamObserver.onCompleted();
+    }
 
+    @Override
+    public void update(Rec.UpdateRequest request, StreamObserver<Rec.UpdateResponse> responseObserver) {
+        replicaManager.update(request.getInput());
+        Rec.UpdateResponse response = Rec.UpdateResponse.newBuilder().build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void initializeReplicas(Rec.InitializeReplicasRequest request, StreamObserver<Rec.InitializeReplicasResponse> responseStreamObserver){
+        String abbr = request.getAbbr();
+        int docks = request.getDocks();
+        int bikes = request.getBikes();
+        replicaManager.initializeReplicasStations(abbr, docks, bikes);
+        responseStreamObserver.onNext(Rec.InitializeReplicasResponse.newBuilder().build());
+        responseStreamObserver.onCompleted();
     }
 }

@@ -87,9 +87,15 @@ public class HubMain {
 		rec_channel = ManagedChannelBuilder.forTarget(uri).usePlaintext().build();
 		rec_stub = RecordServiceGrpc.newBlockingStub(rec_channel);
 
-		Rec.initializeRequest request = Rec.initializeRequest.newBuilder().setAbbr(abbr)
+		Rec.InitializeReplicasRequest request = Rec.InitializeReplicasRequest.newBuilder().setAbbr(abbr)
 				.setDocks(docksNr).setBikes(bikesNr).build();
-		rec_stub.initialize(request);
+
+		Rec.initializeRequest requestInit = Rec.initializeRequest.newBuilder().setAbbr(abbr)
+				.setDocks(docksNr).setBikes(bikesNr).build();
+
+		rec_stub.initializeReplicas(request);
+		rec_stub.initialize(requestInit);
+
 	}
 
 	public static void readUsersFromCSV(String fileName){

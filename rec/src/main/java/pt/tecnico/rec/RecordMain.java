@@ -33,13 +33,13 @@ public class RecordMain {
 
 		System.out.println("Path: " + path);
 
-		RecServerImpl impl = new RecServerImpl(zooHost, zooPort);
+		RecServerImpl impl = new RecServerImpl(zooHost, zooPort, Integer.parseInt(args[4]));
 
 		try{
 			zkNaming = new ZKNaming(zooHost, zooPort);
 			//publish
 			zkNaming.rebind(path, host, port);
-			Server server = ServerBuilder.forPort(Integer.parseInt(port)).addService(impl).build();
+			Server server = ServerBuilder.forPort(Integer.parseInt(port)).addService((BindableService) impl).build();
 			server.start();
 			server.awaitTermination();
 		}catch(ZKNamingException e){
