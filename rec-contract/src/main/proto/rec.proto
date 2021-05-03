@@ -52,6 +52,14 @@ message InitializeReplicasRequest{
     int32 bikes = 3;
 }
 
+message getStubRequest{
+  string input = 1;
+}
+
+message getStubResponse{
+  int32 id = 1;
+}
+
 message InitializeReplicasResponse{}
 
 service RecordService {
@@ -61,4 +69,5 @@ service RecordService {
   rpc initialize(initializeRequest) returns (initializeResponse);
   rpc update(UpdateRequest) returns (UpdateResponse);
   rpc initializeReplicas(InitializeReplicasRequest) returns (InitializeReplicasResponse);
+  rpc getStub(getStubRequest) returns (getStubResponse);
 }

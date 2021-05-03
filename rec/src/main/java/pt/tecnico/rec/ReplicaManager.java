@@ -17,6 +17,7 @@ public class ReplicaManager {
 
     private static String path;
     private static Integer id;
+    private Integer tag;
 
     private Map<String, ManagedChannel> channels = new HashMap<>();
     private Map<String, RecordServiceGrpc.RecordServiceBlockingStub> stubs = new HashMap<>();
@@ -28,6 +29,7 @@ public class ReplicaManager {
         zkNaming = new ZKNaming(zooHost, zooPort);
         this.path = path;
         this.id = id;
+        tag = 0;
     }
 
     public static Integer getId(){
@@ -43,6 +45,10 @@ public class ReplicaManager {
             channels.putIfAbsent(record.getPath(), channel);
             stubs.putIfAbsent(record.getPath(), RecordServiceGrpc.newBlockingStub(channel));
         }
+    }
+
+    public void incrementTag() {
+        tag++;
     }
 
     public void update(String changed) {
@@ -91,6 +97,10 @@ public class ReplicaManager {
             }
         }
         return updatedStub;
+    }
+
+    public Integer getTag() {
+        return tag;
     }
 
 }

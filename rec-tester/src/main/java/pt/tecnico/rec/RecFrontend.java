@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class RecFrontend{
 
@@ -36,6 +37,15 @@ public class RecFrontend{
         return stubs;
     }
 
+   /* public Integer getUpdatedStub(Integer id, String input) {
+        RecordServiceGrpc.RecordServiceBlockingStub stub = stubs.get(id).getStub();
+        Rec.getStubRequest stubRequest = Rec.getStubRequest.newBuilder().setInput(input).build();
+
+        Rec.getStubResponse stubResponse = stubs.get(id).getStub(stubRequest);
+
+        return stubResponse.getId();
+    }*/
+
     public static String ctrlPing(String ping){
         Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
 
@@ -58,10 +68,19 @@ public class RecFrontend{
         int low = 0;
         int high = stubs.size();
         int result = r.nextInt(high - low) + low;
+        
 
         System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
 
-        return stubs.get(result).read(readRequest).getValue();
+        try{
+            Rec.ReadResponse readResponse = stubs.get(result).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
+            return readResponse.getValue();
+        } catch (StatusRuntimeException e) {
+            if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
+				System.out.println("Exceção de timeout.");
+            }
+        }
+        return "";
     }
 
     public static String balance(String input){
@@ -74,31 +93,40 @@ public class RecFrontend{
         try {
             Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
             System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
-            Rec.ReadResponse readResponse = stubs.get(result).read(readRequest);
+            Rec.ReadResponse readResponse = stubs.get(result).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
             System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
             return readResponse.getValue();
         } catch (StatusRuntimeException e) {
-            return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
+            if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
+                System.out.println("Exceção de timeout.");
+            }
+            //return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
         }
+        return "";
     }
 
     public static String topUp(String name){
         Random r = new Random();
         int low = 0;
-        int high = stubs.size();
+        int high = stubs.
+        size();
         int result = r.nextInt(high - low) + low;
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
             System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
-            Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
+            Rec.WriteResponse writeResponse = stubs.get(result).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
-            stubs.get(result).update(updateRequest);
+            stubs.get(result).withDeadlineAfter(4000, TimeUnit.MILLISECONDS).update(updateRequest);
             return writeResponse.getValue();
         } catch (StatusRuntimeException e) {
-            return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
+            if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
+                System.out.println("Exceção de timeout.");
+            }
+            //return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
         }
+        return "";
     }
 
     public static String bikeUp(String name){

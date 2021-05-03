@@ -9,12 +9,10 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
     private static RecServerImplOperations operations;
     private ReplicaManager replicaManager;
-    private Integer tag;
 
     public RecServerImpl(String zooHost, String zooPort, Integer id){
         operations = new RecServerImplOperations(zooHost, zooPort);
         replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec", id);
-        tag = 0;
     }
 
     public static RecServerImplOperations getRecOperations(){
@@ -25,7 +23,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){
         try{
             String responseInput = operations.read(request.getName());
-            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput).setVersion(tag).build();
+            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput).setVersion(replicaManager.getTag()).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
@@ -38,7 +36,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
         try{
             String responseInput = operations.write(request.getName());
             Rec.WriteResponse response = Rec.WriteResponse.newBuilder().setValue(responseInput).build();
-            //tag++;
+            replicaManager.incrementTag();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
@@ -84,5 +82,17 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
         replicaManager.initializeReplicasStations(abbr, docks, bikes);
         responseStreamObserver.onNext(Rec.InitializeReplicasResponse.newBuilder().build());
         responseStreamObserver.onCompleted();
+    }
+
+    @Override
+    public void getStub(Rec.getStubRequest request, StreamObserver<Rec.getStubResponse> responseStreamObserver) {
+        String input = request.getInput();
+
+        RecordServiceGrpc.RecordServiceBlockingStub stub = replicaManager.checkTags(input);
+
+        //falta set do id do stub
+        responseStreamObserver.onNext(Rec.getStubResponse.newBuilder().setId(1).build());
+        responseStreamObserver.onCompleted();
+
     }
 }
