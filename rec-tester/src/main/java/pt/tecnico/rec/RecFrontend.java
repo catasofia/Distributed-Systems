@@ -45,6 +45,31 @@ public class RecFrontend{
 
         return stubResponse.getId();
     }*/
+    public static Rec.ReadResponse checkTags(String input){
+        Integer tag = 0;
+        String value = "";
+        Integer id = 0;
+        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
+        Rec.ReadResponse readResponse = null;
+
+        for(RecordServiceGrpc.RecordServiceBlockingStub stub: stubs){
+            try {
+                readResponse  = stub.withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
+                if(readResponse.getVersion() >= tag) {
+                    tag = readResponse.getVersion();
+                    value = readResponse.getValue();
+                    id = readResponse.getRid();
+                }
+            } catch (StatusRuntimeException e) {
+                if (Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()) {
+                    //System.out.println("ERRO: Tempo de espera excedido. Tente outra vez!");
+                    continue;
+                }
+            }
+        }
+        System.out.println("Conectei-me à réplica " + id + " no localhost 809" + id);
+        return readResponse;
+    }
 
     public static String ctrlPing(String ping){
         Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
@@ -62,109 +87,58 @@ public class RecFrontend{
     }
 
     public static String info_station(String abbr){
-        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(abbr+"/info").build();
-
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
-        
-
-        System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
-
-        try{
-            Rec.ReadResponse readResponse = stubs.get(result).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
-            return readResponse.getValue();
-        } catch (StatusRuntimeException e) {
-            if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
-				System.out.println("Exceção de timeout.");
-            }
-        }
-        return "";
+        return checkTags(abbr+"/info").getValue();
     }
 
     public static String balance(String input){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
-
-
-        try {
-            Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
-            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
-            Rec.ReadResponse readResponse = stubs.get(result).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
-            System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
-            return readResponse.getValue();
-        } catch (StatusRuntimeException e) {
-            if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
-                System.out.println("Exceção de timeout.");
-            }
-            //return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
-        }
-        return "";
+        return checkTags(input).getValue();
     }
 
     public static String topUp(String name){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.
-        size();
-        int result = r.nextInt(high - low) + low;
-
+        String[] attributes = name.split("/");
+        Integer id = checkTags(attributes[0] +"/balance").getRid();
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
-            Rec.WriteResponse writeResponse = stubs.get(result).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
-            System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
+            Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
-            stubs.get(result).withDeadlineAfter(4000, TimeUnit.MILLISECONDS).update(updateRequest);
+            stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (StatusRuntimeException e) {
             if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
-                System.out.println("Exceção de timeout.");
+                System.out.println("ERRO: Tempo de espera excedido. Tente outra vez!");
             }
-            //return "Tentei conectar-me à réplica " + (result + 1) + " e falhei! ";
         }
         return "";
     }
 
     public static String bikeUp(String name){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
+        String[] attributes = name.split(" ");
+        Integer id = checkTags(attributes[1] + "/info").getRid();
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
-            Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
-            System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
+            Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
-            stubs.get(result).update(updateRequest);
+            stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (IllegalThreadStateException e) {
-            System.out.println("Tentei conectar-me à réplica " + (result + 1) + " e falhei! ");
+            System.out.println("Tentei conectar-me à réplica " + id + " e falhei! ");
         }
         return "";
     }
 
     public static String bikeDown(String name){
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
+        String[] attributes = name.split(" ");
+        Integer id = checkTags(attributes[1] + "/info").getRid();
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
-            System.out.println("A tentar conectar-me à réplica " + (result + 1)+ " no localhost 809" + (result + 1) + "...");
-            Rec.WriteResponse writeResponse = stubs.get(result).write(writeRequest);
-            System.out.println("Conectei-me à réplica " + (result + 1) + " no localhost 809" + (result + 1));
+            Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder().setInput(name).build();
-            stubs.get(result).update(updateRequest);
+            stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (IllegalThreadStateException e) {
-            System.out.println("Tentei conectar-me à réplica " + (result + 1) + " e falhei! ");
+            System.out.println("Tentei conectar-me à réplica " + id + " e falhei! ");
         }
         return "";
     }

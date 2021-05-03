@@ -64,6 +64,13 @@ public class RecServerImplOperations {
         }
     }
 
+    public synchronized void updateValues(String input){
+        String[] attributes = input.split("/");
+        if(attributes[1].startsWith("top_up")){
+
+        }
+    }
+
     public synchronized String write(String input) throws BadEntrySpecificationException{
         String[] attributes = input.split("/");
         if(attributes[1].startsWith("top_up")){

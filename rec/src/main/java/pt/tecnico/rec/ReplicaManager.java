@@ -10,13 +10,14 @@ import pt.ulisboa.tecnico.sdis.zk.ZKRecord;
 
 import java.nio.file.FileSystemNotFoundException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ReplicaManager {
     private List<MutableUser> users = new ArrayList<>();
     private List<MutableStation> stations = new ArrayList<>();
 
     private static String path;
-    private static Integer id;
+    private Integer id;
     private Integer tag;
 
     private Map<String, ManagedChannel> channels = new HashMap<>();
@@ -32,7 +33,7 @@ public class ReplicaManager {
         tag = 0;
     }
 
-    public static Integer getId(){
+    public Integer getId(){
         return id;
     }
 
@@ -60,7 +61,7 @@ public class ReplicaManager {
         for(RecordServiceGrpc.RecordServiceBlockingStub stub: stubs.values()){
             try {
                 Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(changed).build();
-                stub.write(writeRequest);
+                stub.withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             }catch (StatusRuntimeException e) {
                 continue;
             }

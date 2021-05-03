@@ -1,6 +1,7 @@
 package pt.tecnico.bicloin.app;
 
 import io.grpc.ManagedChannel;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import pt.tecnico.bicloin.hub.HubFrontend;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
@@ -130,6 +131,9 @@ public class AppMain {
 						if(e.getMessage().equals("UNAVAILABLE: io exception")) {
 							System.out.println("ERRO: Falha na conexão.");
 						}
+						if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
+							System.out.println("ERRO: Tempo de espera excedido. Tente outra vez!");
+						}
 						else{
 							System.out.println("ERRO: " + e.getMessage());
 						}
@@ -143,6 +147,9 @@ public class AppMain {
 					} catch(StatusRuntimeException e){
 						if(e.getMessage().equals("UNAVAILABLE: io exception")) {
 							System.out.println("ERRO: Falha na conexão.");
+						}
+						if(Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()){
+							System.out.println("ERRO: Tempo de espera excedido. Tente outra vez!");
 						}
 						else{
 							System.out.println("ERRO: " + e.getMessage());
