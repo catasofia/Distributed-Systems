@@ -49,6 +49,10 @@ public class AppMain {
 					System.out.println(user + " " + hubFrontend.balance(user));
 				}
 				else if (command.startsWith("info")){
+					if(command.equals("info")) {
+						System.out.println("Má utilização do comando info.");
+						continue;
+					}
 					try {
 						String[] attributes = command.split(" ");
 						System.out.println(hubFrontend.info_station(attributes[1]));
@@ -62,6 +66,10 @@ public class AppMain {
 					}
 				}
 				else if (command.startsWith("top-up")){
+					if(command.equals("top-up")) {
+						System.out.println("Má utilização do comando top-up.");
+						continue;
+					}
 					try {
 						String[] attributes = command.split(" ");
 						System.out.println(user + " " + hubFrontend.topUp(user, Integer.parseInt(attributes[1]), args[3]) + " BIC");
@@ -70,6 +78,10 @@ public class AppMain {
 					}
 				}
 				else if(command.startsWith("tag")){
+					if(command.equals("tag")) {
+						System.out.println("Má utilização do comando tag.");
+						continue;
+					}
 					String[] attributes = command.split(" ");
 					try{
 						Double.parseDouble(attributes[1]);
@@ -83,6 +95,10 @@ public class AppMain {
 					System.out.println("OK");
 				}
 				else if(command.startsWith("move")){
+					if(command.equals("move")) {
+						System.out.println("Má utilização do comando move.");
+						continue;
+					}
 					String[] attributes = command.split(" ");
 					if(attributes.length == 2){
 						if(tags.get(attributes[1]) == null){
@@ -115,6 +131,10 @@ public class AppMain {
 					System.out.println(user + " em https://www.google.com/maps/place/" + latitude + "," + longitude);
 				}
 				else if(command.startsWith("scan")){
+					if(command.equals("scan")) {
+						System.out.println("Má utilização do comando scan.");
+						continue;
+					}
 					String[] attributes = command.split(" ");
 					String stations = hubFrontend.locate_station(latitude, longitude, Integer.parseInt(attributes[1]));
 					String[] dividedStations = stations.split("\n");
@@ -123,6 +143,10 @@ public class AppMain {
 					}
 				}
 				else if(command.startsWith("bike-up")){
+					if(command.equals("bike-up")) {
+						System.out.println("Má utilização do comando bike-up.");
+						continue;
+					}
 					String[] attributes = command.split(" ");
 					try{
 						hubFrontend.bikeUp(user, latitude, longitude, attributes[1]);
@@ -140,6 +164,10 @@ public class AppMain {
 					}
 				}
 				else if(command.startsWith("bike-down")){
+					if(command.equals("bike-down")) {
+						System.out.println("Má utilização do comando bike-down.");
+						continue;
+					}
 					String[] attributes = command.split(" ");
 					try{
 						hubFrontend.bikeDown(user, latitude, longitude, attributes[1]);
@@ -189,6 +217,10 @@ public class AppMain {
 					}
 				}
 				else if(command.startsWith("zzz")){
+					if(command.equals("zzz")) {
+						System.out.println("Má utilização do comando zzz.");
+						continue;
+					}
 					String[] attributes = command.split(" ");
 					TimeUnit.MILLISECONDS.sleep(Integer.parseInt(attributes[1]));
 					System.out.println("Dormi durante " + attributes[1] + " milissegundos!\n");

@@ -12,7 +12,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
     public RecServerImpl(String zooHost, String zooPort, Integer id){
         operations = new RecServerImplOperations(zooHost, zooPort);
-        replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec", id);
+        replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec", id, operations);
     }
 
     public static RecServerImplOperations getRecOperations(){
@@ -23,7 +23,8 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){
         try{
             String responseInput = operations.read(request.getName());
-            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput).setVersion(replicaManager.getTag())
+            Rec.ReadResponse response = Rec.ReadResponse.newBuilder().setValue(responseInput)
+                    .setVersion(operations.getTags(request.getName()))
                     .setRid(replicaManager.getId()).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -36,8 +37,8 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
     public void write(Rec.WriteRequest request, StreamObserver<Rec.WriteResponse> responseObserver){
         try{
             String responseInput = operations.write(request.getName());
-            Rec.WriteResponse response = Rec.WriteResponse.newBuilder().setValue(responseInput).build();
-            replicaManager.incrementTag();
+            Rec.WriteResponse response = Rec.WriteResponse.newBuilder().setValue(responseInput)
+                    .setTag(operations.getTags(request.getName())).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {

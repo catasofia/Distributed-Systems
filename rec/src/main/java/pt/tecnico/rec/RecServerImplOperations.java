@@ -64,14 +64,51 @@ public class RecServerImplOperations {
         }
     }
 
-    public synchronized void updateValues(String input){
+    public synchronized void updateValues(String input, Integer newTag){
         String[] attributes = input.split("/");
         if(attributes[1].startsWith("top_up")){
+            String[] amount = attributes[1].split(" ");
+            mutableUsers.get(attributes[0]).setNewBalance(Integer.parseInt(amount[1]));
+            mutableUsers.get(attributes[0]).setTagBalance(newTag);
+        }
+    }
 
+    public Integer getTags(String input){
+        if(!input.startsWith("update")) {
+            String[] attributes = input.split("/");
+            if (attributes[1].equals("balance") || attributes[1].startsWith("top_up"))
+                return mutableUsers.get(attributes[0]).getTagBalance();
+            else if (attributes[1].startsWith("info") || attributes[1].startsWith("bike_up") || attributes[1].startsWith("bike_down"))
+                return mutableStations.get(attributes[0]).getTagStation();
+            return -1; //default
+        } else{
+            String[] attributes = input.split(":");
+            if (attributes[2].equals("balance") || attributes[2].startsWith("top_up"))
+                return mutableUsers.get(attributes[1]).getTagBalance();
+            //check this index number, line 89
+            else if (attributes[1].startsWith("info") || attributes[1].startsWith("bike_up") || attributes[1].startsWith("bike_down"))
+                return mutableStations.get(attributes[2]).getTagStation();
+            return -1; //default
         }
     }
 
     public synchronized String write(String input) throws BadEntrySpecificationException{
+        String result = "";
+        if(input.startsWith("update")){
+            String[] attributes1 = input.split(":");
+            if(attributes1[2].equals("top_up")){
+                mutableUsers.get(attributes1[1]).setNewBalance(Integer.parseInt(attributes1[3]));
+                mutableUsers.get(attributes1[1]).setTagBalance(Integer.parseInt(attributes1[4]));
+                return "";
+            }
+            else if(attributes1[1].equals("bike_up") || attributes1[1].equals("bike_down")){
+                mutableStations.get(attributes1[2]).updateStats(Integer.parseInt(attributes1[3]),
+                        Integer.parseInt(attributes1[4]), Integer.parseInt(attributes1[5]),
+                        Integer.parseInt(attributes1[6]));
+                mutableStations.get(attributes1[2]).setTagStation(Integer.parseInt(attributes1[7]));
+                return "";
+            }
+        }
         String[] attributes = input.split("/");
         if(attributes[1].startsWith("top_up")){
             if (mutableUsers.get(attributes[0]) == null) {
@@ -115,7 +152,11 @@ public class RecServerImplOperations {
                 mutableUsers.get(userId[1]).setBikeState();
                 mutableUsers.get(userId[1]).increaseBalance(-10);
                 Integer requisitions = mutableStations.get(attributes[0]).getRequisitions();
-                return String.valueOf(requisitions);
+                Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
+                Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
+                Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
+                return result;
             }
             else {
                 MutableStation mutableStation = mutableStations.get(attributes[0]);
@@ -123,7 +164,11 @@ public class RecServerImplOperations {
                 mutableUsers.get(userId[1]).setBikeState();
                 mutableUsers.get(userId[1]).increaseBalance(-10);
                 Integer requisitions = mutableStation.getRequisitions();
-                return String.valueOf(requisitions);
+                Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
+                Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
+                Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
+                return result;
             }
         }
         else if(attributes[1].startsWith("bike_down")){
@@ -146,19 +191,26 @@ public class RecServerImplOperations {
                 mutableStations.get(attributes[0]).bikeDown();
                 mutableUsers.get(userId[1]).setBikeState();
                 mutableUsers.get(userId[1]).increaseBalance(Integer.parseInt(userId[2]));
+                Integer requisitions = mutableStations.get(attributes[0]).getRequisitions();
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
-                return String.valueOf(deliveries);
+                Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
+                Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
+                return result;
             }
             else {
                 MutableStation mutableStation = mutableStations.get(attributes[0]);
                 mutableStations.get(attributes[0]).bikeDown();
                 mutableUsers.get(userId[1]).setBikeState();
                 mutableUsers.get(userId[1]).increaseBalance(Integer.parseInt(userId[2]));
-                Integer deliveries = mutableStation.getDeliveries();
-                return String.valueOf(deliveries);
+                Integer requisitions = mutableStations.get(attributes[0]).getRequisitions();
+                Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
+                Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
+                Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
+                return result;
             }
         }
-
         return ""; //default case
     }
 }

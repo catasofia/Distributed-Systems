@@ -29,6 +29,7 @@ message WriteRequest {
   
 message WriteResponse {
    string value = 1;
+   int32 tag = 2;
 }
 
 message initializeRequest{

@@ -22,15 +22,17 @@ public class ReplicaManager {
 
     private Map<String, ManagedChannel> channels = new HashMap<>();
     private Map<String, RecordServiceGrpc.RecordServiceBlockingStub> stubs = new HashMap<>();
+    RecServerImplOperations operations;
 
     private ZKNaming zkNaming;
 
 
-    public ReplicaManager(String zooHost, String zooPort, String path, Integer id) {
+    public ReplicaManager(String zooHost, String zooPort, String path, Integer id, RecServerImplOperations ops) {
         zkNaming = new ZKNaming(zooHost, zooPort);
         this.path = path;
         this.id = id;
         tag = 0;
+        operations = ops;
     }
 
     public Integer getId(){
