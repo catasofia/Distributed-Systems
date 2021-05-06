@@ -29,7 +29,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -43,7 +43,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -63,7 +63,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -75,7 +75,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -87,7 +87,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -99,7 +99,7 @@ public class HubServerImpl extends HubServiceGrpc.HubServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }catch(BadEntrySpecificationException e){
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 

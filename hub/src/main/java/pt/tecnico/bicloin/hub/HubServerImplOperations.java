@@ -1,5 +1,6 @@
 package pt.tecnico.bicloin.hub;
 
+import pt.tecnico.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.sdis.zk.*;
 import pt.tecnico.bicloin.hub.exceptions.BadEntrySpecificationException;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -23,22 +24,16 @@ public class HubServerImplOperations {
     }
 
     public synchronized String ping(String ping) throws BadEntrySpecificationException{
-        if (ping == null || ping.isBlank()){
-            throw new BadEntrySpecificationException("Ping: nulo ou vazio");
-        }
-        return ping;
+        return ping + " PONG";
     }
 
     public synchronized String sys_status(String sysStatus) throws BadEntrySpecificationException{
-        if(sysStatus == null || sysStatus.isBlank()){
-            throw new BadEntrySpecificationException("System status: nulo ou vazio");
-        }
         return sysStatus;
     }
 
     public synchronized List<String> info_station(String abbr) throws BadEntrySpecificationException{
         if(stations.get(abbr) == null){
-            throw new BadEntrySpecificationException("Não existe nenhuma estação com a abreviatura: " + abbr);
+            throw new BadEntrySpecificationException(ErrorMessage.NO_STATION_FOUND);
         }
 
         Station station = stations.get(abbr);
@@ -81,10 +76,10 @@ public class HubServerImplOperations {
     public synchronized String topUp(String name, Integer amount, String phone) throws BadEntrySpecificationException{
    
         if (!(users.get(name).getPhone().equals(phone))){
-            throw new BadEntrySpecificationException("O número de telemóvel não corresponde ao utilizador");
+            throw new BadEntrySpecificationException(ErrorMessage.NO_PHONE_MATCH);
         }
         if(amount < 1 || amount > 20){
-            throw new BadEntrySpecificationException("Só se pode carregar com valores entre 1 EUR e 20 EUR, inclusive.");
+            throw new BadEntrySpecificationException(ErrorMessage.VALUE_OUT_OF_BOUNDS);
         }
         return name+"/top_up "+amount;
     }
@@ -94,7 +89,7 @@ public class HubServerImplOperations {
         if (station.calculateDistance(latitude, longitude) < 200){
             return abbr+"/bike_up " + name;
         }else{
-            throw new BadEntrySpecificationException("Fora de alcance");
+            throw new BadEntrySpecificationException(ErrorMessage.FAR_AWAY);
         }
     }
 
@@ -103,7 +98,7 @@ public class HubServerImplOperations {
         if (station.calculateDistance(latitude, longitude) < 200){
             return abbr+"/bike_down " + name + " " + station.getPrize();
         }else{
-            throw new BadEntrySpecificationException("Fora de alcance");
+            throw new BadEntrySpecificationException(ErrorMessage.FAR_AWAY);
         }
     }
 }

@@ -2,6 +2,8 @@ package pt.tecnico.rec;
 
 import pt.tecnico.rec.exceptions.BadEntrySpecificationException;
 import pt.tecnico.rec.MutableUser;
+import pt.tecnico.rec.exceptions.ErrorMessage;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -9,10 +11,8 @@ public class RecServerImplOperations {
 
     private Map <String, MutableUser> mutableUsers = new HashMap<>();
     private Map <String, MutableStation> mutableStations = new HashMap<>();
-    //private ReplicaManager replicaManager;
 
     public RecServerImplOperations(String zooHost, String zooPort) {
-        //replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec");
     }
 
     public synchronized void initializeStations(String abbr, Integer docksNr, Integer bikesNr){
@@ -21,14 +21,15 @@ public class RecServerImplOperations {
     }
 
     public synchronized String ping(String ping) throws BadEntrySpecificationException{
-        if (ping == null || ping.isBlank()){
-            throw new BadEntrySpecificationException("Erro ping: nulo ou vazio");
-        }
         return ping;
     }
 
     public synchronized String read(String input) throws BadEntrySpecificationException{
         String[] attributes = input.split("/");
+
+        if(attributes[0].startsWith("user")){
+            return mutableUsers.get(attributes[1]).getStringState();
+        }
 
         switch (attributes[1]){
             case "balance":
@@ -64,15 +65,6 @@ public class RecServerImplOperations {
         }
     }
 
-    public synchronized void updateValues(String input, Integer newTag){
-        String[] attributes = input.split("/");
-        if(attributes[1].startsWith("top_up")){
-            String[] amount = attributes[1].split(" ");
-            mutableUsers.get(attributes[0]).setNewBalance(Integer.parseInt(amount[1]));
-            mutableUsers.get(attributes[0]).setTagBalance(newTag);
-        }
-    }
-
     public Integer getTags(String input){
         if(!input.startsWith("update")) {
             String[] attributes = input.split("/");
@@ -85,7 +77,6 @@ public class RecServerImplOperations {
             String[] attributes = input.split(":");
             if (attributes[2].equals("balance") || attributes[2].startsWith("top_up"))
                 return mutableUsers.get(attributes[1]).getTagBalance();
-            //check this index number, line 89
             else if (attributes[1].startsWith("info") || attributes[1].startsWith("bike_up") || attributes[1].startsWith("bike_down"))
                 return mutableStations.get(attributes[2]).getTagStation();
             return -1; //default
@@ -106,6 +97,7 @@ public class RecServerImplOperations {
                         Integer.parseInt(attributes1[4]), Integer.parseInt(attributes1[5]),
                         Integer.parseInt(attributes1[6]));
                 mutableStations.get(attributes1[2]).setTagStation(Integer.parseInt(attributes1[7]));
+                mutableUsers.get(attributes1[8]).setNewState(Boolean.parseBoolean(attributes1[9]));
                 return "";
             }
         }
@@ -134,16 +126,15 @@ public class RecServerImplOperations {
             }
 
             if(mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
-                throw new BadEntrySpecificationException("Erro write: Não há bicicletas disponiveis para requisitar.");
+                throw new BadEntrySpecificationException(ErrorMessage.NO_AVAILABLE_BIKES);
             }
 
             if(mutableUsers.get(userId[1]).getBikeState()) {
-                throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar mais bicicletas.");
+                throw new BadEntrySpecificationException(ErrorMessage.ALREADY_HAS_BIKE);
             }
 
             if(mutableUsers.get(userId[1]).getBalance() < 10) {
-                throw new BadEntrySpecificationException("Erro write: Este utilizador não pode requisitar bicicletas. " +
-                        "Conta com dinheiro insuficiente.");
+                throw new BadEntrySpecificationException(ErrorMessage.NOT_ENOUGH_BALANCE);
             }
 
             if (mutableStations.get(attributes[0]) == null) {
@@ -179,11 +170,11 @@ public class RecServerImplOperations {
             }
 
             if(mutableStations.get(attributes[0]).getDocksNumber() -  mutableStations.get(attributes[0]).getAvailableBikesNr() == 0) {
-                throw new BadEntrySpecificationException("Erro write: Não pode devolver a bicicleta nesta doca. Doca cheia.");
+                throw new BadEntrySpecificationException(ErrorMessage.FULL_DOCK);
             }
 
             if(!(mutableUsers.get(userId[1]).getBikeState())){
-                throw new BadEntrySpecificationException("Erro write: Este utilizador não tem bicicleta para devolver.");
+                throw new BadEntrySpecificationException(ErrorMessage.NO_BIKE_TO_DELIVER);
             }
 
             if (mutableStations.get(attributes[0]) == null) {

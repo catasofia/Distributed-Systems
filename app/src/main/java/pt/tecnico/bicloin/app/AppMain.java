@@ -234,56 +234,46 @@ public class AppMain {
 					System.exit(0);
 				}
 				else if(command.equals("help")){
-					System.out.println("\n- Comando \"at\": devolve a posição atual do utilizador.\nNão recebe argumentos.\n" +
-							"Modo de utilização: at\n Exemplo de retorno: alice em " +
-							"https://www.google.com/maps/place/38.7376,-9.3031\n");
-					System.out.println("- Comando \"balance\": devolve o saldo da conta do utilizador.\nNão recebe argumentos.\n" +
-							"Modo de utilização: balance\nRetorna o identificador do utilizador seguido do valor de" +
-							" Bicloins. Exemplo: alice 100 BIC\n");
-					System.out.println("- Comando \"bike-down\": Comando para devolver uma bicicleta.\nRecebe um argumento:" +
-							" abreviatura da estação na qual se pertende devolver a bicicleta.\n" +
-							"Exemplo de utilização: bike-down istt\nRetorna OK em caso de sucesso e ERRO em caso de" +
-							"insucesso\n");
-					System.out.println("- Comando \"bike-up\": Comando para alugar uma bicicleta.\nRecebe um argumento:" +
-							" abreviatura da estação de onde se pertende alugar a bicicleta.\n" +
-							"Exemplo de utilização: bike-up istt\nRetorna OK em caso de sucesso e ERRO em caso de" +
-							"insucesso\n");
-					System.out.println("- Comando \"exit\": Comando para desligar a aplicação.\nNão recebe argumentos.\n" +
-							"Modo de utilização: exit\n");
-					System.out.println("- Comando \"info\": Comando que devolve a informação de uma estaçao.\nRecebe um " +
-							"argumento: abreviatura da estação pretendida.\nExemplo de utilização: info istt\n" +
-							"Retorna linha com formato: Nome da estação, Latitude, Longitude, Nr de docas, Prémio, " +
-							"Nr de bicicletas, Nr de levantamentos, Nr de devoluções, link de localização\nExemplo de " +
-							" retorno: IST Taguspark, lat 38.7372, -9.3023 long, 20 docas, 4 BIC prémio, 12 bicicletas, " +
-							"22 levantamentos, 7 devoluções, https://www.google.com/maps/place/38.7372,-9.3023\n");
-					System.out.println("- Comando \"move\": Comando para mover o utilizador.\nRecebe 2 argumentos:" +
-							" Latitude Longitude || recebe 1 argumento: nome da tag\n Exemplo de utilização: " +
-							"move 38.6867 -9.3117 || move loc1 (loc1 é uma tag).\nRetorna OK em caso de sucesso e " +
-							"ERRO em caso de insucesso.\n");
-					System.out.println("- Comando \"ping\": Comando que devolve o estado do servidor. Recebe um argumento: " +
-							"input. Exemplo: ping input\n");
-					System.out.println("- Comando \"scan\": Comando que devolve informação das estações mais próximas.\nRecebe " +
-							"um argumento: número de estações que deseja receber.\nExemplo de utilização: " +
-							"scan 2\nRetorna uma linha por estação com formato: abreviatura da estação, Latitude, " +
-							"Longitude, Nr de docas, Prémio, Nr de bicicletas, metros de distância entre utilizador " +
-							"e a estação.\nExemplo de retorno: istt, lat 38.7372, -9.3023 long, 20 docas, 4 BIC prémio, " +
-							"12 bicicletas, a 82 metros\nstao, lat 38.6867, -9.3124 long, 30 docas, 3 BIC prémio, " +
-							"20 bicicletas, a 5717 metros\n");
-					System.out.println("- Comando \"sys_status\": Comando que devolve o estado dos servidores atuais indicando " +
-							"o seu path e se está a responder(up) ou não(down).\nRecebe um argumento: input\nExemplo " +
-							"de utilização: sys_status status\n");
-					System.out.println("- Comando \"tag\": Comando que permite criar uma tag de localização.Recebe 3 argumentos: " +
-							"Latitude Longitude e nome da tag.\nExemplo de utilização: tag 38.7376 -9.3031 loc1\n" +
-							"Retorna OK em caso de sucesso e ERRO em caso de insucesso.\n");
-					System.out.println("Comando \"top-up\": Comando que permite carregar o saldo. Recebe um argumento: " +
-							"valor inteiro a carregar.\nExemplo: top-up 15\nRetorna OK em caso de sucesso e ERRO em caso de" +
-							"insucesso.\n");
-					System.out.println("- Comando \"zzz\": Comando para adormecer a aplicação. Recebe um argumento: " +
-							"nr de milissegundos para adormecer.\nExemplo de utilização: zzz 1000\n");
-					System.out.println("- Comando que comece com \"#\" é ignorado.\n");
-					System.out.println("\n****************Comandos adicionais criados:****************");
-					System.out.println("- \"exit\"");
+					System.out.println("\n- Comando \"at\": Devolve a posição atual do utilizador.\nNão recebe argumentos.\n");
 
+					System.out.println("- Comando \"balance\": Devolve o saldo da conta do utilizador.\nNão recebe argumentos.\n");
+
+					System.out.println("- Comando \"bike-down\": Comando para o utilizador devolver uma bicicleta.\nRecebe um argumento:" +
+							" Abreviatura da estação na qual se pertende devolver a bicicleta.\n");
+
+					System.out.println("- Comando \"bike-up\": Comando para o utilizador alugar uma bicicleta.\nRecebe um argumento:" +
+							" Abreviatura da estação de onde se pertende alugar a bicicleta.\n");
+
+					System.out.println("- Comando \"exit\": Comando para desligar a aplicação.\nNão recebe argumentos.\n");
+
+					System.out.println("- Comando \"info\": Comando que devolve a informação de uma estação.\nRecebe um " +
+							"argumento: abreviatura da estação pretendida.\n");
+
+					System.out.println("- Comando \"tag\": Comando que permite criar uma tag de localização.\nRecebe 3 argumentos: " +
+							"Latitude, longitude e nome da tag.\n");
+
+					System.out.println("- Comando \"move\": Comando para mover o utilizador.\nRecebe 2 argumentos:" +
+							" Latitude Longitude || Recebe 1 argumento: Nome da tag\n");
+
+					System.out.println("- Comando \"ping\": Comando que devolve o estado do servidor.\nRecebe um argumento: input.\n");
+
+					System.out.println("- Comando \"scan\": Comando que devolve a informação das estações mais próximas.\nRecebe " +
+							"um argumento: Número de estações que deseja ver a informação.\n");
+
+					System.out.println("- Comando \"sys_status\": Comando que devolve o estado dos servidores atuais indicando " +
+							"o seu path e se está a responder(up) ou não(down).\nRecebe um argumento: input\n");
+
+					System.out.println("Comando \"top-up\": Comando que permite carregar o saldo do utilizador.\nRecebe um argumento: " +
+							"Valor (inteiro) a carregar.\n");
+
+					System.out.println("- Comando \"zzz\": Comando para adormecer a aplicação.\nRecebe um argumento: " +
+							"Número de milissegundos para adormecer.\n");
+
+					System.out.println("- Comando que comece com \"#\" é ignorado.\n");
+
+					System.out.println("\n****************Comandos adicionais criados:****************");
+
+					System.out.println("- Comando \"exit\": Comando para sair da aplicação.\nNão recebe argumentos.");
 				}
 				else {
 					System.out.println("O comando inserido não é válido. Por favor, tente de novo! Prima \"help\" " +

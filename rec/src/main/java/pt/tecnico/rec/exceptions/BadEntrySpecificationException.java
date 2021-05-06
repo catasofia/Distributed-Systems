@@ -2,13 +2,14 @@ package pt.tecnico.rec.exceptions;
 
 public class BadEntrySpecificationException extends Exception {
 
-  private String _entrySpecification;
+  private ErrorMessage _entrySpecification;
 
-  public BadEntrySpecificationException(String entrySpecification) {
+  public BadEntrySpecificationException(ErrorMessage entrySpecification) {
+    super(entrySpecification.label);
     _entrySpecification = entrySpecification;
   }
 
-  public String getEntrySpecification() {
+  public ErrorMessage getEntrySpecification() {
     return _entrySpecification;
   }
 }

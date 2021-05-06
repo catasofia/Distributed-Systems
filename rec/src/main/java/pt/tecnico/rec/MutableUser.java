@@ -52,6 +52,15 @@ public class MutableUser{
         return _bike;
     }
 
+    public String getStringState() {
+        if(_bike) return "true";
+        else return "false";
+    }
+
+    public void setNewState(boolean state){
+        _bike = state;
+    }
+
     public void setBikeState() {
         _bike = !_bike;
         _tagBike++;

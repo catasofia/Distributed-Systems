@@ -8,7 +8,6 @@ import pt.tecnico.rec.grpc.*;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 import pt.ulisboa.tecnico.sdis.zk.ZKRecord;
 
-import java.nio.file.FileSystemNotFoundException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +17,6 @@ public class ReplicaManager {
 
     private static String path;
     private Integer id;
-    private Integer tag;
 
     private Map<String, ManagedChannel> channels = new HashMap<>();
     private Map<String, RecordServiceGrpc.RecordServiceBlockingStub> stubs = new HashMap<>();
@@ -31,7 +29,6 @@ public class ReplicaManager {
         zkNaming = new ZKNaming(zooHost, zooPort);
         this.path = path;
         this.id = id;
-        tag = 0;
         operations = ops;
     }
 
@@ -50,9 +47,6 @@ public class ReplicaManager {
         }
     }
 
-    public void incrementTag() {
-        tag++;
-    }
 
     public void update(String changed) {
         try {
@@ -69,41 +63,4 @@ public class ReplicaManager {
             }
         }
     }
-
-    public void initializeReplicasStations(String abbr, int docks, int bikes) {
-        try {
-            connect();
-        } catch (ZKNamingException e){
-            e.printStackTrace();
-        }
-        for(RecordServiceGrpc.RecordServiceBlockingStub stub: stubs.values()){
-            Rec.initializeRequest initializeRequest = Rec.initializeRequest.newBuilder().setAbbr(abbr).setDocks(docks).setBikes(bikes).build();
-            stub.initialize(initializeRequest);
-        }
-    }
-
-    public RecordServiceGrpc.RecordServiceBlockingStub checkTags(String input){
-        try {
-            connect();
-        } catch (ZKNamingException e){
-            e.printStackTrace();
-        }
-
-        Integer tag = 0;
-        RecordServiceGrpc.RecordServiceBlockingStub updatedStub = null;
-        for(RecordServiceGrpc.RecordServiceBlockingStub stub: stubs.values()){
-            Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName(input).build();
-            Rec.ReadResponse response = stub.read(readRequest);
-            if(response.getVersion() > tag){
-                tag = response.getVersion();
-                updatedStub = stub;
-            }
-        }
-        return updatedStub;
-    }
-
-    public Integer getTag() {
-        return tag;
-    }
-
 }

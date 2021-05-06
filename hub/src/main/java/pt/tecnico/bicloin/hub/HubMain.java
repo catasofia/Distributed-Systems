@@ -1,9 +1,6 @@
 package pt.tecnico.bicloin.hub;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.*;
 import pt.tecnico.rec.RecServerImpl;
 import pt.tecnico.rec.RecServerImplOperations;
 import pt.tecnico.rec.grpc.Rec;
@@ -18,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HubMain {
@@ -82,20 +78,20 @@ public class HubMain {
 	}
 
 	public static void initializeRec(String abbr, Integer docksNr, Integer bikesNr)throws ZKNamingException, IOException, InterruptedException{
-		ZKRecord zkRecord = zkNaming.lookup("/grpc/bicloin/rec/1");
-		String uri = zkRecord.getURI();
-		rec_channel = ManagedChannelBuilder.forTarget(uri).usePlaintext().build();
-		rec_stub = RecordServiceGrpc.newBlockingStub(rec_channel);
+		Collection<ZKRecord> records = zkNaming.listRecords("/grpc/bicloin/rec");
+		for(ZKRecord zkRecord: records) {
+			try {
+				String uri = zkRecord.getURI();
+				rec_channel = ManagedChannelBuilder.forTarget(uri).usePlaintext().build();
+				rec_stub = RecordServiceGrpc.newBlockingStub(rec_channel);
 
-		Rec.InitializeReplicasRequest request = Rec.InitializeReplicasRequest.newBuilder().setAbbr(abbr)
-				.setDocks(docksNr).setBikes(bikesNr).build();
-
-		Rec.initializeRequest requestInit = Rec.initializeRequest.newBuilder().setAbbr(abbr)
-				.setDocks(docksNr).setBikes(bikesNr).build();
-
-		rec_stub.initializeReplicas(request);
-		rec_stub.initialize(requestInit);
-
+				Rec.initializeRequest requestInit = Rec.initializeRequest.newBuilder().setAbbr(abbr)
+						.setDocks(docksNr).setBikes(bikesNr).build();
+				rec_stub.initialize(requestInit);
+			} catch (StatusRuntimeException e){
+				continue;
+			}
+		}
 	}
 
 	public static void readUsersFromCSV(String fileName){

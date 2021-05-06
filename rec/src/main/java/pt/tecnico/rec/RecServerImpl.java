@@ -15,9 +15,6 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
         replicaManager = new ReplicaManager(zooHost, zooPort, "/grpc/bicloin/rec", id, operations);
     }
 
-    public static RecServerImplOperations getRecOperations(){
-        return operations;
-    }
 
     @Override
     public void read(Rec.ReadRequest request, StreamObserver<Rec.ReadResponse> responseObserver){
@@ -29,7 +26,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -42,7 +39,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -54,7 +51,7 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BadEntrySpecificationException e) {
-            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification()).asRuntimeException());
+            responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getEntrySpecification().label).asRuntimeException());
         }
     }
 
@@ -74,27 +71,5 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
         Rec.UpdateResponse response = Rec.UpdateResponse.newBuilder().build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
-    }
-
-    @Override
-    public void initializeReplicas(Rec.InitializeReplicasRequest request, StreamObserver<Rec.InitializeReplicasResponse> responseStreamObserver){
-        String abbr = request.getAbbr();
-        int docks = request.getDocks();
-        int bikes = request.getBikes();
-        replicaManager.initializeReplicasStations(abbr, docks, bikes);
-        responseStreamObserver.onNext(Rec.InitializeReplicasResponse.newBuilder().build());
-        responseStreamObserver.onCompleted();
-    }
-
-    @Override
-    public void getStub(Rec.getStubRequest request, StreamObserver<Rec.getStubResponse> responseStreamObserver) {
-        String input = request.getInput();
-
-        RecordServiceGrpc.RecordServiceBlockingStub stub = replicaManager.checkTags(input);
-
-        //falta set do id do stub
-        responseStreamObserver.onNext(Rec.getStubResponse.newBuilder().setId(1).build());
-        responseStreamObserver.onCompleted();
-
     }
 }

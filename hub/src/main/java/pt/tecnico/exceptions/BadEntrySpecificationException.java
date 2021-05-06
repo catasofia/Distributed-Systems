@@ -1,14 +1,17 @@
 package pt.tecnico.bicloin.hub.exceptions;
 
+import pt.tecnico.exceptions.ErrorMessage;
+
 public class BadEntrySpecificationException extends Exception {
 
-  private String _entrySpecification;
+  private final ErrorMessage _entrySpecification;
 
-  public BadEntrySpecificationException(String entrySpecification) {
+  public BadEntrySpecificationException(ErrorMessage entrySpecification) {
+    super(entrySpecification.label);
     _entrySpecification = entrySpecification;
   }
 
-  public String getEntrySpecification() {
+  public ErrorMessage getEntrySpecification() {
     return _entrySpecification;
   }
 }

@@ -33,18 +33,6 @@ public class RecFrontend{
         return channels;
     }
 
-    public List<RecordServiceGrpc.RecordServiceBlockingStub> getStub(){
-        return stubs;
-    }
-
-   /* public Integer getUpdatedStub(Integer id, String input) {
-        RecordServiceGrpc.RecordServiceBlockingStub stub = stubs.get(id).getStub();
-        Rec.getStubRequest stubRequest = Rec.getStubRequest.newBuilder().setInput(input).build();
-
-        Rec.getStubResponse stubResponse = stubs.get(id).getStub(stubRequest);
-
-        return stubResponse.getId();
-    }*/
     public static Rec.ReadResponse checkTags(String input){
         Integer tag = 0;
         Integer id = 0;
@@ -64,7 +52,6 @@ public class RecFrontend{
                 }
             } catch (StatusRuntimeException e) {
                 if (Status.DEADLINE_EXCEEDED.getCode() == e.getStatus().getCode()) {
-                    //System.out.println("ERRO: Tempo de espera excedido. Tente outra vez!");
                     continue;
                 }
             }
@@ -118,6 +105,12 @@ public class RecFrontend{
         return "";
     }
 
+    public static String getUser(String name, Integer id){
+        Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName("user/" + name).build();
+        Rec.ReadResponse readResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
+        return readResponse.getValue();
+    }
+
     public static String bikeUp(String name){
         String[] attributes = name.split("/");
         Integer id = checkTags(attributes[0] + "/info").getRid();
@@ -128,8 +121,10 @@ public class RecFrontend{
             Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             String value = writeResponse.getValue();
             Integer newTag = writeResponse.getTag();
+            String state = getUser(method[1], id);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder()
-                    .setInput("update:" + method[0] + ":" + attributes[0] + ":" + value + ":" + newTag).build();
+                    .setInput("update:" + method[0] + ":" + attributes[0] + ":" + value + ":" + newTag + ":" + method[1] +
+                            ":" + state).build();
             stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (IllegalThreadStateException e) {
@@ -149,8 +144,10 @@ public class RecFrontend{
             Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             String value = writeResponse.getValue();
             Integer newTag = writeResponse.getTag();
+            String state = getUser(method[1], id);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder()
-                    .setInput("update:" + method[0] + ":" + attributes[0] + ":" + value + ":" + newTag).build();
+                    .setInput("update:" + method[0] + ":" + attributes[0] + ":" + value + ":" + newTag + ":" + method[1] +
+                            ":" + state).build();
             stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (IllegalThreadStateException e) {
