@@ -7,7 +7,6 @@ import pt.tecnico.bicloin.hub.grpc.*;
 import pt.ulisboa.tecnico.sdis.zk.ZKNamingException;
 
 import java.io.IOException;
-import java.util.List;
 
 public class HubTester {
 	private static ManagedChannel channel;

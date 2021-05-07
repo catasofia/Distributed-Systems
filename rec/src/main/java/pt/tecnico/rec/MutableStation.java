@@ -1,7 +1,5 @@
 package pt.tecnico.rec;
 
-import java.util.*;
-import org.apache.commons.lang3.tuple.MutablePair;
 
 public class MutableStation{
 
@@ -34,13 +32,6 @@ public class MutableStation{
 
     public void setTagStation(Integer newTag){
         _tagStation = newTag;
-    }
-
-    public void setStation(Integer deliveries, Integer requisitions, Integer docks, Integer bikes){
-        _deliveries = deliveries;
-        _requisitions = requisitions;
-        _docks = docks;
-        _bikes = bikes;
     }
 
     public Integer getAvailableBikesNr(){

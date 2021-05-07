@@ -1,6 +1,5 @@
 package pt.tecnico.rec;
 
-import java.util.*;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 public class MutableUser{

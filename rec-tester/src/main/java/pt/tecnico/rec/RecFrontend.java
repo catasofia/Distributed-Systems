@@ -62,17 +62,19 @@ public class RecFrontend{
 
     public static String ctrlPing(String ping){
         Rec.CtrlPingRequest pingRequest = Rec.CtrlPingRequest.newBuilder().setInput(ping).build();
-
-        Random r = new Random();
-        int low = 0;
-        int high = stubs.size();
-        int result = r.nextInt(high - low) + low;
-
-        System.out.println("Conectei-me à réplica " + (result+1) + " no localhost 809" + (result+1));
-
-        Rec.CtrlPingResponse pingResponse = stubs.get(result).ctrlPing(pingRequest);
-
-        return pingResponse.getOutput();
+        StringBuilder result = new StringBuilder();
+        Integer i = 1;
+        for(RecordServiceGrpc.RecordServiceBlockingStub stub: stubs) {
+            try {
+                Rec.CtrlPingResponse pingResponse = stub.ctrlPing(pingRequest);
+                result.append("/grpc/bicloin/rec/" + i + " up\n");
+                i++;
+            } catch (StatusRuntimeException e) {
+                result.append("/grpc/bicloin/rec/" + i + " down\n");
+                i++;
+            }
+        }
+        return result.toString().replaceAll("[\n\r]$", ""); //removes the last \n;
     }
 
     public static String info_station(String abbr){
@@ -86,7 +88,6 @@ public class RecFrontend{
     public static String topUp(String name){
         String[] attributes = name.split("/");
         Integer id = checkTags(attributes[0] +"/balance").getRid();
-        Integer tag = checkTags(attributes[0] +"/balance").getVersion();
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
             Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
@@ -95,6 +96,7 @@ public class RecFrontend{
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder()
                     .setInput("update:" + attributes[0]+":top_up:" +  value + ":" + newTag)
                     .build();
+            //id-1 because replicas starts in 1, but they are recorded in a list, that starts in 0
             stubs.get(id-1).update(updateRequest);
             return value;
         } catch (StatusRuntimeException e) {
@@ -107,24 +109,30 @@ public class RecFrontend{
 
     public static String getUser(String name, Integer id){
         Rec.ReadRequest readRequest = Rec.ReadRequest.newBuilder().setName("user/" + name).build();
+        //id-1 because replicas starts in 1, but they are recorded in a list, that starts in 0
         Rec.ReadResponse readResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).read(readRequest);
         return readResponse.getValue();
     }
 
     public static String bikeUp(String name){
+        //name = abbr/bike_up user
         String[] attributes = name.split("/");
         Integer id = checkTags(attributes[0] + "/info").getRid();
+
+        //attributes[1] = bike_up user
         String[] method = attributes[1].split(" ");
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            //id-1 because replicas starts in 1, but they are recorded in a list, that starts in 0
             Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             String value = writeResponse.getValue();
             Integer newTag = writeResponse.getTag();
-            String state = getUser(method[1], id);
+            String stateBalance = getUser(method[1], id);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder()
                     .setInput("update:" + method[0] + ":" + attributes[0] + ":" + value + ":" + newTag + ":" + method[1] +
-                            ":" + state).build();
+                            ":" + stateBalance).build();
+            //id-1 because replicas starts in 1, but they are recorded in a list, that starts in 0
             stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (IllegalThreadStateException e) {
@@ -134,20 +142,24 @@ public class RecFrontend{
     }
 
     public static String bikeDown(String name){
+        //name = abbr/bike_down user
         String[] attributes = name.split("/");
         Integer id = checkTags(attributes[0] + "/info").getRid();
 
+        //attributes[1] = bike_down user
         String[] method = attributes[1].split(" ");
 
         try {
             Rec.WriteRequest writeRequest = Rec.WriteRequest.newBuilder().setName(name).build();
+            //id-1 because replicas starts in 1, but they are recorded in a list, that starts in 0
             Rec.WriteResponse writeResponse = stubs.get(id-1).withDeadlineAfter(2000, TimeUnit.MILLISECONDS).write(writeRequest);
             String value = writeResponse.getValue();
             Integer newTag = writeResponse.getTag();
-            String state = getUser(method[1], id);
+            String stateBalance = getUser(method[1], id);
             Rec.UpdateRequest updateRequest = Rec.UpdateRequest.newBuilder()
                     .setInput("update:" + method[0] + ":" + attributes[0] + ":" + value + ":" + newTag + ":" + method[1] +
-                            ":" + state).build();
+                            ":" + stateBalance).build();
+            //id-1 because replicas starts in 1, but they are recorded in a list, that starts in 0
             stubs.get(id-1).update(updateRequest);
             return writeResponse.getValue();
         } catch (IllegalThreadStateException e) {

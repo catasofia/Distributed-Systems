@@ -1,42 +1,44 @@
 # balance do bruno
 balance
 #carregamento do bruno
-top-up 15
+top-up 20
 #erro de carregamento
 top-up 30
 #info Ok
 info istt
 #erro de info
 info amadora
-#move bruno
-move 38.7075 -9.1364
-#at
-at
 #scan ok
 scan 3
 #bike up ok
-bike-up prcm
-#bike down ok
-bike-down prcm
-#bike down erro
+bike-up stao
+#top up ok
+top-up 10
+#bike-down ok
 bike-down stao
-#tag ok
-tag 38.7060 -9.1441 cais
-#tag erro
-tag istt ista loc
-#move ok
-move cais
-#at ok
-at
-#ping ok
-ping bruno
-#ping erro
+#bike-down erro
+bike-down gulb
+#top-up ok
+top-up 5
+#balance
+balance
+#ping
 ping
-#sys_status ok
+#sys status
 sys_status status
-#sys_status error
-sys_status
-#adormece 3 segundos
-zzz 3000
+#tag ok
+tag 38.7376 -9.3031 loc1
+#tag erro
+tag istt ista loc1
+# move tag ok
+move loc1
+#move lat long ok
+move 38.6867 -9.3117
+#move tag erro
+move istt
+#at
+at
+#adormece 2 segundos
+zzz 2000
 #exit
 exit

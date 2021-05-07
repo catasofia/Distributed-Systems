@@ -38,6 +38,7 @@ public class ReplicaManager {
 
     public void connect() throws ZKNamingException {
         Collection<ZKRecord> records = zkNaming.listRecords(path);
+        //connects with other replicas in zookeeper
         for(ZKRecord record: records){
             if(record.getPath().equals(path + "/" + id)) continue;
             String target = record.getURI();

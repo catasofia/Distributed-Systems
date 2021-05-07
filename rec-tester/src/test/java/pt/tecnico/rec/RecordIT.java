@@ -33,40 +33,13 @@ public class RecordIT {
 			channel.shutdownNow();
 		}
 	}
-	
-	// initialization and clean-up for each test
-	
-	@BeforeEach
-	public void setUp() {
-		
-	}
-	
-	@AfterEach
-	public void tearDown() {
-		
-	}
-		
-	// tests 
-	
-	@Test
-	public void test() {
-	}
 
 	@Test
 	public void pingOKTest(){
 		Rec.CtrlPingRequest request = Rec.CtrlPingRequest.newBuilder().setInput("friend").build();
 		String response = recFrontend.ctrlPing("friend");
-		assertEquals("friend", response);
+		assertEquals("/grpc/bicloin/rec/1 up\n/grpc/bicloin/rec/2 up", response);
 	}
-
-	@Test
-	public void emptyPingTest(){
-		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->recFrontend.ctrlPing(""))
-				.getStatus()
-				.getCode());
-	}
-
-
 
 	@Test
 	public void topUpOK(){
@@ -78,7 +51,7 @@ public class RecordIT {
 	public void bikeUpOK(){
 		recFrontend.topUp("eva/top_up 15");
 		String response = recFrontend.bikeUp("istt/bike_up eva");
-		assertEquals("10", response);
+		assertEquals("10:0:20:10", response);
 	}
 
 	@Test
@@ -114,7 +87,7 @@ public class RecordIT {
 		recFrontend.topUp("bruno/top_up 15");
 		recFrontend.bikeUp("cais/bike_up bruno");
 		String response = recFrontend.bikeDown("cais/bike_down bruno 1");
-		assertEquals("1", response);
+		assertEquals("18:1:50:33", response);
 	}
 
 	@Test

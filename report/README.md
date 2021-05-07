@@ -15,7 +15,7 @@ Sistemas Distribuídos 2020-2021, segundo semestre
 | 93735  | Maria Ribeiro     | <https://git.rnl.tecnico.ulisboa.pt/ist193735> | <mailto:maria.f.ribeiro@tecnico.ulisboa.pt> |
 
  
-![Beatriz](93691.png) ![Catarina](93695.png) ![Maria](93735.png)
+![Beatriz](93691.png) ![Catarina](Catarina.png) ![Maria](93735.png)
 
 
 ## Melhorias da primeira parte
@@ -30,7 +30,9 @@ Sistemas Distribuídos 2020-2021, segundo semestre
 
 Quando um Rec vai a baixo momentaneamente e depois se volta a ligar, as suas informações são atualizadas gradualmente, quando os outros Rec's fazem escritas. Quando isto acontece, apesar do Rec ir a baixo, a aplicação avisa que não consegue ligar-se ao Rec que está em falha, e continua a sua execução normal.
 
-A nossa implementação não garante que se o Rec mais atualizado for abaixo que estas informações passem para os restantes Rec's, e não garante uma sincronização correta das escritas e leituras, não havendo portanto coesão de dados.
+Se apenas existir uma réplica mais atualizada e se esta for abaixo, a nossa implementação não garante que estas informações passem para os restantes Rec's. 
+
+Garantimos uma sincronização correta das escritas e leituras em todas as réplicas ativas, havendo portanto coesão de dados.
 
 ## Solução
 
@@ -46,7 +48,7 @@ Quando há um pedido de escrita, é repetido o processo de leitura previamente e
 
 Implementação de novas funcionalidades no Rec Frontend, que têm como função fazer as escritas e as leituras entre as réplicas, garantindo que cada leitura é feita da réplica com a informação mais atual, de modo a que exista uma maior coerência entre os dados.
 
-Implementação de um Replica Manager que gere como são feitas as atualizações das restantes réplicas quando há uma escrita na réplica mais atualizada (réplica com a maior Tag).
+Implementação de um Replica Manager que gere como são feitas as atualizações das restantes réplicas quando há uma escrita na réplica mais atualizada (réplica com a maior Tag). Para isto, implementámos uma função connect que permite à réplica conectar-se às restantes réplicas ativas. Posteriormente, atualizamos todas estas réplicas com o novo valor e a nova tag.
 
 Seja uma escrita ou uma leitura, a primeira operação é feita pelo Rec Frontend, e tem como objetivo encontrar a réplica que tem a maior Tag referente aos dados nos quais se quer ler ou escrever, de modo a ler os valores mais recentes, que na escrita também é importante uma vez que algumas operações requerem verificações (por exemplo, num bike-up, verificar se o utilizador tem saldo suficiente). Caso seja uma leitura, o Rec Frontend lê o valor da réplica cuja Tag é a mais alta e devolve-o ao Hub que pediu este valor. No caso de uma escrita, o Rec Frontend garante que a escrita é feita no Rec mais atualizado, ou seja, com a maior Tag, e de seguida o Replica Manager atualiza apenas os valores atualizados pela escrita em todas as réplicas restantes.
 
@@ -77,9 +79,9 @@ Neste segundo gráfico e tabela de desempenho, representamos os valores obtidos 
 
 ## Opções de implementação
 
-Inicialmente, quando arrancamos o hub todas as réplicas são inicializadas com os valores contidos nos ficheiros users.csv e stations.csv. Para isto acontecer, obtemos o stub de uma réplica e inicializamos com os valores. Posteriormente, esta réplica conecta-se às restantes através do Replica Manager e inicializa os valores nas outras. 
+Inicialmente, quando arrancamos o hub todas as réplicas são inicializadas com os valores contidos nos ficheiros users.csv e stations.csv. Para isto acontecer, obtemos os records que se encontram no serviço de nomes (Zookeeper) e através dos seus stubs inicializamos os valores (tal e qual como fazíamos na primeira entrega, porém, agora fazemos para todas as réplicas do Rec existentes).
 
-Quando é efetuada uma escrita, é escolhida a réplica com o valor associado à Tag mais atual, para ser atualizada. Depois, através do Replica Manager, esta conecta-se às outras réplicas e atualiza-as.
+Quando é efetuada uma escrita ou uma leitura, é escolhida a réplica com o valor associado à Tag mais atual. No caso de uma escrita, para além de existir uma leitura, é escolhida a mesma réplica para ser atualizada. Depois, através do Replica Manager, esta conecta-se às outras réplicas e atualiza-as.
 
 Não implementámos nenhuma optimização, logo não é possível fazer comparações de desempenho entre o antes e o depois.
 

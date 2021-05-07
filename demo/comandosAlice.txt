@@ -8,32 +8,36 @@ top-up 30
 info istt
 #erro de info
 info amadora
-#move alice
-move 38.7376 -9.3031
-#at
-at
-#scan ok
+#scan
 scan 3
-#bike up ok
+#bike up erro
 bike-up istt
-#bike down ok
-bike-down istt
+#top up ok
+top-up 10
 #bike down erro
 bike-down stao
-#tag ok
-tag 38.7060 -9.1441 cais
-#tag erro
-tag istt ista loc
-#move ok
-move cais
-#at ok
-at
-#ping ok
-ping alice
-#ping erro
+#bike-down erro
+bike-down gulb
+#top-up 5
+top-up 5
+#balance
+balance
+#ping
 ping
-#sys_status ok
+#status
 sys_status status
+#tag ok
+tag 38.7376 -9.3031 loc1
+#tag erro
+tag istt ista loc1
+#move tag
+move loc1
+#move lat long
+move 38.6867 -9.3117
+#move tag erro
+move istt
+#at
+at
 #adormece 2 segundos
 zzz 2000
 #exit

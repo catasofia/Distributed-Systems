@@ -223,7 +223,7 @@ public class AppMain {
 					}
 					String[] attributes = command.split(" ");
 					TimeUnit.MILLISECONDS.sleep(Integer.parseInt(attributes[1]));
-					System.out.println("Dormi durante " + attributes[1] + " milissegundos!\n");
+					System.out.println("Dormi durante " + attributes[1] + " milissegundos!");
 				}
 				else if(command.startsWith("#")){
 					continue;

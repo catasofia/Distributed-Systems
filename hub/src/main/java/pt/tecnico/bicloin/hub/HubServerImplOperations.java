@@ -53,6 +53,8 @@ public class HubServerImplOperations {
         for (Station station : stations.values()){
             stationsDistance.put(station.getAbbr(), station.calculateDistance(lat, longt));
         }
+
+        //sort stations by distance
         stationsDistance.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -85,6 +87,9 @@ public class HubServerImplOperations {
     }
 
     public synchronized String bikeUp(String name, Double latitude, Double longitude, String abbr) throws BadEntrySpecificationException{
+        if(stations.get(abbr) == null){
+            throw new BadEntrySpecificationException(ErrorMessage.NO_STATION_FOUND);
+        }
         Station station = stations.get(abbr);
         if (station.calculateDistance(latitude, longitude) < 200){
             return abbr+"/bike_up " + name;
@@ -94,6 +99,9 @@ public class HubServerImplOperations {
     }
 
     public synchronized String bikeDown(String name, Double latitude, Double longitude, String abbr) throws BadEntrySpecificationException{
+        if(stations.get(abbr) == null){
+            throw new BadEntrySpecificationException(ErrorMessage.NO_STATION_FOUND);
+        }
         Station station = stations.get(abbr);
         if (station.calculateDistance(latitude, longitude) < 200){
             return abbr+"/bike_down " + name + " " + station.getPrize();

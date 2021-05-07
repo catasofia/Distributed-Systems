@@ -25,10 +25,11 @@ public class RecServerImplOperations {
     }
 
     public synchronized String read(String input) throws BadEntrySpecificationException{
+        //input = method/... so we split in /
         String[] attributes = input.split("/");
 
         if(attributes[0].startsWith("user")){
-            return mutableUsers.get(attributes[1]).getStringState();
+            return mutableUsers.get(attributes[1]).getStringState() + ":" + mutableUsers.get(attributes[1]).getBalance();
         }
 
         switch (attributes[1]){
@@ -61,12 +62,12 @@ public class RecServerImplOperations {
                 }
             default:
                 return "";
-
         }
     }
 
     public Integer getTags(String input){
         if(!input.startsWith("update")) {
+            //input = method/... so we split in /
             String[] attributes = input.split("/");
             if (attributes[1].equals("balance") || attributes[1].startsWith("top_up"))
                 return mutableUsers.get(attributes[0]).getTagBalance();
@@ -74,6 +75,7 @@ public class RecServerImplOperations {
                 return mutableStations.get(attributes[0]).getTagStation();
             return -1; //default
         } else{
+            //if input starts with update, input = x:y:... so we split in :
             String[] attributes = input.split(":");
             if (attributes[2].equals("balance") || attributes[2].startsWith("top_up"))
                 return mutableUsers.get(attributes[1]).getTagBalance();
@@ -86,6 +88,7 @@ public class RecServerImplOperations {
     public synchronized String write(String input) throws BadEntrySpecificationException{
         String result = "";
         if(input.startsWith("update")){
+            //if input starts with update, input = x:y:... so we split in :
             String[] attributes1 = input.split(":");
             if(attributes1[2].equals("top_up")){
                 mutableUsers.get(attributes1[1]).setNewBalance(Integer.parseInt(attributes1[3]));
@@ -97,10 +100,12 @@ public class RecServerImplOperations {
                         Integer.parseInt(attributes1[4]), Integer.parseInt(attributes1[5]),
                         Integer.parseInt(attributes1[6]));
                 mutableStations.get(attributes1[2]).setTagStation(Integer.parseInt(attributes1[7]));
+                mutableUsers.get(attributes1[8]).setNewBalance(Integer.parseInt(attributes1[10]));
                 mutableUsers.get(attributes1[8]).setNewState(Boolean.parseBoolean(attributes1[9]));
                 return "";
             }
         }
+        //if input doesnt start with update, input = method/... so we split in /
         String[] attributes = input.split("/");
         if(attributes[1].startsWith("top_up")){
             if (mutableUsers.get(attributes[0]) == null) {
@@ -146,6 +151,7 @@ public class RecServerImplOperations {
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
                 Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
                 Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                //creates string with stats for later update
                 result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
                 return result;
             }
@@ -158,6 +164,7 @@ public class RecServerImplOperations {
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
                 Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
                 Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                //creates string with stats for later update
                 result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
                 return result;
             }
@@ -186,6 +193,7 @@ public class RecServerImplOperations {
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
                 Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
                 Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                //creates string with stats for later update
                 result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
                 return result;
             }
@@ -198,6 +206,7 @@ public class RecServerImplOperations {
                 Integer deliveries = mutableStations.get(attributes[0]).getDeliveries();
                 Integer docks = mutableStations.get(attributes[0]).getDocksNumber();
                 Integer bikes = mutableStations.get(attributes[0]).getAvailableBikesNr();
+                //creates string with stats for later update
                 result = requisitions + ":" + deliveries + ":" + docks + ":" + bikes;
                 return result;
             }

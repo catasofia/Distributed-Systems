@@ -60,12 +60,7 @@ public class HubFrontend{
             x++;
         }
 
-        try{
-            rec.ctrlPing(status);
-            result = result + "/grpc/bicloin/rec/1 up\n";
-        } catch(StatusRuntimeException e) {
-            result = result + "/grpc/bicloin/rec/1 down\n";
-        }
+        result += rec.ctrlPing(status);
         return result;
     }
 

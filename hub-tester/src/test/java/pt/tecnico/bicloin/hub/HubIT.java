@@ -30,23 +30,6 @@ public class HubIT {
 	public static void oneTimeTearDown() {
 		channel.shutdownNow();
 	}
-	
-	// initialization and clean-up for each test
-	
-	@BeforeEach
-	public void setUp() {
-	}
-	
-	@AfterEach
-	public void tearDown() {
-		
-	}
-		
-	// tests 
-	
-	@Test
-	public void test() {
-	}
 		
 	@Test
 	public void topUpOK(){
@@ -65,16 +48,8 @@ public class HubIT {
 	public void pingOKTest(){
 		Hub.CtrlPingRequest request = Hub.CtrlPingRequest.newBuilder().setInput("friend").build();
 		String response = HubFrontend.ctrlPing("friend");
-		assertEquals("friend", response);
+		assertEquals("friend PONG", response);
 	}
-
-	@Test
-	public void emptyPingTest(){
-		assertEquals(INVALID_ARGUMENT.getCode(), assertThrows(StatusRuntimeException.class, ()->hubFrontend.ctrlPing(""))
-				.getStatus()
-				.getCode());
-	}
-
 
 
 	@Test

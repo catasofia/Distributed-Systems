@@ -57,12 +57,12 @@ public class RecServerImpl extends RecordServiceGrpc.RecordServiceImplBase {
 
     @Override
     public void initialize(Rec.initializeRequest request, StreamObserver<Rec.initializeResponse> responseStreamObserver){
-            String abbr = request.getAbbr();
-            int docks = request.getDocks();
-            int bikes = request.getBikes();
-            operations.initializeStations(abbr, docks, bikes);
-            responseStreamObserver.onNext(Rec.initializeResponse.newBuilder().build());
-            responseStreamObserver.onCompleted();
+        String abbr = request.getAbbr();
+        int docks = request.getDocks();
+        int bikes = request.getBikes();
+        operations.initializeStations(abbr, docks, bikes);
+        responseStreamObserver.onNext(Rec.initializeResponse.newBuilder().build());
+        responseStreamObserver.onCompleted();
     }
 
     @Override
